@@ -1,0 +1,1057 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Generator Penawaran Harga (Quotation)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- HTML2PDF.js for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- SheetJS (XLSX) for Excel Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Signature Pad for Digital Signature Drawing -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0284c7',
+                            600: '#0265d2',
+                            700: '#034ea2',
+                            800: '#073b75',
+                            900: '#0c2f56',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        /* Custom Scrollbar for form panels */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Print Styles */
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white !important; margin: 0; padding: 0; }
+            #preview-container { border: none !important; box-shadow: none !important; width: 100% !important; padding: 0 !important; }
+            .page-break { page-break-after: always; }
+        }
+
+        /* Printable Paper Format Specs */
+        .a4-paper {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 15mm;
+            margin: auto;
+            background: white;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 1024px) {
+            .a4-paper {
+                width: 100%;
+                min-height: auto;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased h-screen flex flex-col overflow-hidden">
+
+    <header class="bg-brand-900 text-white shadow-md z-30 flex-none no-print">
+        <div class="px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-brand-500 p-2 rounded-lg text-white">
+                    <i class="fa-solid fa-file-invoice-dollar text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-wide">Quotation Rere</h1>
+                    <p class="text-xs text-brand-100">Sistem Pembuat Penawaran Harga Profesional</p>
+                </div>
+            </div>
+
+            <!-- Action Toolbar Buttons -->
+            <div class="flex items-center space-x-2">
+                <button onclick="exportToPDF()" class="bg-red-600 hover:bg-red-700 text-white text-xs md:text-sm px-3 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow">
+                    <i class="fa-solid fa-file-pdf text-base"></i> <span class="hidden sm:inline">Export PDF</span>
+                </button>
+                <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs md:text-sm px-3 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow">
+                    <i class="fa-solid fa-file-excel text-base"></i> <span class="hidden sm:inline">Export Excel</span>
+                </button>
+                <button onclick="exportToWord()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs md:text-sm px-3 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow">
+                    <i class="fa-solid fa-file-word text-base"></i> <span class="hidden sm:inline">Export Word</span>
+                </button>
+                <button onclick="window.print()" class="bg-slate-700 hover:bg-slate-800 text-white text-xs md:text-sm px-3 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow">
+                    <i class="fa-solid fa-print text-base"></i> <span class="hidden sm:inline">Cetak</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
+
+        <!-- LEFT PANEL: Editor & Form Controls -->
+        <div class="w-full lg:w-1/2 bg-slate-50 border-r border-slate-200 overflow-y-auto p-4 lg:p-6 no-print space-y-6">
+            
+            <!-- Quick View / Tab Toggle on Mobile -->
+            <div class="lg:hidden flex bg-slate-200 p-1 rounded-xl mb-4">
+                <button id="btn-tab-form" onclick="switchMobileTab('form')" class="flex-1 py-2 text-sm font-semibold rounded-lg bg-white shadow text-brand-700">Form Editor</button>
+                <button id="btn-tab-preview" onclick="switchMobileTab('preview')" class="flex-1 py-2 text-sm font-semibold rounded-lg text-slate-600">Pratinjau Dokumen</button>
+            </div>
+
+            <div id="form-panel-wrapper" class="space-y-6">
+
+                <!-- 1. Header & Identity Section -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-brand-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-building text-brand-500"></i> Identitas Perusahaan & Metadata
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Logo Upload -->
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Logo Perusahaan</label>
+                            <div class="flex items-center gap-4">
+                                <div id="logo-preview-box" class="w-20 h-20 border-2 border-dashed border-slate-300 rounded-lg flex items-center justify-center bg-slate-50 overflow-hidden relative">
+                                    <i class="fa-solid fa-image text-slate-400 text-2xl" id="logo-placeholder"></i>
+                                    <img id="logo-img-display" class="hidden w-full h-full object-contain" />
+                                </div>
+                                <div class="flex-1">
+                                    <input type="file" id="input-logo" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
+                                    <button type="button" onclick="document.getElementById('input-logo').click()" class="bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 text-xs px-3 py-2 rounded-lg font-medium transition">
+                                        <i class="fa-solid fa-upload mr-1"></i> Upload Logo
+                                    </button>
+                                    <p class="text-[11px] text-slate-400 mt-1">Format PNG, JPG. Maks 2MB.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pengirim / Perusahaan Anda -->
+                        <div class="md:col-span-2 pt-2 border-t border-slate-100">
+                            <span class="text-xs font-bold text-slate-700 block mb-2">Informasi Pengirim (Perusahaan Anda)</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Nama Perusahaan</label>
+                            <input type="text" id="company-name" value="PT. SOLUSI TEKNOLOGI NUSANTARA" oninput="updatePreview()" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">NPWP / No. Izin</label>
+                            <input type="text" id="company-npwp" value="01.234.567.8-012.000" oninput="updatePreview()" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Alamat Lengkap</label>
+                            <input type="text" id="company-address" value="Jl. Sudirman No. 88, Suite 10B, Jakarta Selatan" oninput="updatePreview()" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Telepon / Whatsapp</label>
+                            <input type="text" id="company-phone" value="+62 21 555 1234 / +62 812-3456-7890" oninput="updatePreview()" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Email / Website</label>
+                            <input type="text" id="company-email" value="sales@solusiteknologi.co.id" oninput="updatePreview()" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+
+                        <!-- Penerima / Klien -->
+                        <div class="md:col-span-2 pt-2 border-t border-slate-100">
+                            <span class="text-xs font-bold text-slate-700 block mb-2">Informasi Penerima (Klien / Customer)</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Nama Perusahaan / Klien</label>
+                            <input type="text" id="client-name" value="PT. MAJU BERSAMA SEJAHTERA" oninput="updatePreview()" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Up (Contact Person)</label>
+                            <input type="text" id="client-attn" value="Bpk. Hendra Wijaya (Procurement Dept)" oninput="updatePreview()" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Alamat Klien</label>
+                            <input type="text" id="client-address" value="Gedung Cyber Tower Lt. 5, Jl. Rasuna Said, Jakarta" oninput="updatePreview()" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+
+                        <!-- Metadata Penawaran -->
+                        <div class="md:col-span-2 pt-2 border-t border-slate-100">
+                            <span class="text-xs font-bold text-slate-700 block mb-2">Detail Dokumen Penawaran</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Nomor Penawaran</label>
+                            <input type="text" id="doc-number" value="QUO/2026/03/008" oninput="updatePreview()" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Tanggal Penawaran</label>
+                            <input type="date" id="doc-date" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500 focus:outline-none" oninput="updatePreview()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Masa Berlaku (Valid Until)</label>
+                            <input type="date" id="doc-validity" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500 focus:outline-none" oninput="updatePreview()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Perihal / Judul</label>
+                            <input type="text" id="doc-subject" value="Penawaran Pengadaan Hardware Server & Network Setup" oninput="updatePreview()" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Items Table Section -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-sm font-bold uppercase tracking-wider text-brand-800 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-brand-500"></i> Rincian Barang / Jasa
+                        </h2>
+                        <button type="button" onclick="addItemRow()" class="bg-brand-50 text-brand-700 hover:bg-brand-100 border border-brand-200 text-xs px-3 py-1.5 rounded-lg font-semibold transition flex items-center gap-1">
+                            <i class="fa-solid fa-plus"></i> Tambah Item
+                        </button>
+                    </div>
+
+                    <div id="items-editor-container" class="space-y-4">
+                        <!-- Dynamic item rows inserted via JS -->
+                    </div>
+                </div>
+
+                <!-- 3. Taxes & Calculations Section -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-brand-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-calculator text-brand-500"></i> Pengaturan Pajak & Biaya Tambahan
+                    </h2>
+
+                    <div class="space-y-4 text-xs">
+                        <!-- Global Discount -->
+                        <div class="grid grid-cols-2 gap-3 items-center">
+                            <label class="font-medium text-slate-700">Diskon Global</label>
+                            <div class="flex gap-2">
+                                <select id="global-discount-type" onchange="calculateTotals()" class="border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-brand-500">
+                                    <option value="nominal">Rp</option>
+                                    <option value="percent">%</option>
+                                </select>
+                                <input type="number" id="global-discount-val" value="0" min="0" oninput="calculateTotals()" class="w-full border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-brand-500">
+                            </div>
+                        </div>
+
+                        <!-- PPN Options -->
+                        <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-2 font-semibold text-slate-800 cursor-pointer">
+                                    <input type="checkbox" id="enable-ppn" checked onchange="toggleTaxOptions(); calculateTotals();" class="w-4 h-4 text-brand-600 rounded">
+                                    <span>Gunakan PPN (Pajak Pertambahan Nilai)</span>
+                                </label>
+                            </div>
+                            <div id="ppn-controls" class="grid grid-cols-2 gap-3 pl-6 pt-2 border-t border-slate-200">
+                                <div>
+                                    <label class="block text-slate-500 mb-1">Tarif PPN (%)</label>
+                                    <input type="number" id="ppn-rate" value="11" min="0" max="100" step="0.5" oninput="calculateTotals()" class="w-full border border-slate-300 rounded-lg p-2 text-xs">
+                                </div>
+                                <div>
+                                    <label class="block text-slate-500 mb-1">Sifat PPN</label>
+                                    <select id="ppn-mode" onchange="calculateTotals()" class="w-full border border-slate-300 rounded-lg p-2 text-xs">
+                                        <option value="exclude">Exclude (Di Luar Harga)</option>
+                                        <option value="include">Include (Termasuk Harga)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PPh Options -->
+                        <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-2 font-semibold text-slate-800 cursor-pointer">
+                                    <input type="checkbox" id="enable-pph" onchange="toggleTaxOptions(); calculateTotals();" class="w-4 h-4 text-brand-600 rounded">
+                                    <span>Potong PPh (Pajak Penghasilan)</span>
+                                </label>
+                            </div>
+                            <div id="pph-controls" class="hidden grid grid-cols-2 gap-3 pl-6 pt-2 border-t border-slate-200">
+                                <div>
+                                    <label class="block text-slate-500 mb-1">Jenis PPh</label>
+                                    <select id="pph-type" onchange="updatePPhRate()" class="w-full border border-slate-300 rounded-lg p-2 text-xs">
+                                        <option value="23" data-rate="2">PPh 23 (Jasa - 2%)</option>
+                                        <option value="22" data-rate="1.5">PPh 22 (Barang - 1.5%)</option>
+                                        <option value="4_2" data-rate="0.5">PPh Final 4(2) (0.5%)</option>
+                                        <option value="custom" data-rate="0">Lainnya / Custom</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-slate-500 mb-1">Tarif PPh (%)</label>
+                                    <input type="number" id="pph-rate" value="2" min="0" step="0.1" oninput="calculateTotals()" class="w-full border border-slate-300 rounded-lg p-2 text-xs">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shipping / Additional Fees -->
+                        <div class="grid grid-cols-2 gap-3 items-center">
+                            <label class="font-medium text-slate-700">Biaya Pengiriman / Lain-Lain</label>
+                            <input type="number" id="shipping-fee" value="150000" min="0" oninput="calculateTotals()" class="w-full border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-brand-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Terms, Bank Info & Notes -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-brand-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-file-contract text-brand-500"></i> Syarat, Ketentuan & Pembayaran
+                    </h2>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Informasi Rekening Bank</label>
+                            <input type="text" id="bank-info" value="Bank BCA - 8830129381 a/n PT. Solusi Teknologi Nusantara" oninput="updatePreview()" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Syarat & Ketentuan Pembayaran</label>
+                            <textarea id="terms-notes" rows="4" oninput="updatePreview()" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500">1. Pembayaran DP 50% saat penandatanganan penawaran/PO.
+2. Pelunasan 50% dilakukan H+3 setelah barang/layanan diterima.
+3. Garansi perangkat keras berlaku selama 1 (satu) tahun.
+4. Penawaran harga ini berlaku sesuai dengan masa validitas yang tertera.</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Signatures & Approvals -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-brand-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-file-signature text-brand-500"></i> Pengesahan & Tanda Tangan
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Nama Terang Penandatangan</label>
+                            <input type="text" id="signer-name" value="Budi Santoso, S.Kom" oninput="updatePreview()" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Jabatan Penandatangan</label>
+                            <input type="text" id="signer-title" value="Sales Manager" oninput="updatePreview()" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-500">
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-medium text-slate-600 mb-2">Tanda Tangan & Stempel Digital</label>
+                            
+                            <div class="flex gap-2 mb-3">
+                                <button type="button" onclick="switchSigMode('draw')" id="btn-sig-draw" class="bg-brand-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium">Gambar Tanda Tangan</button>
+                                <button type="button" onclick="switchSigMode('upload')" id="btn-sig-upload" class="bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs px-3 py-1.5 rounded-lg font-medium">Upload File TTD/Stempel</button>
+                            </div>
+
+                            <!-- Draw Pad Box -->
+                            <div id="sig-draw-container" class="space-y-2">
+                                <div class="border border-slate-300 rounded-lg bg-slate-50 relative overflow-hidden">
+                                    <canvas id="signature-pad" class="w-full h-32 cursor-crosshair"></canvas>
+                                </div>
+                                <div class="flex justify-end gap-2">
+                                    <button type="button" onclick="clearSignature()" class="text-xs text-red-600 hover:text-red-700 font-medium px-2 py-1">Hapus Coretan</button>
+                                    <button type="button" onclick="saveSignature()" class="bg-slate-800 text-white text-xs px-3 py-1 rounded-md font-medium">Terapkan TTD</button>
+                                </div>
+                            </div>
+
+                            <!-- Upload Box -->
+                            <div id="sig-upload-container" class="hidden space-y-2">
+                                <input type="file" id="input-signature" accept="image/*" onchange="handleSigUpload(event)" class="text-xs text-slate-500">
+                                <p class="text-[11px] text-slate-400">Gunakan format PNG dengan latar transparan untuk hasil terbaik.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: Live Document Canvas Preview -->
+        <div id="preview-panel-wrapper" class="hidden lg:block w-full lg:w-1/2 bg-slate-200 overflow-y-auto p-4 lg:p-8 flex justify-center">
+            
+            <div id="preview-container" class="a4-paper text-slate-800 flex flex-col justify-between text-xs relative">
+                <div>
+                    <!-- Document Header -->
+                    <div class="flex justify-between items-start border-b-2 border-brand-800 pb-4 mb-6">
+                        <div class="flex items-start gap-4">
+                            <div id="preview-logo-box" class="w-16 h-16 flex items-center justify-center">
+                                <span class="text-slate-300 text-xs italic">[Logo]</span>
+                            </div>
+                            <div>
+                                <h2 id="prev-company-name" class="text-base font-bold text-brand-900">PT. SOLUSI TEKNOLOGI NUSANTARA</h2>
+                                <p id="prev-company-address" class="text-[11px] text-slate-600">Jl. Sudirman No. 88, Jakarta Selatan</p>
+                                <p id="prev-company-contact" class="text-[11px] text-slate-500">Telp: +62 21 555 1234 | Email: sales@solusiteknologi.co.id</p>
+                                <p id="prev-company-npwp" class="text-[11px] text-slate-500">NPWP: 01.234.567.8-012.000</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <h1 class="text-xl font-extrabold text-brand-900 tracking-wider">PENAWARAN HARGA</h1>
+                            <span class="text-xs font-semibold text-brand-600 bg-brand-50 px-2 py-0.5 rounded border border-brand-200 uppercase inline-block mt-1">QUOTATION</span>
+                        </div>
+                    </div>
+
+                    <!-- Client & Doc Meta Block -->
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <span class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Kepada Yth:</span>
+                            <h3 id="prev-client-name" class="font-bold text-slate-900">PT. MAJU BERSAMA SEJAHTERA</h3>
+                            <p id="prev-client-attn" class="text-slate-600">Up: Bpk. Hendra Wijaya</p>
+                            <p id="prev-client-address" class="text-slate-500 mt-1 whitespace-pre-line">Gedung Cyber Tower Lt. 5, Jakarta</p>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1">
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">No. Penawaran:</span>
+                                <span id="prev-doc-number" class="font-bold text-slate-800">QUO/2026/03/008</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Tanggal:</span>
+                                <span id="prev-doc-date" class="font-medium text-slate-700">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Masa Berlaku:</span>
+                                <span id="prev-doc-validity" class="font-medium text-slate-700">-</span>
+                            </div>
+                            <div class="flex justify-between border-t border-slate-200 pt-1 mt-1">
+                                <span class="text-slate-500">Perihal:</span>
+                                <span id="prev-doc-subject" class="font-semibold text-slate-900 text-right">Penawaran Hardware</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Items Table -->
+                    <table class="w-full border-collapse mb-6">
+                        <thead>
+                            <tr class="bg-brand-900 text-white text-[11px]">
+                                <th class="p-2 text-center rounded-tl-md w-8">#</th>
+                                <th class="p-2 text-left">Deskripsi Barang / Jasa</th>
+                                <th class="p-2 text-center w-12">Qty</th>
+                                <th class="p-2 text-center w-16">Satuan</th>
+                                <th class="p-2 text-right w-24">Harga Satuan</th>
+                                <th class="p-2 text-right w-20">Diskon</th>
+                                <th class="p-2 text-right rounded-tr-md w-28">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="preview-items-body" class="divide-y divide-slate-200 text-[11px]">
+                            <!-- Rendered rows -->
+                        </tbody>
+                    </table>
+
+                    <!-- Totals Block -->
+                    <div class="flex justify-end mb-6">
+                        <div class="w-1/2 space-y-1 text-right text-[11px]">
+                            <div class="flex justify-between py-1 border-b border-slate-100">
+                                <span class="text-slate-500">Subtotal:</span>
+                                <span id="prev-subtotal" class="font-semibold">Rp 0</span>
+                            </div>
+                            <div id="row-prev-global-discount" class="flex justify-between py-1 border-b border-slate-100 text-amber-700 hidden">
+                                <span>Diskon Tambahan:</span>
+                                <span id="prev-global-discount">- Rp 0</span>
+                            </div>
+                            <div id="row-prev-ppn" class="flex justify-between py-1 border-b border-slate-100">
+                                <span id="label-prev-ppn" class="text-slate-500">PPN (11%):</span>
+                                <span id="prev-ppn-val" class="font-semibold">Rp 0</span>
+                            </div>
+                            <div id="row-prev-pph" class="flex justify-between py-1 border-b border-slate-100 text-emerald-700 hidden">
+                                <span id="label-prev-pph">Potongan PPh:</span>
+                                <span id="prev-pph-val">- Rp 0</span>
+                            </div>
+                            <div id="row-prev-shipping" class="flex justify-between py-1 border-b border-slate-100 hidden">
+                                <span class="text-slate-500">Biaya Pengiriman:</span>
+                                <span id="prev-shipping-val">Rp 0</span>
+                            </div>
+                            <div class="flex justify-between py-2 border-t-2 border-slate-800 text-xs font-bold text-brand-900">
+                                <span>GRAND TOTAL:</span>
+                                <span id="prev-grand-total" class="text-sm">Rp 0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terms & Bank Details -->
+                    <div class="grid grid-cols-1 gap-4 bg-slate-50 p-4 rounded-lg border border-slate-200 text-[11px] mb-8">
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-1 flex items-center gap-1">
+                                <i class="fa-solid fa-building-columns text-brand-600"></i> Rekening Pembayaran:
+                            </h4>
+                            <p id="prev-bank-info" class="text-slate-700 font-medium">Bank BCA - 8830129381 a/n PT. Solusi Teknologi Nusantara</p>
+                        </div>
+                        <div class="border-t border-slate-200 pt-2">
+                            <h4 class="font-bold text-slate-800 mb-1 flex items-center gap-1">
+                                <i class="fa-solid fa-circle-info text-brand-600"></i> Syarat & Ketentuan:
+                            </h4>
+                            <p id="prev-terms-notes" class="text-slate-600 whitespace-pre-line leading-relaxed">1. Pembayaran DP 50%...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Signatures -->
+                <div class="grid grid-cols-2 gap-8 pt-4">
+                    <div class="text-center">
+                        <p class="text-slate-500 text-[11px] mb-12">Disetujui oleh (Klien):</p>
+                        <p class="font-bold text-slate-800 border-b border-slate-400 pb-1 inline-block min-w-[150px]"></p>
+                        <p class="text-[10px] text-slate-400 mt-1">Cap & Tanda Tangan</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-slate-500 text-[11px]">Hormat Kami,</p>
+                        <p id="prev-signer-company" class="font-bold text-slate-700 mb-2">PT. SOLUSI TEKNOLOGI NUSANTARA</p>
+                        
+                        <!-- Signature Image Display -->
+                        <div class="h-20 flex items-center justify-center my-1">
+                            <img id="prev-signature-img" class="max-h-full max-w-[160px] object-contain hidden" />
+                        </div>
+
+                        <p id="prev-signer-name" class="font-bold text-slate-900 border-b border-slate-400 pb-0.5 inline-block min-w-[150px]">Budi Santoso, S.Kom</p>
+                        <p id="prev-signer-title" class="text-[10px] text-slate-500">Sales Manager</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Global Application State Data Structure
+        let state = {
+            logoUrl: '',
+            signatureUrl: '',
+            items: [
+                {
+                    id: 1,
+                    image: '',
+                    name: 'Server Rackmount 2U High Performance',
+                    spec: 'Intel Xeon Gold, 64GB RAM, 2x 1TB NVMe SSD, Dual PSU',
+                    qty: 2,
+                    unit: 'Unit',
+                    price: 35000000,
+                    discount: 5,
+                    discountType: 'percent'
+                },
+                {
+                    id: 2,
+                    image: '',
+                    name: 'Managed Switch 24-Port Gigabit SFP+',
+                    spec: 'Layer 3 Managed Switch, PoE+ Support 370W',
+                    qty: 4,
+                    unit: 'Unit',
+                    price: 8500000,
+                    discount: 0,
+                    discountType: 'nominal'
+                }
+            ]
+        };
+
+        let signaturePad = null;
+
+        // Initialize App on DOM Load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Set default dates
+            const today = new Date();
+            const validity = new Date();
+            validity.setDate(today.getDate() + 14);
+
+            document.getElementById('doc-date').value = today.toISOString().split('T')[0];
+            document.getElementById('doc-validity').value = validity.toISOString().split('T')[0];
+
+            // Setup Signature Pad Canvas
+            const canvas = document.getElementById('signature-pad');
+            signaturePad = new SignaturePad(canvas, {
+                backgroundColor: 'rgba(255, 255, 255, 0)',
+                penColor: 'rgb(15, 23, 42)'
+            });
+
+            // Handle Canvas Resizing
+            function resizeCanvas() {
+                const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                canvas.width = canvas.offsetWidth * ratio;
+                canvas.height = canvas.offsetHeight * ratio;
+                canvas.getContext("2d").scale(ratio, ratio);
+                signaturePad.clear();
+            }
+            window.addEventListener("resize", resizeCanvas);
+            resizeCanvas();
+
+            // Render Initial Dynamic Elements
+            renderEditorItems();
+            calculateTotals();
+            updatePreview();
+        });
+
+        // Toggle Responsive Mobile View Tabs
+        function switchMobileTab(tab) {
+            const formWrapper = document.getElementById('form-panel-wrapper');
+            const previewWrapper = document.getElementById('preview-panel-wrapper');
+            const btnForm = document.getElementById('btn-tab-form');
+            const btnPreview = document.getElementById('btn-tab-preview');
+
+            if (tab === 'form') {
+                formWrapper.classList.remove('hidden');
+                previewWrapper.classList.add('hidden');
+                btnForm.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-white shadow text-brand-700";
+                btnPreview.className = "flex-1 py-2 text-sm font-semibold rounded-lg text-slate-600";
+            } else {
+                formWrapper.classList.add('hidden');
+                previewWrapper.classList.remove('hidden');
+                previewWrapper.classList.add('block');
+                btnPreview.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-white shadow text-brand-700";
+                btnForm.className = "flex-1 py-2 text-sm font-semibold rounded-lg text-slate-600";
+            }
+        }
+
+        // Handle Image & File Uploads
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    state.logoUrl = e.target.result;
+                    document.getElementById('logo-placeholder').classList.add('hidden');
+                    const img = document.getElementById('logo-img-display');
+                    img.src = state.logoUrl;
+                    img.classList.remove('hidden');
+
+                    // Update Preview
+                    const prevBox = document.getElementById('preview-logo-box');
+                    prevBox.innerHTML = `<img src="${state.logoUrl}" class="max-h-full max-w-full object-contain" />`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function switchSigMode(mode) {
+            const drawBox = document.getElementById('sig-draw-container');
+            const uploadBox = document.getElementById('sig-upload-container');
+            const btnDraw = document.getElementById('btn-sig-draw');
+            const btnUpload = document.getElementById('btn-sig-upload');
+
+            if (mode === 'draw') {
+                drawBox.classList.remove('hidden');
+                uploadBox.classList.add('hidden');
+                btnDraw.className = "bg-brand-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium";
+                btnUpload.className = "bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs px-3 py-1.5 rounded-lg font-medium";
+            } else {
+                uploadBox.classList.remove('hidden');
+                drawBox.classList.add('hidden');
+                btnUpload.className = "bg-brand-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium";
+                btnDraw.className = "bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs px-3 py-1.5 rounded-lg font-medium";
+            }
+        }
+
+        function clearSignature() {
+            if (signaturePad) signaturePad.clear();
+            state.signatureUrl = '';
+            document.getElementById('prev-signature-img').classList.add('hidden');
+        }
+
+        function saveSignature() {
+            if (signaturePad && !signaturePad.isEmpty()) {
+                state.signatureUrl = signaturePad.toDataURL();
+                const sigImg = document.getElementById('prev-signature-img');
+                sigImg.src = state.signatureUrl;
+                sigImg.classList.remove('hidden');
+            }
+        }
+
+        function handleSigUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    state.signatureUrl = e.target.result;
+                    const sigImg = document.getElementById('prev-signature-img');
+                    sigImg.src = state.signatureUrl;
+                    sigImg.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Item List Management
+        function renderEditorItems() {
+            const container = document.getElementById('items-editor-container');
+            container.innerHTML = '';
+
+            state.items.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = 'p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-3 relative group';
+                row.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                        <span class="text-xs font-bold text-brand-800"># Item ${index + 1}</span>
+                        <div class="flex items-center gap-1">
+                            ${index > 0 ? `<button type="button" onclick="moveItem(${index}, -1)" class="p-1 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-arrow-up"></i></button>` : ''}
+                            ${index < state.items.length - 1 ? `<button type="button" onclick="moveItem(${index}, 1)" class="p-1 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-arrow-down"></i></button>` : ''}
+                            <button type="button" onclick="removeItemRow(${index})" class="p-1 text-red-500 hover:text-red-700 ml-2"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-2 text-xs">
+                        <div class="md:col-span-2">
+                            <label class="block text-[11px] text-slate-500 mb-0.5">Nama Barang / Jasa</label>
+                            <input type="text" value="${item.name}" oninput="updateItem(${index}, 'name', this.value)" class="w-full border border-slate-300 rounded p-2 focus:ring-1 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-slate-500 mb-0.5">Jumlah (Qty)</label>
+                            <input type="number" min="1" value="${item.qty}" oninput="updateItem(${index}, 'qty', parseFloat(this.value) || 0)" class="w-full border border-slate-300 rounded p-2 focus:ring-1 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-slate-500 mb-0.5">Satuan</label>
+                            <input type="text" value="${item.unit}" oninput="updateItem(${index}, 'unit', this.value)" placeholder="Pcs/Unit/Set" class="w-full border border-slate-300 rounded p-2 focus:ring-1 focus:ring-brand-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-[11px] text-slate-500 mb-0.5">Spesifikasi / Detail Deskripsi</label>
+                            <input type="text" value="${item.spec}" oninput="updateItem(${index}, 'spec', this.value)" class="w-full border border-slate-300 rounded p-2 focus:ring-1 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-slate-500 mb-0.5">Harga Satuan (Rp)</label>
+                            <input type="number" value="${item.price}" oninput="updateItem(${index}, 'price', parseFloat(this.value) || 0)" class="w-full border border-slate-300 rounded p-2 focus:ring-1 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-slate-500 mb-0.5">Diskon Item</label>
+                            <div class="flex gap-1">
+                                <select onchange="updateItem(${index}, 'discountType', this.value)" class="border border-slate-300 rounded text-xs p-1">
+                                    <option value="percent" ${item.discountType === 'percent' ? 'selected' : ''}>%</option>
+                                    <option value="nominal" ${item.discountType === 'nominal' ? 'selected' : ''}>Rp</option>
+                                </select>
+                                <input type="number" value="${item.discount}" oninput="updateItem(${index}, 'discount', parseFloat(this.value) || 0)" class="w-full border border-slate-300 rounded p-2 focus:ring-1 focus:ring-brand-500">
+                            </div>
+                        </div>
+                        <div class="md:col-span-4">
+                            <label class="block text-[11px] text-slate-500 mb-0.5">Thumbnail Gambar Item (Opsional)</label>
+                            <input type="file" accept="image/*" onchange="handleItemImageUpload(event, ${index})" class="text-xs text-slate-500">
+                        </div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function addItemRow() {
+            state.items.push({
+                id: Date.now(),
+                image: '',
+                name: '',
+                spec: '',
+                qty: 1,
+                unit: 'Unit',
+                price: 0,
+                discount: 0,
+                discountType: 'percent'
+            });
+            renderEditorItems();
+            calculateTotals();
+            updatePreview();
+        }
+
+        function removeItemRow(index) {
+            state.items.splice(index, 1);
+            renderEditorItems();
+            calculateTotals();
+            updatePreview();
+        }
+
+        function moveItem(index, direction) {
+            const target = index + direction;
+            if (target >= 0 && target < state.items.length) {
+                const temp = state.items[index];
+                state.items[index] = state.items[target];
+                state.items[target] = temp;
+                renderEditorItems();
+                calculateTotals();
+                updatePreview();
+            }
+        }
+
+        function updateItem(index, field, value) {
+            state.items[index][field] = value;
+            calculateTotals();
+            updatePreview();
+        }
+
+        function handleItemImageUpload(event, index) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    state.items[index].image = e.target.result;
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updatePPhRate() {
+            const select = document.getElementById('pph-type');
+            const rateInput = document.getElementById('pph-rate');
+            const selectedOption = select.options[select.selectedIndex];
+            const rate = selectedOption.getAttribute('data-rate');
+            if (rate !== null) {
+                rateInput.value = rate;
+            }
+            calculateTotals();
+        }
+
+        function toggleTaxOptions() {
+            const enablePPN = document.getElementById('enable-ppn').checked;
+            const enablePPh = document.getElementById('enable-pph').checked;
+
+            document.getElementById('ppn-controls').style.display = enablePPN ? 'grid' : 'none';
+            document.getElementById('pph-controls').style.display = enablePPh ? 'grid' : 'none';
+
+            document.getElementById('row-prev-ppn').style.display = enablePPN ? 'flex' : 'none';
+            document.getElementById('row-prev-pph').style.display = enablePPh ? 'flex' : 'none';
+        }
+
+        function calculateTotals() {
+            let itemsSubtotal = 0;
+
+            // Calculate item subtotal
+            state.items.forEach(item => {
+                let rowGross = item.qty * item.price;
+                let rowDiscount = 0;
+                if (item.discountType === 'percent') {
+                    rowDiscount = rowGross * (item.discount / 100);
+                } else {
+                    rowDiscount = item.discount;
+                }
+                let rowNet = Math.max(0, rowGross - rowDiscount);
+                itemsSubtotal += rowNet;
+            });
+
+            // Global discount calculation
+            const discountType = document.getElementById('global-discount-type').value;
+            const discountVal = parseFloat(document.getElementById('global-discount-val').value) || 0;
+            let globalDiscountAmount = 0;
+
+            if (discountType === 'percent') {
+                globalDiscountAmount = itemsSubtotal * (discountVal / 100);
+            } else {
+                globalDiscountAmount = discountVal;
+            }
+
+            const dpp = Math.max(0, itemsSubtotal - globalDiscountAmount);
+
+            // PPN calculation
+            const enablePPN = document.getElementById('enable-ppn').checked;
+            const ppnRate = parseFloat(document.getElementById('ppn-rate').value) || 0;
+            const ppnMode = document.getElementById('ppn-mode').value;
+            let ppnAmount = 0;
+
+            if (enablePPN) {
+                if (ppnMode === 'exclude') {
+                    ppnAmount = dpp * (ppnRate / 100);
+                } else {
+                    // Include mode
+                    ppnAmount = dpp - (dpp / (1 + (ppnRate / 100)));
+                }
+            }
+
+            // PPh calculation
+            const enablePPh = document.getElementById('enable-pph').checked;
+            const pphRate = parseFloat(document.getElementById('pph-rate').value) || 0;
+            let pphAmount = 0;
+
+            if (enablePPh) {
+                pphAmount = dpp * (pphRate / 100);
+            }
+
+            // Shipping
+            const shippingFee = parseFloat(document.getElementById('shipping-fee').value) || 0;
+
+            // Final Grand Total
+            let grandTotal = 0;
+            if (enablePPN && ppnMode === 'exclude') {
+                grandTotal = dpp + ppnAmount - pphAmount + shippingFee;
+            } else {
+                grandTotal = dpp - pphAmount + shippingFee;
+            }
+
+            // UI Render Updates
+            document.getElementById('prev-subtotal').innerText = formatIDR(itemsSubtotal);
+
+            // Global Discount Display
+            const rowDiscount = document.getElementById('row-prev-global-discount');
+            if (globalDiscountAmount > 0) {
+                rowDiscount.classList.remove('hidden');
+                document.getElementById('prev-global-discount').innerText = `- ${formatIDR(globalDiscountAmount)}`;
+            } else {
+                rowDiscount.classList.add('hidden');
+            }
+
+            // PPN Display
+            document.getElementById('label-prev-ppn').innerText = `PPN (${ppnRate}% - ${ppnMode.toUpperCase()}):`;
+            document.getElementById('prev-ppn-val').innerText = formatIDR(ppnAmount);
+
+            // PPh Display
+            document.getElementById('label-prev-pph').innerText = `Potongan PPh (${pphRate}%):`;
+            document.getElementById('prev-pph-val').innerText = `- ${formatIDR(pphAmount)}`;
+
+            // Shipping Display
+            const rowShipping = document.getElementById('row-prev-shipping');
+            if (shippingFee > 0) {
+                rowShipping.classList.remove('hidden');
+                document.getElementById('prev-shipping-val').innerText = formatIDR(shippingFee);
+            } else {
+                rowShipping.classList.add('hidden');
+            }
+
+            document.getElementById('prev-grand-total').innerText = formatIDR(grandTotal);
+        }
+
+        // Live Document Preview Sync Function
+        function updatePreview() {
+            // Text values
+            document.getElementById('prev-company-name').innerText = document.getElementById('company-name').value || '-';
+            document.getElementById('prev-signer-company').innerText = document.getElementById('company-name').value || '-';
+            document.getElementById('prev-company-address').innerText = document.getElementById('company-address').value || '-';
+            document.getElementById('prev-company-contact').innerText = `Telp: ${document.getElementById('company-phone').value || '-'} | Email: ${document.getElementById('company-email').value || '-'}`;
+            document.getElementById('prev-company-npwp').innerText = `NPWP: ${document.getElementById('company-npwp').value || '-'}`;
+
+            document.getElementById('prev-client-name').innerText = document.getElementById('client-name').value || '-';
+            document.getElementById('prev-client-attn').innerText = `Up: ${document.getElementById('client-attn').value || '-'}`;
+            document.getElementById('prev-client-address').innerText = document.getElementById('client-address').value || '-';
+
+            document.getElementById('prev-doc-number').innerText = document.getElementById('doc-number').value || '-';
+            document.getElementById('prev-doc-date').innerText = formatDate(document.getElementById('doc-date').value);
+            document.getElementById('prev-doc-validity').innerText = formatDate(document.getElementById('doc-validity').value);
+            document.getElementById('prev-doc-subject').innerText = document.getElementById('doc-subject').value || '-';
+
+            document.getElementById('prev-bank-info').innerText = document.getElementById('bank-info').value || '-';
+            document.getElementById('prev-terms-notes').innerText = document.getElementById('terms-notes').value || '-';
+
+            document.getElementById('prev-signer-name').innerText = document.getElementById('signer-name').value || '-';
+            document.getElementById('prev-signer-title').innerText = document.getElementById('signer-title').value || '-';
+
+            // Items Table Render
+            const tbody = document.getElementById('preview-items-body');
+            tbody.innerHTML = '';
+
+            state.items.forEach((item, index) => {
+                let rowGross = item.qty * item.price;
+                let rowDiscount = item.discountType === 'percent' ? rowGross * (item.discount / 100) : item.discount;
+                let rowNet = Math.max(0, rowGross - rowDiscount);
+
+                const tr = document.createElement('tr');
+                tr.className = index % 2 === 0 ? 'bg-white' : 'bg-slate-50/50';
+                tr.innerHTML = `
+                    <td class="p-2 text-center align-top border-b border-slate-100">${index + 1}</td>
+                    <td class="p-2 align-top border-b border-slate-100">
+                        <div class="flex gap-2">
+                            ${item.image ? `<img src="${item.image}" class="w-10 h-10 object-cover rounded border border-slate-200 flex-none" />` : ''}
+                            <div>
+                                <p class="font-bold text-slate-800">${item.name || '-'}</p>
+                                <p class="text-[10px] text-slate-500 whitespace-pre-line">${item.spec || ''}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-2 text-center align-top border-b border-slate-100 font-medium">${item.qty}</td>
+                    <td class="p-2 text-center align-top border-b border-slate-100 text-slate-600">${item.unit}</td>
+                    <td class="p-2 text-right align-top border-b border-slate-100">${formatIDR(item.price)}</td>
+                    <td class="p-2 text-right align-top border-b border-slate-100 text-slate-500">${item.discount > 0 ? (item.discountType === 'percent' ? item.discount + '%' : formatIDR(item.discount)) : '-'}</td>
+                    <td class="p-2 text-right align-top border-b border-slate-100 font-bold text-slate-800">${formatIDR(rowNet)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Helper Format Functions
+        function formatIDR(num) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
+        }
+
+        function exportToPDF() {
+            const element = document.getElementById('preview-container');
+            const docNum = document.getElementById('doc-number').value || 'Quotation';
+            
+            const opt = {
+                margin:       0,
+                filename:     `Penawaran_Harga_${docNum.replace(/[/\\?%*:|"<>]/g, '-')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Execute PDF Generation
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function exportToExcel() {
+            const docNum = document.getElementById('doc-number').value || 'Quotation';
+            const clientName = document.getElementById('client-name').value || 'Client';
+
+            let data = [
+                ["PENAWARAN HARGA / QUOTATION"],
+                ["Nomor Penawaran:", docNum],
+                ["Tanggal:", formatDate(document.getElementById('doc-date').value)],
+                ["Kepada:", clientName],
+                [""],
+                ["No", "Nama Barang / Jasa", "Spesifikasi", "Qty", "Satuan", "Harga Satuan (Rp)", "Diskon", "Total Harga (Rp)"]
+            ];
+
+            state.items.forEach((item, index) => {
+                let rowGross = item.qty * item.price;
+                let rowDiscount = item.discountType === 'percent' ? rowGross * (item.discount / 100) : item.discount;
+                let rowNet = Math.max(0, rowGross - rowDiscount);
+
+                data.push([
+                    index + 1,
+                    item.name,
+                    item.spec,
+                    item.qty,
+                    item.unit,
+                    item.price,
+                    item.discount,
+                    rowNet
+                ]);
+            });
+
+            // Append Calculations Summary
+            data.push([]);
+            data.push(["", "", "", "", "", "", "Subtotal:", document.getElementById('prev-subtotal').innerText]);
+            data.push(["", "", "", "", "", "", "PPN:", document.getElementById('prev-ppn-val').innerText]);
+            data.push(["", "", "", "", "", "", "Grand Total:", document.getElementById('prev-grand-total').innerText]);
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Quotation");
+
+            XLSX.writeFile(wb, `Quotation_${docNum.replace(/[/\\?%*:|"<>]/g, '-')}.xlsx`);
+        }
+
+        function exportToWord() {
+            const previewHtml = document.getElementById('preview-container').innerHTML;
+            const docNum = document.getElementById('doc-number').value || 'Quotation';
+
+            const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
+                "xmlns:w='urn:schemas-microsoft-com:office:word' "+
+                "xmlns='http://www.w3.org/TR/REC-html40'>"+
+                "<head><meta charset='utf-8'><title>Export Word</title><style>"+
+                "body { font-family: Arial, sans-serif; font-size: 10pt; } "+
+                "table { border-collapse: collapse; width: 100%; } "+
+                "th, td { border: 1px solid #ccc; padding: 6px; } "+
+                "</style></head><body>";
+            const footer = "</body></html>";
+            
+            const sourceHTML = header + previewHtml + footer;
+            const blob = new Blob(['\ufeff' + sourceHTML], { type: 'application/msword' });
+            
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Quotation_${docNum.replace(/[/\\?%*:|"<>]/g, '-')}.doc`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+</body>
+</html>
+```
