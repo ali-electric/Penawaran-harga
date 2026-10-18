@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Penawaran Harga (By.Rere)</title>
+    <title>Generator Penawaran Harga (Sales Offer / Quotation)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -51,19 +51,32 @@
         .a4-page {
             width: 210mm;
             min-height: 297mm;
-            padding: 18mm 18mm 20mm 18mm;
-            margin: 0 auto;
+            padding: 16mm 16mm 18mm 16mm;
+            margin: 0 auto 20px auto;
             background: white;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
             box-sizing: border-box;
             position: relative;
+            display: flex;
+            flex-col;
+            justify-content: space-between;
         }
 
         @media print {
             body { background: white !important; padding: 0 !important; }
             .no-print { display: none !important; }
-            .a4-page { box-shadow: none !important; margin: 0 !important; width: 100% !important; padding: 12mm !important; }
-            .page-break-inside-avoid { page-break-inside: avoid; }
+            .a4-page { 
+                box-shadow: none !important; 
+                margin: 0 !important; 
+                width: 210mm !important; 
+                height: 297mm !important; 
+                padding: 12mm !important; 
+                page-break-after: always;
+                page-break-inside: avoid;
+            }
+            .a4-page:last-child {
+                page-break-after: auto;
+            }
         }
 
         .custom-scrollbar::-webkit-scrollbar {
@@ -450,138 +463,11 @@
 
 
         <!-- ================= RIGHT LIVE PREVIEW PANEL ================= -->
-        <section class="w-full lg:w-1/2 p-4 sm:p-8 overflow-y-auto h-full bg-slate-200 flex justify-center custom-scrollbar">
+        <section class="w-full lg:w-1/2 p-4 sm:p-8 overflow-y-auto h-full bg-slate-200 custom-scrollbar">
             
-            <!-- Live Preview Paper Container -->
-            <div id="quotationPaper" class="a4-page text-slate-800 flex flex-col justify-between text-xs transition-all duration-300">
-                
-                <div>
-                    <!-- Header Section: Logo & Document Title -->
-                    <div id="previewHeaderBorder" class="flex justify-between items-start border-b-2 border-slate-800 pb-5 mb-6 transition-colors">
-                        <div class="max-w-[55%]">
-                            <div id="previewLogoContainer" class="mb-3 hidden">
-                                <img id="previewLogo" src="" alt="Company Logo" class="max-h-16 max-w-[200px] object-contain">
-                            </div>
-                            <h2 id="prevCompanyName" class="text-lg font-bold transition-colors">PT Solusi Digital Perkasa</h2>
-                            <p id="prevCompanyAddress" class="text-slate-600 text-[11px] whitespace-pre-line leading-relaxed">Jl. Jendral Sudirman No. 45, Jakarta Selatan 12190</p>
-                            <p id="prevCompanyPhone" class="text-slate-600 text-[11px]">Telp: +62 812-3456-7890</p>
-                            <p id="prevCompanyEmail" class="text-slate-600 text-[11px]">Email: info@solusidigital.co.id</p>
-                            <p id="prevCompanyTaxId" class="text-slate-600 text-[11px]">NPWP: 01.234.567.8-012.000</p>
-                        </div>
-
-                        <div class="text-right">
-                            <h1 id="prevDocTitle" class="text-2xl font-black tracking-wider uppercase transition-colors">PENAWARAN HARGA</h1>
-                            <p class="text-slate-500 font-semibold text-[11px]">QUOTATION</p>
-                            
-                            <div class="mt-4 space-y-1 text-[11px]">
-                                <p><span class="text-slate-500">No. Penawaran:</span> <strong id="prevDocNumber" class="text-slate-800">QUO/2026/X/001</strong></p>
-                                <p><span class="text-slate-500">Tanggal:</span> <strong id="prevDocDate" class="text-slate-800">-</strong></p>
-                                <p><span class="text-slate-500">Berlaku S.d:</span> <strong id="prevDocValidDate" class="text-slate-800">-</strong></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Client & Subject Information -->
-                    <div class="grid grid-cols-2 gap-4 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-200">
-                        <div>
-                            <p id="prevLabelTo" class="text-[10px] font-bold uppercase tracking-wider mb-1 transition-colors">KEPADA YTH:</p>
-                            <h3 id="prevClientName" class="font-bold text-slate-800 text-sm">PT Nusantara Cemerlang</h3>
-                            <p id="prevClientContact" class="text-slate-600">Up: Bpk. Hendra Wijaya</p>
-                            <p id="prevClientAddress" class="text-slate-600 whitespace-pre-line leading-tight">Gedung Menara Indah Lt. 12, Bandung</p>
-                            <p id="prevClientPhone" class="text-slate-600">Telp: +62 811-9876-5432</p>
-                            <p id="prevClientEmail" class="text-slate-600">Email: hendra@nusantaracemerlang.com</p>
-                        </div>
-                        <div>
-                            <p id="prevLabelSubject" class="text-[10px] font-bold uppercase tracking-wider mb-1 transition-colors">PERIHAL / SUBJECT:</p>
-                            <p id="prevDocSubject" class="font-semibold text-slate-800 leading-snug">Penawaran Harga Pengadaan Server & Jaringan Web</p>
-                        </div>
-                    </div>
-
-                    <!-- Items Table -->
-                    <div class="mb-6 overflow-hidden">
-                        <table class="w-full border-collapse">
-                            <thead>
-                                <tr id="prevTableHeader" class="text-white text-[10px] uppercase tracking-wider transition-colors">
-                                    <th class="py-2 px-2 text-center w-8 rounded-tl-md">No</th>
-                                    <th class="py-2 px-2 text-left">Deskripsi & Spesifikasi Items</th>
-                                    <th class="py-2 px-2 text-center w-12">Qty</th>
-                                    <th class="py-2 px-2 text-center w-14">Satuan</th>
-                                    <th class="py-2 px-2 text-right w-24">Harga Satuan</th>
-                                    <th class="py-2 px-2 text-right w-20">Diskon</th>
-                                    <th class="py-2 px-2 text-right w-28 rounded-tr-md">Total Harga</th>
-                                </tr>
-                            </thead>
-                            <tbody id="prevTableBody" class="divide-y divide-slate-200 text-[11px]">
-                                <!-- Rows dynamic rendered here -->
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Financial Summary Section -->
-                    <div class="flex justify-end mb-6 page-break-inside-avoid">
-                        <div class="w-72 space-y-1.5 text-[11px] border-t border-slate-300 pt-2">
-                            <div class="flex justify-between text-slate-600">
-                                <span>Subtotal Items</span>
-                                <span id="prevSubtotal" class="font-semibold text-slate-800">Rp 0</span>
-                            </div>
-                            <div id="prevGlobalDiscountRow" class="flex justify-between text-slate-600 hidden">
-                                <span>Diskon Tambahan</span>
-                                <span id="prevGlobalDiscount" class="font-semibold text-red-600">- Rp 0</span>
-                            </div>
-                            <div id="prevPPNRow" class="flex justify-between text-slate-600">
-                                <span id="prevPPNLabel">PPN (11%)</span>
-                                <span id="prevPPNAmount" class="font-semibold text-slate-800">Rp 0</span>
-                            </div>
-                            <div id="prevPPhRow" class="flex justify-between text-slate-600 hidden">
-                                <span id="prevPPhLabel">Potongan PPh 23 (2%)</span>
-                                <span id="prevPPhAmount" class="font-semibold text-red-600">- Rp 0</span>
-                            </div>
-                            <div id="prevShippingRow" class="flex justify-between text-slate-600 hidden">
-                                <span>Biaya Pengiriman</span>
-                                <span id="prevShipping" class="font-semibold text-slate-800">Rp 0</span>
-                            </div>
-                            <div id="prevGrandTotalRow" class="flex justify-between items-center text-sm font-bold border-t-2 border-slate-800 pt-2 transition-colors">
-                                <span>GRAND TOTAL</span>
-                                <span id="prevGrandTotal">Rp 0</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Terms, Bank & Signature Section -->
-                    <div class="grid grid-cols-2 gap-6 border-t pt-4 text-[11px] page-break-inside-avoid">
-                        <!-- Terms & Bank -->
-                        <div class="space-y-3">
-                            <div>
-                                <h4 id="prevLabelBank" class="font-bold uppercase text-[10px] tracking-wider transition-colors">REKENING PEMBAYARAN:</h4>
-                                <p class="text-slate-700"><span id="prevBankName">Bank Mandiri</span>: <strong id="prevBankAccount" class="text-slate-900">123-00-9876543-2</strong></p>
-                                <p class="text-slate-600">A/N: <span id="prevBankHolder">PT Solusi Digital Perkasa</span></p>
-                            </div>
-                            <div>
-                                <h4 id="prevLabelTerms" class="font-bold uppercase text-[10px] tracking-wider transition-colors">SYARAT & KETENTUAN:</h4>
-                                <p id="prevTermsText" class="text-slate-600 whitespace-pre-line leading-relaxed">1. DP 50% saat penawaran disetujui.</p>
-                            </div>
-                        </div>
-
-                        <!-- Signatures -->
-                        <div class="text-center flex flex-col items-center justify-between min-h-[140px]">
-                            <p class="text-slate-600">Hormat Kami,</p>
-                            <div class="my-2 h-16 flex items-center justify-center">
-                                <img id="prevSigImage" src="" alt="Digital Signature" class="max-h-16 object-contain hidden">
-                            </div>
-                            <div>
-                                <p id="prevSignerName" class="font-bold text-slate-900 underline">Budi Santoso, S.Kom</p>
-                                <p id="prevSignerTitle" class="text-slate-500 text-[10px]">Sales & Commercial Director</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Footer Document Info -->
-                <div class="border-t border-slate-200 pt-3 text-[9px] text-slate-400 flex justify-between items-center no-print-footer">
-                    <span>Dokumen penawaran harga ini diterbitkan secara resmi melalui sistem QuotationPRO.</span>
-                    <span>Halaman 1 dari 1</span>
-                </div>
-
+            <!-- Live Preview Paper Container Wrapper (Supporting Multi-Page) -->
+            <div id="quotationPaperPagesContainer" class="flex flex-col items-center space-y-6">
+                <!-- Pages will be generated dynamically via JavaScript -->
             </div>
 
         </section>
@@ -627,37 +513,14 @@
 
         function changeThemeColor(themeKey) {
             currentThemeKey = themeKey;
-            const theme = themePresets[themeKey] || themePresets.navy;
-
-            const headerBorder = document.getElementById('previewHeaderBorder');
-            const compName = document.getElementById('prevCompanyName');
-            const docTitle = document.getElementById('prevDocTitle');
-            const labelTo = document.getElementById('prevLabelTo');
-            const labelSubject = document.getElementById('prevLabelSubject');
-            const tableHeader = document.getElementById('prevTableHeader');
-            const grandTotalRow = document.getElementById('prevGrandTotalRow');
-            const labelBank = document.getElementById('prevLabelBank');
-            const labelTerms = document.getElementById('prevLabelTerms');
-
-            // Apply style dynamically
-            headerBorder.style.borderColor = theme.primaryHex;
-            compName.style.color = theme.primaryHex;
-            docTitle.style.color = theme.primaryHex;
-            labelTo.style.color = theme.primaryHex;
-            labelSubject.style.color = theme.primaryHex;
-            tableHeader.style.backgroundColor = theme.primaryHex;
-            grandTotalRow.style.color = theme.primaryHex;
-            grandTotalRow.style.borderColor = theme.primaryHex;
-            labelBank.style.color = theme.primaryHex;
-            labelTerms.style.color = theme.primaryHex;
+            updatePreview();
         }
 
         function changeFontFamily(fontFamily) {
             currentFontFamily = fontFamily;
-            document.getElementById('quotationPaper').style.fontFamily = fontFamily;
+            updatePreview();
         }
 
-        // GLOBAL STATE APPLICATION
         let itemsData = [
             {
                 id: 1,
@@ -687,17 +550,12 @@
         let signaturePad = null;
         let sigImageBase64 = '';
 
-        // INITIALIZATION
         window.onload = function() {
             // Set Default Dates
             const today = new Date().toISOString().split('T')[0];
             const nextWeek = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
             document.getElementById('docDate').value = today;
             document.getElementById('docValidDate').value = nextWeek;
-
-            // Initialize Theme & Typography
-            changeThemeColor('navy');
-            changeFontFamily("'Inter', sans-serif");
 
             // Initialize Canvas Signature Pad
             const canvas = document.getElementById('sigCanvas');
@@ -815,170 +673,243 @@
         }
 
         function updatePreview() {
-            // 1. Text Fields Binding
-            document.getElementById('prevCompanyName').innerText = document.getElementById('companyName').value || 'Nama Perusahaan';
-            document.getElementById('prevCompanyPhone').innerText = 'Telp: ' + (document.getElementById('companyPhone').value || '-');
-            document.getElementById('prevCompanyAddress').innerText = document.getElementById('companyAddress').value || '-';
-            
-            // Email Show/Hide Toggle
-            const showEmail = document.getElementById('showCompanyEmail').checked;
-            document.getElementById('prevCompanyEmail').style.display = showEmail ? 'block' : 'none';
-            document.getElementById('prevCompanyEmail').innerText = 'Email: ' + document.getElementById('companyEmail').value;
+            const pagesContainer = document.getElementById('quotationPaperPagesContainer');
+            pagesContainer.innerHTML = '';
 
-            // NPWP Show/Hide Toggle
-            const showTaxId = document.getElementById('showCompanyTaxId').checked;
-            document.getElementById('prevCompanyTaxId').style.display = showTaxId ? 'block' : 'none';
-            document.getElementById('prevCompanyTaxId').innerText = 'NPWP: ' + document.getElementById('companyTaxId').value;
-
-            // Client Info
-            document.getElementById('prevClientName').innerText = document.getElementById('clientName').value || 'Nama Klien';
-            document.getElementById('prevClientContact').innerText = 'Up: ' + (document.getElementById('clientContact').value || '-');
-            document.getElementById('prevClientAddress').innerText = document.getElementById('clientAddress').value || '-';
-            document.getElementById('prevClientPhone').innerText = 'Telp: ' + (document.getElementById('clientPhone').value || '-');
-            document.getElementById('prevClientEmail').innerText = 'Email: ' + (document.getElementById('clientEmail').value || '-');
-
-            // Metadata
-            document.getElementById('prevDocNumber').innerText = document.getElementById('docNumber').value || '-';
-            document.getElementById('prevDocSubject').innerText = document.getElementById('docSubject').value || '-';
-            document.getElementById('prevDocDate').innerText = formatDate(document.getElementById('docDate').value);
-            document.getElementById('prevDocValidDate').innerText = formatDate(document.getElementById('docValidDate').value);
-
-            // Bank & Terms
-            document.getElementById('prevBankName').innerText = document.getElementById('bankName').value || '-';
-            document.getElementById('prevBankAccount').innerText = document.getElementById('bankAccount').value || '-';
-            document.getElementById('prevBankHolder').innerText = document.getElementById('bankHolder').value || '-';
-            document.getElementById('prevTermsText').innerText = document.getElementById('termsText').value || '-';
-
-            // Signer
-            document.getElementById('prevSignerName').innerText = document.getElementById('signerName').value || 'Nama Terang';
-            document.getElementById('prevSignerTitle').innerText = document.getElementById('signerTitle').value || 'Jabatan';
-
-            // Signature Image
-            const prevSigImg = document.getElementById('prevSigImage');
-            if (sigImageBase64) {
-                prevSigImg.src = sigImageBase64;
-                prevSigImg.classList.remove('hidden');
-            } else {
-                prevSigImg.classList.add('hidden');
-            }
-
-            // Currency Symbol
+            const ITEMS_PER_PAGE = 26;
+            const totalPages = Math.ceil(itemsData.length / ITEMS_PER_PAGE) || 1;
+            const theme = themePresets[currentThemeKey] || themePresets.navy;
             const curr = document.getElementById('currencySymbol').value;
 
-            // 2. Render Table Items & Calculate Item Totals
-            const tbody = document.getElementById('prevTableBody');
-            tbody.innerHTML = '';
-            
+            // Form Values
+            const compName = document.getElementById('companyName').value || 'Nama Perusahaan';
+            const compPhone = document.getElementById('companyPhone').value || '-';
+            const compAddr = document.getElementById('companyAddress').value || '-';
+            const compEmail = document.getElementById('companyEmail').value || '';
+            const compTaxId = document.getElementById('companyTaxId').value || '';
+            const showEmail = document.getElementById('showCompanyEmail').checked;
+            const showTaxId = document.getElementById('showCompanyTaxId').checked;
+
+            const clientName = document.getElementById('clientName').value || 'Nama Klien';
+            const clientContact = document.getElementById('clientContact').value || '-';
+            const clientAddr = document.getElementById('clientAddress').value || '-';
+            const clientPhone = document.getElementById('clientPhone').value || '-';
+            const clientEmail = document.getElementById('clientEmail').value || '-';
+
+            const docNum = document.getElementById('docNumber').value || '-';
+            const docSubj = document.getElementById('docSubject').value || '-';
+            const docDateVal = formatDate(document.getElementById('docDate').value);
+            const docValidVal = formatDate(document.getElementById('docValidDate').value);
+
+            // Calculations
             let subtotal = 0;
-
-            itemsData.forEach((item, i) => {
-                const itemTotal = (item.qty * item.price) - item.discount;
-                subtotal += itemTotal;
-
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-slate-100";
-                tr.innerHTML = `
-                    <td class="py-2.5 px-2 text-center text-slate-500">${i + 1}</td>
-                    <td class="py-2.5 px-2">
-                        <strong class="text-slate-800 block">${escapeHtml(item.name)}</strong>
-                        <span class="text-slate-500 text-[10px] block whitespace-pre-line">${escapeHtml(item.desc)}</span>
-                    </td>
-                    <td class="py-2.5 px-2 text-center font-medium">${item.qty}</td>
-                    <td class="py-2.5 px-2 text-center text-slate-600">${escapeHtml(item.unit)}</td>
-                    <td class="py-2.5 px-2 text-right">${formatCurrency(item.price, curr)}</td>
-                    <td class="py-2.5 px-2 text-right text-red-600">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</td>
-                    <td class="py-2.5 px-2 text-right font-bold text-slate-800">${formatCurrency(itemTotal, curr)}</td>
-                `;
-                tbody.appendChild(tr);
+            itemsData.forEach(item => {
+                subtotal += (item.qty * item.price) - item.discount;
             });
 
-            document.getElementById('prevSubtotal').innerText = formatCurrency(subtotal, curr);
-
-            // 3. Financial Calculation (Global Discount, PPN, PPh, Shipping)
             let globalDiscountAmount = 0;
             const globalDiscType = document.getElementById('globalDiscountType').value;
             const globalDiscVal = parseFloat(document.getElementById('globalDiscountValue').value) || 0;
-
             if (globalDiscType === 'percent') {
                 globalDiscountAmount = subtotal * (globalDiscVal / 100);
             } else {
                 globalDiscountAmount = globalDiscVal;
             }
 
-            const prevGlobalDiscRow = document.getElementById('prevGlobalDiscountRow');
-            if (globalDiscountAmount > 0) {
-                prevGlobalDiscRow.classList.remove('hidden');
-                document.getElementById('prevGlobalDiscount').innerText = '- ' + formatCurrency(globalDiscountAmount, curr);
-            } else {
-                prevGlobalDiscRow.classList.add('hidden');
-            }
-
             const subtotalAfterDisc = Math.max(0, subtotal - globalDiscountAmount);
 
-            // PPN Calculation Logic
             const usePPN = document.getElementById('usePPN').checked;
             const ppnRate = parseFloat(document.getElementById('ppnRate').value) || 0;
             const ppnMode = document.querySelector('input[name="ppnMode"]:checked').value;
-            
             let ppnAmount = 0;
-            let dpp = subtotalAfterDisc; // Dasar Pengenaan Pajak
+            let dpp = subtotalAfterDisc;
 
             if (usePPN && ppnRate > 0) {
                 if (ppnMode === 'exclude') {
                     dpp = subtotalAfterDisc;
                     ppnAmount = dpp * (ppnRate / 100);
-                } else { // Include PPN
+                } else {
                     dpp = subtotalAfterDisc / (1 + (ppnRate / 100));
                     ppnAmount = subtotalAfterDisc - dpp;
                 }
             }
 
-            const prevPPNRow = document.getElementById('prevPPNRow');
-            if (usePPN) {
-                prevPPNRow.classList.remove('hidden');
-                document.getElementById('prevPPNLabel').innerText = `PPN (${ppnRate}%) ${ppnMode === 'include' ? '[Incl.]' : ''}`;
-                document.getElementById('prevPPNAmount').innerText = formatCurrency(ppnAmount, curr);
-            } else {
-                prevPPNRow.classList.add('hidden');
-            }
-
-            // PPh Calculation Logic (Based on DPP)
             const usePPh = document.getElementById('usePPh').checked;
             const pphRate = parseFloat(document.getElementById('pphRate').value) || 0;
-            let pphAmount = 0;
+            let pphAmount = (usePPh && pphRate > 0) ? dpp * (pphRate / 100) : 0;
 
-            if (usePPh && pphRate > 0) {
-                pphAmount = dpp * (pphRate / 100);
-            }
-
-            const prevPPhRow = document.getElementById('prevPPhRow');
-            if (usePPh && pphAmount > 0) {
-                prevPPhRow.classList.remove('hidden');
-                document.getElementById('prevPPhLabel').innerText = `Potongan PPh (${pphRate}%)`;
-                document.getElementById('prevPPhAmount').innerText = '- ' + formatCurrency(pphAmount, curr);
-            } else {
-                prevPPhRow.classList.add('hidden');
-            }
-
-            // Shipping Fee
             const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
-            const prevShippingRow = document.getElementById('prevShippingRow');
-            if (shippingFee > 0) {
-                prevShippingRow.classList.remove('hidden');
-                document.getElementById('prevShipping').innerText = formatCurrency(shippingFee, curr);
-            } else {
-                prevShippingRow.classList.add('hidden');
-            }
+            let grandTotal = (ppnMode === 'include') ? (subtotalAfterDisc - pphAmount + shippingFee) : (subtotalAfterDisc + ppnAmount - pphAmount + shippingFee);
 
-            // Final Grand Total
-            let grandTotal = 0;
-            if (ppnMode === 'include') {
-                grandTotal = subtotalAfterDisc - pphAmount + shippingFee;
-            } else {
-                grandTotal = subtotalAfterDisc + ppnAmount - pphAmount + shippingFee;
-            }
+            // Render Each Page
+            for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
+                const pageNum = pageIndex + 1;
+                const pageItems = itemsData.slice(pageIndex * ITEMS_PER_PAGE, (pageIndex + 1) * ITEMS_PER_PAGE);
+                const isLastPage = pageNum === totalPages;
 
-            document.getElementById('prevGrandTotal').innerText = formatCurrency(grandTotal, curr);
+                const pageDiv = document.createElement('div');
+                pageDiv.className = 'a4-page text-slate-800 text-xs transition-all duration-300 flex flex-col justify-between';
+                pageDiv.style.fontFamily = currentFontFamily;
+
+                let tableRowsHtml = '';
+                pageItems.forEach((item, idx) => {
+                    const actualIdx = (pageIndex * ITEMS_PER_PAGE) + idx + 1;
+                    const itemTotal = (item.qty * item.price) - item.discount;
+                    tableRowsHtml += `
+                        <tr class="border-b border-slate-100">
+                            <td class="py-2 px-2 text-center text-slate-500">${actualIdx}</td>
+                            <td class="py-2 px-2">
+                                <strong class="text-slate-800 block">${escapeHtml(item.name)}</strong>
+                                ${item.desc ? `<span class="text-slate-500 text-[10px] block whitespace-pre-line">${escapeHtml(item.desc)}</span>` : ''}
+                            </td>
+                            <td class="py-2 px-2 text-center font-medium">${item.qty}</td>
+                            <td class="py-2 px-2 text-center text-slate-600">${escapeHtml(item.unit)}</td>
+                            <td class="py-2 px-2 text-right">${formatCurrency(item.price, curr)}</td>
+                            <td class="py-2 px-2 text-right text-red-600">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</td>
+                            <td class="py-2 px-2 text-right font-bold text-slate-800">${formatCurrency(itemTotal, curr)}</td>
+                        </tr>
+                    `;
+                });
+
+                // Summary and Signatures for Last Page
+                let summaryAndFooterSection = '';
+                if (isLastPage) {
+                    summaryAndFooterSection = `
+                        <!-- Financial Summary -->
+                        <div class="flex justify-end mb-4 page-break-inside-avoid">
+                            <div class="w-72 space-y-1.5 text-[11px] border-t border-slate-300 pt-2">
+                                <div class="flex justify-between text-slate-600">
+                                    <span>Subtotal Items</span>
+                                    <span class="font-semibold text-slate-800">${formatCurrency(subtotal, curr)}</span>
+                                </div>
+                                ${globalDiscountAmount > 0 ? `
+                                <div class="flex justify-between text-slate-600">
+                                    <span>Diskon Tambahan</span>
+                                    <span class="font-semibold text-red-600">- ${formatCurrency(globalDiscountAmount, curr)}</span>
+                                </div>` : ''}
+                                ${usePPN ? `
+                                <div class="flex justify-between text-slate-600">
+                                    <span>PPN (${ppnRate}%) ${ppnMode === 'include' ? '[Incl.]' : ''}</span>
+                                    <span class="font-semibold text-slate-800">${formatCurrency(ppnAmount, curr)}</span>
+                                </div>` : ''}
+                                ${usePPh && pphAmount > 0 ? `
+                                <div class="flex justify-between text-slate-600">
+                                    <span>Potongan PPh (${pphRate}%)</span>
+                                    <span class="font-semibold text-red-600">- ${formatCurrency(pphAmount, curr)}</span>
+                                </div>` : ''}
+                                ${shippingFee > 0 ? `
+                                <div class="flex justify-between text-slate-600">
+                                    <span>Biaya Pengiriman</span>
+                                    <span class="font-semibold text-slate-800">${formatCurrency(shippingFee, curr)}</span>
+                                </div>` : ''}
+                                <div class="flex justify-between items-center text-sm font-bold border-t-2 pt-2 transition-colors" style="color: ${theme.primaryHex}; border-color: ${theme.primaryHex};">
+                                    <span>GRAND TOTAL</span>
+                                    <span>${formatCurrency(grandTotal, curr)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terms, Bank & Signature -->
+                        <div class="grid grid-cols-2 gap-6 border-t pt-4 text-[11px] page-break-inside-avoid">
+                            <div class="space-y-3">
+                                <div>
+                                    <h4 class="font-bold uppercase text-[10px] tracking-wider mb-1" style="color: ${theme.primaryHex};">REKENING PEMBAYARAN:</h4>
+                                    <p class="text-slate-700">${document.getElementById('bankName').value || '-'}: <strong class="text-slate-900">${document.getElementById('bankAccount').value || '-'}</strong></p>
+                                    <p class="text-slate-600">A/N: <span>${document.getElementById('bankHolder').value || '-'}</span></p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold uppercase text-[10px] tracking-wider mb-1" style="color: ${theme.primaryHex};">SYARAT & KETENTUAN:</h4>
+                                    <p class="text-slate-600 whitespace-pre-line leading-relaxed">${escapeHtml(document.getElementById('termsText').value || '-')}</p>
+                                </div>
+                            </div>
+
+                            <div class="text-center flex flex-col items-center justify-between min-h-[130px]">
+                                <p class="text-slate-600">Hormat Kami,</p>
+                                <div class="my-1 h-14 flex items-center justify-center">
+                                    ${sigImageBase64 ? `<img src="${sigImageBase64}" alt="Signature" class="max-h-14 object-contain">` : ''}
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-900 underline">${escapeHtml(document.getElementById('signerName').value || 'Nama Terang')}</p>
+                                    <p class="text-slate-500 text-[10px]">${escapeHtml(document.getElementById('signerTitle').value || 'Jabatan')}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                pageDiv.innerHTML = `
+                    <div>
+                        <!-- Header Section -->
+                        <div class="flex justify-between items-start border-b-2 pb-4 mb-4 transition-colors" style="border-color: ${theme.primaryHex};">
+                            <div class="max-w-[55%]">
+                                ${logoBase64 ? `<div class="mb-2"><img src="${logoBase64}" alt="Company Logo" class="max-h-14 max-w-[180px] object-contain"></div>` : ''}
+                                <h2 class="text-base font-bold transition-colors" style="color: ${theme.primaryHex};">${escapeHtml(compName)}</h2>
+                                <p class="text-slate-600 text-[10px] whitespace-pre-line leading-relaxed">${escapeHtml(compAddr)}</p>
+                                <p class="text-slate-600 text-[10px]">Telp: ${escapeHtml(compPhone)}</p>
+                                ${showEmail ? `<p class="text-slate-600 text-[10px]">Email: ${escapeHtml(compEmail)}</p>` : ''}
+                                ${showTaxId ? `<p class="text-slate-600 text-[10px]">NPWP: ${escapeHtml(compTaxId)}</p>` : ''}
+                            </div>
+
+                            <div class="text-right">
+                                <h1 class="text-xl font-black tracking-wider uppercase transition-colors" style="color: ${theme.primaryHex};">PENAWARAN HARGA</h1>
+                                <p class="text-slate-500 font-semibold text-[10px]">QUOTATION</p>
+                                
+                                <div class="mt-3 space-y-0.5 text-[10px]">
+                                    <p><span class="text-slate-500">No. Penawaran:</span> <strong class="text-slate-800">${escapeHtml(docNum)}</strong></p>
+                                    <p><span class="text-slate-500">Tanggal:</span> <strong class="text-slate-800">${docDateVal}</strong></p>
+                                    <p><span class="text-slate-500">Berlaku S.d:</span> <strong class="text-slate-800">${docValidVal}</strong></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Client & Subject Information -->
+                        <div class="grid grid-cols-2 gap-3 mb-4 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <div>
+                                <p class="text-[9px] font-bold uppercase tracking-wider mb-0.5 transition-colors" style="color: ${theme.primaryHex};">KEPADA YTH:</p>
+                                <h3 class="font-bold text-slate-800 text-xs">${escapeHtml(clientName)}</h3>
+                                <p class="text-slate-600 text-[10px]">Up: ${escapeHtml(clientContact)}</p>
+                                <p class="text-slate-600 text-[10px] whitespace-pre-line leading-tight">${escapeHtml(clientAddr)}</p>
+                                <p class="text-slate-600 text-[10px]">Telp: ${escapeHtml(clientPhone)}</p>
+                                <p class="text-slate-600 text-[10px]">Email: ${escapeHtml(clientEmail)}</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] font-bold uppercase tracking-wider mb-0.5 transition-colors" style="color: ${theme.primaryHex};">PERIHAL / SUBJECT:</p>
+                                <p class="font-semibold text-slate-800 text-[11px] leading-snug">${escapeHtml(docSubj)}</p>
+                            </div>
+                        </div>
+
+                        <!-- Items Table for Current Page -->
+                        <div class="mb-4 overflow-hidden">
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr class="text-white text-[9px] uppercase tracking-wider transition-colors" style="background-color: ${theme.primaryHex};">
+                                        <th class="py-2 px-2 text-center w-8 rounded-tl-md">No</th>
+                                        <th class="py-2 px-2 text-left">Deskripsi & Spesifikasi Items</th>
+                                        <th class="py-2 px-2 text-center w-10">Qty</th>
+                                        <th class="py-2 px-2 text-center w-12">Satuan</th>
+                                        <th class="py-2 px-2 text-right w-24">Harga Satuan</th>
+                                        <th class="py-2 px-2 text-right w-16">Diskon</th>
+                                        <th class="py-2 px-2 text-right w-24 rounded-tr-md">Total Harga</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 text-[10px]">
+                                    ${tableRowsHtml}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        ${summaryAndFooterSection}
+                    </div>
+
+                    <!-- Footer Page Count -->
+                    <div class="border-t border-slate-200 pt-2 text-[9px] text-slate-400 flex justify-between items-center no-print-footer">
+                        <span>Dokumen penawaran harga ini diterbitkan secara resmi melalui sistem QuotationPRO.</span>
+                        <span class="font-semibold text-slate-600">Halaman ${pageNum} dari ${totalPages}</span>
+                    </div>
+                `;
+
+                pagesContainer.appendChild(pageDiv);
+            }
         }
 
         function formatCurrency(amount, currencySymbol = 'Rp') {
@@ -997,9 +928,7 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     logoBase64 = e.target.result;
-                    const logoImg = document.getElementById('previewLogo');
-                    logoImg.src = logoBase64;
-                    document.getElementById('previewLogoContainer').classList.remove('hidden');
+                    updatePreview();
                 }
                 reader.readAsDataURL(file);
             }
@@ -1008,7 +937,7 @@
         function removeLogo() {
             logoBase64 = '';
             document.getElementById('inputLogo').value = '';
-            document.getElementById('previewLogoContainer').classList.add('hidden');
+            updatePreview();
         }
 
         function toggleSigMethod(method) {
@@ -1058,9 +987,8 @@
             else details.classList.add('hidden');
         });
 
-        // PDF Export Handler
         function exportPDF() {
-            const element = document.getElementById('quotationPaper');
+            const pages = document.querySelectorAll('.a4-page');
             const opt = {
                 margin:       0,
                 filename:     `Quotation_${document.getElementById('docNumber').value.replace(/[\/\\?%*:|"<>]/g, '-')}.pdf`,
@@ -1068,7 +996,18 @@
                 html2canvas:  { scale: 2, useCORS: true, logging: false },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-            html2pdf().set(opt).from(element).save();
+
+            if (pages.length === 1) {
+                html2pdf().set(opt).from(pages[0]).save();
+            } else {
+                // Combine multi-page elements
+                const tempWrapper = document.createElement('div');
+                pages.forEach(page => {
+                    const clonedPage = page.cloneNode(true);
+                    tempWrapper.appendChild(clonedPage);
+                });
+                html2pdf().set(opt).from(tempWrapper).save();
+            }
         }
 
         // Excel Export Handler (SheetJS)
@@ -1076,7 +1015,6 @@
             const curr = document.getElementById('currencySymbol').value;
             const wb = XLSX.utils.book_new();
             
-            // Header Info Matrix
             const excelData = [
                 ["PENAWARAN HARGA / QUOTATION"],
                 ["No. Penawaran:", document.getElementById('docNumber').value],
@@ -1091,7 +1029,6 @@
                 ["No", "Deskripsi Barang / Jasa", "Qty", "Satuan", "Harga Satuan (" + curr + ")", "Diskon (" + curr + ")", "Total Harga (" + curr + ")"]
             ];
 
-            // Add Table Rows
             itemsData.forEach((item, index) => {
                 const total = (item.qty * item.price) - item.discount;
                 excelData.push([
@@ -1135,7 +1072,6 @@
                         new docx.Paragraph({ text: `Kepada Yth: ${document.getElementById('clientName').value} (${document.getElementById('clientContact').value})` }),
                         new docx.Paragraph({ text: "" }),
                         
-                        // Table
                         new docx.Table({
                             rows: [
                                 new docx.TableRow({
