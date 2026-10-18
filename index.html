@@ -1,177 +1,1713 @@
+```html
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-full bg-slate-100">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0f172a">
-<title>QuotationPRO — Generator Penawaran Harga</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@400;600;700&family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-<style>
-:root{--primary:#1e3a8a;--primary-light:#eff6ff;--paper-font:'Plus Jakarta Sans',Inter,sans-serif;--line:#e2e8f0;--ink:#1e293b;--muted:#64748b;--panel:#fff;--bg:#f1f5f9}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.topbar{position:sticky;top:0;z-index:20;background:#0f172a;color:#fff;box-shadow:0 5px 20px #0f172a22}.topbar-inner{max-width:1600px;margin:auto;min-height:68px;padding:10px 22px;display:flex;justify-content:space-between;align-items:center;gap:14px}.brand{display:flex;align-items:center;gap:12px}.brand-icon{background:linear-gradient(135deg,#2563eb,#6366f1);width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:19px}.brand h1{font-size:17px;margin:0;font-weight:800;letter-spacing:-.3px}.brand p{font-size:11px;color:#94a3b8;margin:4px 0 0}.actions{display:flex;flex-wrap:wrap;gap:7px}.btn{border:0;border-radius:9px;padding:10px 12px;color:#fff;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:7px;box-shadow:0 2px 5px #0f172a12}.btn:hover{filter:brightness(1.06);transform:translateY(-1px)}.btn-pdf{background:#e11d48}.btn-excel{background:#059669}.btn-word{background:#2563eb}.btn-print{background:#334155}.btn-light{color:#334155;background:#e2e8f0}.layout{max-width:1600px;margin:auto;display:grid;grid-template-columns:minmax(360px,1fr) minmax(420px,1fr);gap:0;min-height:calc(100vh - 68px)}.form-panel{padding:22px;overflow:auto;max-height:calc(100vh - 68px);display:flex;flex-direction:column;gap:16px}.preview-panel{background:#cbd5e1;padding:26px 18px;overflow:auto;max-height:calc(100vh - 68px)}.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:17px;box-shadow:0 2px 8px #0f172a06}.card-title{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #f1f5f9;padding-bottom:12px;margin-bottom:14px}.card-title h2{font-size:13px;margin:0;font-weight:800;display:flex;align-items:center;gap:8px}.card-title h2 i{color:#2563eb}.step{background:#eff6ff;border:1px solid #dbeafe;color:#1d4ed8;border-radius:99px;padding:4px 8px;font-size:9px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;white-space:nowrap}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.form-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.field{min-width:0}.field.full{grid-column:1/-1}.field label{font-size:11px;font-weight:700;color:#475569;display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 5px}.field input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]),.field textarea,.field select,.tax-input,.item-input{width:100%;min-width:0;padding:9px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:#1e293b;font-size:12px;outline:none}.field textarea{resize:vertical;line-height:1.5}.field input:focus,.field textarea:focus,.field select:focus,.item-input:focus{border-color:#60a5fa;box-shadow:0 0 0 3px #dbeafe}.check-label{display:inline-flex!important;align-items:center;gap:4px;color:#64748b!important;font-weight:600!important;margin:0!important;font-size:10px!important}.check-label input{accent-color:#2563eb}.subsection{border-top:1px solid #f1f5f9;margin-top:17px;padding-top:15px}.subsection h3{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:#1d4ed8;margin:0 0 11px;font-weight:800;display:flex;align-items:center;gap:7px}.soft-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px}.muted{color:#64748b;font-size:10px;line-height:1.5}.range-row{display:flex;align-items:center;gap:8px}.range-row input{width:100%;accent-color:#2563eb}.range-value{font-size:10px;font-weight:800;color:#2563eb;white-space:nowrap;min-width:48px;text-align:right}.item-card{border:1px solid #dbe3ed;border-radius:11px;padding:11px;background:#f8fafc;margin-bottom:9px}.item-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}.item-head strong{font-size:11px}.item-head button{border:0;background:#fff1f2;color:#be123c;border-radius:7px;font-size:10px;font-weight:700;padding:6px 8px}.item-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.item-grid .wide{grid-column:span 2}.item-input{padding:8px;font-size:11px}.mini-label{display:block;color:#64748b;font-weight:700;font-size:9px;margin:0 0 4px}.add-btn{width:100%;padding:11px;border:1px dashed #3b82f6;border-radius:9px;background:#eff6ff;color:#1d4ed8;font-size:11px;font-weight:800}.tax-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.tax-row>label{font-size:11px;font-weight:700}.tax-input{width:72px!important;padding:7px!important;text-align:center}.radio-row{display:flex;flex-wrap:wrap;gap:14px;font-size:10px;color:#475569}.radio-row label{display:flex;align-items:center;gap:5px}.radio-row input{accent-color:#2563eb}.hidden{display:none!important}.signature-canvas{display:block;width:300px;max-width:100%;height:110px;background:#fff;border:1px solid #cbd5e1;border-radius:8px;touch-action:none;cursor:crosshair}.tiny-btn{padding:7px 9px;border:1px solid #cbd5e1;border-radius:7px;background:#fff;color:#475569;font-size:10px;font-weight:700}.a4-page{width:210mm;min-height:297mm;padding:12mm 14mm 10mm;background:#fff;margin:0 auto 22px;box-shadow:0 8px 30px #0f172a20;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;color:#1e293b;font-family:var(--paper-font);position:relative;break-after:page;page-break-after:always}.a4-page:last-child{break-after:auto;page-break-after:auto}.paper-main{flex:1}.paper-head{border-bottom:2px solid var(--primary);padding-bottom:10px;margin-bottom:11px}.paper-head-row{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}.paper-company{max-width:58%;overflow-wrap:anywhere}.paper-company h2{margin:0 0 4px;color:var(--primary);font-size:15pt;font-weight:800;overflow-wrap:anywhere}.paper-company p{font-size:8.5pt;line-height:1.45;margin:2px 0;color:#64748b;white-space:pre-line}.paper-doc{text-align:right;max-width:44%}.paper-doc h1{font-size:19pt;line-height:1.1;color:var(--primary);margin:0;font-weight:800;letter-spacing:.5px}.paper-doc .en{font-size:7pt;letter-spacing:2px;color:#94a3b8;font-weight:800;margin:4px 0 8px}.doc-meta{display:inline-block;text-align:left;background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;padding:7px 9px;font-size:8pt;max-width:100%;overflow-wrap:anywhere}.doc-meta div{margin:2px 0}.doc-meta span{color:#64748b}.logo-box{margin-bottom:7px;display:flex}.logo-box img{object-fit:contain;max-width:100%}.client-box{display:grid;grid-template-columns:1.1fr 1fr;gap:12px;padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;margin-bottom:12px;font-size:9pt;overflow-wrap:anywhere}.paper-label{font-size:7pt;color:var(--primary);font-weight:800;letter-spacing:.8px;margin:0 0 4px}.client-box h3{font-size:11pt;margin:0 0 3px;font-weight:800}.client-box p{margin:2px 0;line-height:1.35;white-space:pre-line}.subject{font-size:9pt;font-weight:600;line-height:1.4}.items-table-wrap{border:1px solid #dbe3ed;border-radius:8px;overflow:hidden;margin-bottom:12px}.items-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:8.5pt}.items-table th{background:var(--primary);color:white;text-align:left;font-size:7.5pt;letter-spacing:.2px;padding:8px 6px;overflow-wrap:anywhere}.items-table td{padding:8px 6px;border-bottom:1px solid #e2e8f0;vertical-align:top;overflow-wrap:anywhere;word-break:break-word}.items-table tr:nth-child(even) td{background:#f8fafc}.items-table tr:last-child td{border-bottom:0}.items-table .center{text-align:center}.items-table .right{text-align:right;font-variant-numeric:tabular-nums}.item-name{font-weight:800;color:#1e293b}.item-desc{font-size:7.5pt;color:#64748b;line-height:1.4;white-space:pre-line;margin-top:3px}.summary{width:76mm;margin:0 0 13px auto;padding:10px 11px;border:1px solid #dbe3ed;background:#f8fafc;border-radius:8px;font-size:8.5pt}.sumrow{display:flex;justify-content:space-between;gap:10px;margin:5px 0}.sumrow span:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.sumrow.total{border-top:1px solid #cbd5e1;padding-top:8px;margin-top:8px;font-size:11pt;font-weight:800;color:var(--primary)}.paper-footer{border-top:1px solid #e2e8f0;padding-top:10px;display:grid;grid-template-columns:1.1fr .9fr;gap:14px;font-size:8pt;line-height:1.4;break-inside:avoid}.paper-footer h4{font-size:7.5pt;color:var(--primary);letter-spacing:.5px;margin:0 0 4px}.paper-footer p{white-space:pre-line;margin:2px 0;overflow-wrap:anywhere}.sign-area{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:space-between;min-height:125px}.sign-img{height:58px;max-width:150px;object-fit:contain}.sign-name{margin-top:4px!important;font-weight:800;text-decoration:underline}.page-foot{display:flex;justify-content:space-between;gap:12px;color:#94a3b8;font-size:7pt;border-top:1px solid #e2e8f0;padding-top:5px;margin-top:10px}.page-foot span:last-child{white-space:nowrap;font-weight:700;color:#64748b}.notice{position:fixed;right:16px;bottom:16px;z-index:50;background:#0f172a;color:#fff;border-radius:10px;padding:11px 14px;font-size:12px;box-shadow:0 8px 25px #0002;max-width:90vw}.app-note{font-size:10px;color:#64748b;line-height:1.5;margin-top:9px}.pill{font-size:9px;font-weight:800;color:#047857;background:#ecfdf5;border:1px solid #d1fae5;border-radius:99px;padding:4px 8px}
-@media(max-width:1100px){.layout{grid-template-columns:1fr}.form-panel{max-height:none;overflow:visible}.preview-panel{max-height:none;overflow-x:auto}.topbar-inner{align-items:flex-start;flex-direction:column}.actions{width:100%}.a4-page{margin-left:auto;margin-right:auto}}
-@media(max-width:620px){.topbar-inner{padding:12px}.brand p{display:none}.actions .btn{flex:1;justify-content:center;padding:9px 8px;font-size:11px}.layout{display:block}.form-panel{padding:12px}.preview-panel{padding:12px 8px;overflow-x:auto}.form-grid,.form-grid.three{grid-template-columns:1fr}.field.full{grid-column:auto}.item-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.item-grid .wide{grid-column:span 2}.card{padding:13px}.a4-page{transform-origin:top left;width:210mm;min-width:210mm;min-height:297mm;margin:0 0 14px}.tax-row{align-items:flex-start}}
-@media print{@page{size:A4 portrait;margin:0}body{background:#fff!important}.topbar,.form-panel,.no-print,.preview-panel>.preview-heading{display:none!important}.layout{display:block;min-height:0}.preview-panel{padding:0!important;background:white!important;max-height:none!important;overflow:visible!important}.a4-page{width:210mm!important;min-height:297mm!important;height:297mm;max-height:none!important;margin:0!important;padding:12mm 14mm 10mm!important;box-shadow:none!important;border-radius:0!important;overflow:hidden!important;break-after:page!important;page-break-after:always!important}.a4-page:last-child{break-after:auto!important;page-break-after:auto!important}.items-table tr,.summary,.paper-footer{break-inside:avoid!important;page-break-inside:avoid!important}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Penawaran Harga (Sales Offer / Quotation)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- HTML2PDF CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- SheetJS (XLSX) CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Docx CDN -->
+    <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
+    <!-- Signature Pad CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+    <!-- Sortable JS for Drag and Drop -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+                        mono: ['"Roboto Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
+        
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+            font-family: 'Roboto Mono', monospace, sans-serif;
+        }
+
+        /* Mencegah pemotongan elemen saat eksport PDF & Print */
+        .a4-page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 12mm 14mm 14mm 14mm;
+            margin: 0 auto 24px auto;
+            background: white;
+            box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
+            box-sizing: border-box;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-radius: 4px;
+            word-break: normal;
+            overflow-wrap: break-word;
+        }
+
+        tr, .page-break-inside-avoid {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
+        @media print {
+            body { background: white !important; padding: 0 !important; margin: 0 !important; }
+            .no-print { display: none !important; }
+            @page {
+                size: A4 portrait;
+                margin: 0mm;
+            }
+            .a4-page { 
+                box-shadow: none !important; 
+                margin: 0 !important; 
+                width: 210mm !important; 
+                min-height: 297mm !important; 
+                padding: 12mm 14mm !important; 
+                page-break-after: always !important;
+                page-break-inside: avoid !important;
+                border: none !important;
+                border-radius: 0 !important;
+            }
+            .a4-page:last-child {
+                page-break-after: auto !important;
+            }
+            [contenteditable] {
+                background: transparent !important;
+                outline: none !important;
+            }
+        }
+
+        .export-clean [contenteditable] {
+            background-color: transparent !important;
+            outline: none !important;
+            border-color: transparent !important;
+            box-shadow: none !important;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
 </head>
-<body>
-<header class="topbar no-print"><div class="topbar-inner"><div class="brand"><div class="brand-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div><div><h1>QuotationPRO <span style="font-size:9px;color:#93c5fd;border:1px solid #334155;background:#1e293b;padding:3px 6px;border-radius:99px">PRO EDITION</span></h1><p>Generator penawaran harga — modern, responsif, dan multi-export</p></div></div><div class="actions"><button class="btn btn-pdf" onclick="exportPDF()"><i class="fa-solid fa-file-pdf"></i> PDF</button><button class="btn btn-excel" onclick="exportExcel()"><i class="fa-solid fa-file-excel"></i> Excel</button><button class="btn btn-word" onclick="exportWord()"><i class="fa-solid fa-file-word"></i> Word</button><button class="btn btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> Cetak</button><button class="btn btn-light" onclick="saveDraft()"><i class="fa-solid fa-floppy-disk"></i> Simpan Draft</button><button class="btn btn-light" onclick="loadDraft()"><i class="fa-solid fa-folder-open"></i> Muat Draft</button></div></div></header>
-<main class="layout">
-<section class="form-panel no-print">
-<div class="card"><div class="card-title"><h2><i class="fa-solid fa-palette"></i> Tema, Font & Ukuran Teks</h2><span class="step">Style</span></div><div class="form-grid three">
-<div class="field"><label for="colorThemeSelect">Tema warna</label><select id="colorThemeSelect" onchange="changeThemeColor(this.value)"><option value="navy">Classic Corporate Navy</option><option value="emerald">Soft Emerald Sage</option><option value="slate">Slate Charcoal</option><option value="terracotta">Warm Terracotta</option><option value="gold">Luxury Muted Gold</option><option value="royal">Royal Indigo</option></select></div>
-<div class="field"><label for="fontFamilySelect">Jenis font dokumen</label><select id="fontFamilySelect" onchange="changeFontFamily(this.value)"><option value="'Plus Jakarta Sans', sans-serif">Modern Executive</option><option value="'Inter', sans-serif">Clean Neutral</option><option value="'Playfair Display', serif">Luxury Serif</option><option value="'Montserrat', sans-serif">Geometric</option><option value="'Lora', serif">Elegant Classic</option><option value="'Roboto', sans-serif">Standard Work</option></select></div>
-<div class="field"><label for="headerFontSizeSelect">Teks header</label><select id="headerFontSizeSelect" onchange="setFontSize('header',this.value)"><option>8</option><option>9</option><option selected>10</option><option>11</option><option>12</option><option>14</option></select></div>
-<div class="field"><label for="clientFontSizeSelect">Teks metadata</label><select id="clientFontSizeSelect" onchange="setFontSize('client',this.value)"><option>8</option><option>9</option><option selected>10</option><option>11</option><option>12</option></select></div>
-<div class="field"><label for="tableFontSizeSelect">Teks tabel</label><select id="tableFontSizeSelect" onchange="setFontSize('table',this.value)"><option>7</option><option>8</option><option selected>9</option><option>10</option><option>11</option></select></div>
-<div class="field"><label for="itemDescFontSizeSelect">Deskripsi item</label><select id="itemDescFontSizeSelect" onchange="setFontSize('desc',this.value)"><option>6</option><option>7</option><option selected>8</option><option>9</option></select></div>
-<div class="field"><label for="numericFontSizeSelect">Angka / nominal</label><select id="numericFontSizeSelect" onchange="setFontSize('numeric',this.value)"><option>7</option><option>8</option><option selected>9</option><option>10</option></select></div>
-<div class="field"><label for="grandTotalFontSizeSelect">Grand total</label><select id="grandTotalFontSizeSelect" onchange="setFontSize('total',this.value)"><option>9</option><option>10</option><option selected>11</option><option>12</option><option>14</option></select></div>
-<div class="field"><label for="footerFontSizeSelect">Footer & tanda tangan</label><select id="footerFontSizeSelect" onchange="setFontSize('footer',this.value)"><option>7</option><option selected>8</option><option>9</option><option>10</option></select></div>
-</div></div>
-<div class="card"><div class="card-title"><h2><i class="fa-solid fa-building"></i> Data Pengirim & Penerima</h2><span class="step">Langkah 1</span></div>
-<div class="soft-box" style="margin-bottom:14px"><div class="field"><label for="inputLogo">Logo perusahaan (PNG/JPG)</label><input type="file" id="inputLogo" accept="image/png,image/jpeg,image/webp,image/svg+xml" onchange="handleLogoUpload(event)" style="font-size:11px;max-width:100%"></div><div class="form-grid" style="margin-top:12px"><div class="field"><label>Lebar logo <span id="logoWidthVal" class="range-value">140 px</span></label><div class="range-row"><input type="range" id="logoWidthInput" min="50" max="300" value="140" oninput="updateLogoControls()"></div></div><div class="field"><label>Tinggi maksimum <span id="logoHeightVal" class="range-value">60 px</span></label><div class="range-row"><input type="range" id="logoHeightInput" min="30" max="150" value="60" oninput="updateLogoControls()"></div></div><div class="field"><label for="logoAlignSelect">Posisi logo</label><select id="logoAlignSelect" onchange="updateLogoControls()"><option value="left">Kiri</option><option value="center">Tengah</option><option value="right">Kanan</option></select></div><div class="field"><label>Geser vertikal <span id="logoOffsetYVal" class="range-value">0 px</span></label><input type="range" id="logoOffsetYInput" min="-30" max="40" value="0" oninput="updateLogoControls()"></div></div><button type="button" class="tiny-btn" onclick="removeLogo()" style="margin-top:8px;color:#be123c"><i class="fa-solid fa-trash"></i> Hapus logo</button></div>
-<div class="form-grid"><div class="field"><label for="companyName">Nama perusahaan</label><input id="companyName" value="PT Solusi Digital Perkasa" oninput="updatePreview()"></div><div class="field"><label for="companyPhone">Telepon / WhatsApp</label><input id="companyPhone" value="+62 812-3456-7890" oninput="updatePreview()"></div><div class="field full"><label for="companyAddress">Alamat perusahaan</label><textarea id="companyAddress" rows="2" oninput="updatePreview()">Jl. Jendral Sudirman No. 45, Jakarta Selatan 12190</textarea></div><div class="field"><label for="companyEmail">Email <span class="check-label"><input type="checkbox" id="showCompanyEmail" checked onchange="updatePreview()"> Tampilkan</span></label><input id="companyEmail" type="email" value="info@solusidigital.co.id" oninput="updatePreview()"></div><div class="field"><label for="companyTaxId">NPWP <span class="check-label"><input type="checkbox" id="showCompanyTaxId" checked onchange="updatePreview()"> Tampilkan</span></label><input id="companyTaxId" value="01.234.567.8-012.000" oninput="updatePreview()"></div></div>
-<div class="subsection"><h3><i class="fa-solid fa-user-tie"></i> Informasi klien / penerima</h3><div class="form-grid"><div class="field"><label for="clientName">Nama perusahaan / klien</label><input id="clientName" value="PT Nusantara Cemerlang" oninput="updatePreview()"></div><div class="field"><label for="clientContact">UP / Contact Person</label><input id="clientContact" value="Bpk. Hendra Wijaya" oninput="updatePreview()"></div><div class="field"><label for="clientEmail">Email klien <span class="check-label"><input type="checkbox" id="showClientEmail" checked onchange="updatePreview()"> Tampilkan</span></label><input id="clientEmail" value="hendra@nusantaracemerlang.com" oninput="updatePreview()"></div><div class="field"><label for="clientPhone">Telepon klien <span class="check-label"><input type="checkbox" id="showClientPhone" checked onchange="updatePreview()"> Tampilkan</span></label><input id="clientPhone" value="+62 811-9876-5432" oninput="updatePreview()"></div><div class="field full"><label for="clientAddress">Alamat klien <span class="check-label"><input type="checkbox" id="showClientAddress" checked onchange="updatePreview()"> Tampilkan</span></label><textarea id="clientAddress" rows="2" oninput="updatePreview()">Gedung Menara Indah Lt. 12, Jl. Asia Afrika No. 8, Bandung</textarea></div></div></div>
-<div class="subsection"><h3><i class="fa-solid fa-file-signature"></i> Metadata dokumen</h3><div class="form-grid"><div class="field"><label for="docNumber">Nomor penawaran</label><input id="docNumber" value="QUO/2026/X/001" oninput="updatePreview()"></div><div class="field"><label for="docSubject">Perihal / subject</label><input id="docSubject" value="Penawaran Harga Pengadaan Server & Jaringan Web" oninput="updatePreview()"></div><div class="field"><label for="docDate">Tanggal penawaran</label><input type="date" id="docDate" onchange="updatePreview()"></div><div class="field"><label for="docValidDate">Masa berlaku sampai</label><input type="date" id="docValidDate" onchange="updatePreview()"></div></div></div>
-</div>
-<div class="card"><div class="card-title"><h2><i class="fa-solid fa-list-check"></i> Rincian barang / jasa</h2><span class="step">Langkah 2</span></div><p class="muted" style="margin-top:-5px">Diskon item diisi sebagai nominal diskon untuk seluruh baris item, bukan per unit. Susun urutan item dengan menarik kartu.</p><div class="form-grid" style="margin:12px 0"><div class="field"><label for="currencySymbol">Mata uang</label><select id="currencySymbol" onchange="updatePreview()"><option value="Rp">IDR (Rp)</option><option value="$">USD ($)</option><option value="€">EUR (€)</option><option value="S$">SGD (S$)</option></select></div></div><div id="itemsFormContainer"></div><button class="add-btn" type="button" onclick="addItemRow()"><i class="fa-solid fa-plus"></i> Tambah item / jasa</button></div>
-<div class="card"><div class="card-title"><h2><i class="fa-solid fa-calculator"></i> Pajak & biaya tambahan</h2><span class="step">Langkah 3</span></div>
-<div class="soft-box" style="margin-bottom:10px"><div class="form-grid three"><div class="field"><label for="globalDiscountType">Jenis diskon global</label><select id="globalDiscountType" onchange="updatePreview()"><option value="nominal">Nominal</option><option value="percent">Persen (%)</option></select></div><div class="field" style="grid-column:span 2"><label for="globalDiscountValue">Nilai diskon global</label><input type="number" id="globalDiscountValue" min="0" step="any" value="0" oninput="updatePreview()"></div></div></div>
-<div class="soft-box" style="margin-bottom:10px"><div class="tax-row"><label><input type="checkbox" id="usePPN" checked onchange="updatePreview()"> Gunakan PPN</label><div style="display:flex;align-items:center;gap:5px"><input class="tax-input" type="number" id="ppnRate" value="11" min="0" max="100" step="0.1" oninput="updatePreview()"><span style="font-size:11px">%</span></div></div><div class="radio-row" style="margin-top:12px"><label><input type="radio" name="ppnMode" value="exclude" checked onchange="updatePreview()"> Exclude PPN (ditambahkan)</label><label><input type="radio" name="ppnMode" value="include" onchange="updatePreview()"> Include PPN (sudah termasuk)</label></div></div>
-<div class="soft-box" style="margin-bottom:10px"><div class="tax-row"><label><input type="checkbox" id="usePPh" onchange="togglePPhDetails();updatePreview()"> Potongan PPh</label><span class="muted">Tarif dapat disesuaikan</span></div><div id="pphDetailsContainer" class="form-grid" style="margin-top:10px;display:none"><div class="field"><label for="pphType">Jenis PPh (pilih tarif awal)</label><select id="pphType" onchange="handlePPhTypeChange()"><option value="23_service">PPh 23 Jasa (contoh 2%)</option><option value="22_goods">PPh 22 Barang (contoh 1,5%)</option><option value="4_2_final">PPh Final 4(2) (contoh 0,5%)</option><option value="custom">Tarif khusus</option></select></div><div class="field"><label for="pphRateInput">Tarif PPh (%)</label><input id="pphRateInput" type="number" min="0" max="100" step="0.1" value="2" oninput="updatePreview()"></div></div></div>
-<div class="field"><label for="shippingFee">Biaya pengiriman / biaya lain</label><input type="number" id="shippingFee" min="0" step="any" value="0" oninput="updatePreview()"></div><p class="app-note">Perhitungan pajak di aplikasi ini bersifat fleksibel. Tarif dan dasar pengenaan perlu disesuaikan dengan jenis transaksi, status PKP, serta ketentuan pajak yang berlaku. Konfirmasi kepada petugas pajak/konsultan sebelum menerbitkan dokumen resmi.</p>
-</div>
-<div class="card"><div class="card-title"><h2><i class="fa-solid fa-file-contract"></i> Rekening, syarat & tanda tangan</h2><span class="step">Langkah 4</span></div><div class="form-grid three"><div class="field"><label for="bankName">Nama bank</label><input id="bankName" value="Bank Mandiri" oninput="updatePreview()"></div><div class="field"><label for="bankAccount">Nomor rekening</label><input id="bankAccount" value="123-00-9876543-2" oninput="updatePreview()"></div><div class="field"><label for="bankHolder">Atas nama</label><input id="bankHolder" value="PT Solusi Digital Perkasa" oninput="updatePreview()"></div><div class="field full"><label for="termsText">Syarat & ketentuan</label><textarea id="termsText" rows="4" oninput="updatePreview()">1. Pembayaran DP 50% saat penawaran disetujui.\n2. Pelunasan 50% dilakukan sebelum pengiriman/serah terima.\n3. Estimasi pengerjaan: 14 Hari Kerja setelah DP diterima.\n4. Garansi pemeliharaan berlaku selama 3 (tiga) bulan.</textarea></div></div>
-<div class="subsection"><h3><i class="fa-solid fa-signature"></i> Tanda tangan digital</h3><div class="form-grid"><div class="field"><label for="signerName">Nama penandatangan</label><input id="signerName" value="Budi Santoso, S.Kom" oninput="updatePreview()"></div><div class="field"><label for="signerTitle">Jabatan</label><input id="signerTitle" value="Sales & Commercial Director" oninput="updatePreview()"></div></div><div class="radio-row" style="margin:12px 0"><label><input type="radio" name="sigMethod" value="draw" checked onchange="toggleSigMethod('draw')"> Gambar langsung</label><label><input type="radio" name="sigMethod" value="upload" onchange="toggleSigMethod('upload')"> Upload stempel / gambar</label></div><div id="sigDrawContainer"><canvas id="sigCanvas" class="signature-canvas" width="600" height="220" aria-label="Area tanda tangan"></canvas><button class="tiny-btn" style="margin-top:7px;color:#be123c" type="button" onclick="clearSignature()"><i class="fa-solid fa-eraser"></i> Bersihkan tanda tangan</button></div><div id="sigUploadContainer" class="hidden"><input type="file" id="sigFileInput" accept="image/*" onchange="handleSigUpload(event)" style="font-size:11px;max-width:100%"></div></div></div>
-</section>
-<section class="preview-panel"><div class="preview-heading no-print" style="max-width:210mm;margin:0 auto 14px;display:flex;justify-content:space-between;align-items:center;color:#334155;font-size:12px;font-weight:800"><span><i class="fa-solid fa-eye" style="color:#2563eb"></i> Pratinjau dokumen A4</span><span class="pill">Live Preview</span></div><div id="quotationPaperPagesContainer"></div></section>
-</main>
-<div id="notice" class="notice hidden" role="status"></div>
-<script>
-'use strict';
-const $ = id => document.getElementById(id);
-let logoBase64 = '';
-let sigImageBase64 = '';
-let signatureHasInk = false;
-let nextItemId = 4;
-let logoWidth = 140, logoHeight = 60, logoAlign = 'left', logoOffsetY = 0;
-let currentThemeKey = 'navy';
-let currentFontFamily = "'Plus Jakarta Sans', sans-serif";
-const fontSizes = {header:10, client:10, table:9, desc:8, numeric:9, total:11, footer:8};
-let itemsData = [
- {id:1,name:'Server Dell PowerEdge R750',desc:'Intel Xeon Silver 4310, 32GB RAM, 2x 1TB SSD NVMe Dual PSU',qty:2,unit:'Unit',price:48000000,discount:1000000},
- {id:2,name:'Cisco Catalyst Switch 24-Port Gigabit',desc:'Managed Switch L2+ dengan PoE Support 370W Smart Managed',qty:1,unit:'Unit',price:12500000,discount:0},
- {id:3,name:'Jasa Instalasi & Konfigurasi Jaringan',desc:'Setting Router, Switch, VLAN, & Firewall Security Setup',qty:1,unit:'Paket',price:8500000,discount:500000}
-];
-const themes = {
- navy:{primary:'#1e3a8a',light:'#eff6ff'}, emerald:{primary:'#065f46',light:'#ecfdf5'}, slate:{primary:'#334155',light:'#f1f5f9'},
- terracotta:{primary:'#9a3412',light:'#fff7ed'}, gold:{primary:'#854d0e',light:'#fefce8'}, royal:{primary:'#4338ca',light:'#eef2ff'}
-};
-function localISODate(date=new Date()){const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,'0'),d=String(date.getDate()).padStart(2,'0');return `${y}-${m}-${d}`;}
-function safeNum(value, min=0, max=Number.MAX_SAFE_INTEGER){const n=Number.parseFloat(value);return Number.isFinite(n)?Math.min(max,Math.max(min,n)):0;}
-function escapeHtml(value){return String(value ?? '').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));}
-function formatCurrency(amount, symbol=($('currencySymbol')?.value || 'Rp')){const n=Number.isFinite(Number(amount))?Number(amount):0;return `${symbol} ${Math.round(n).toLocaleString('id-ID')}`;}
-function formatDate(dateStr){if(!dateStr)return '-';const p=dateStr.split('-').map(Number);if(p.length!==3||!p.every(Number.isFinite))return '-';const d=new Date(p[0],p[1]-1,p[2]);return d.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});}
-function cleanFileName(s){return String(s||'Draft').trim().replace(/[\\/?%*:|"<>]/g,'-').replace(/\s+/g,'_').slice(0,100)||'Draft';}
-function notify(message){const el=$('notice');el.textContent=message;el.classList.remove('hidden');clearTimeout(notify._t);notify._t=setTimeout(()=>el.classList.add('hidden'),3500);}
-function clampItems(){itemsData=itemsData.map(item=>{const qty=safeNum(item.qty,0,1e9),price=safeNum(item.price,0,1e15),gross=qty*price,discount=Math.min(gross,safeNum(item.discount,0,1e15));return {...item,qty,price,discount,name:String(item.name??''),desc:String(item.desc??''),unit:String(item.unit??'')};});}
-function calcTotals(){
- clampItems();
- const lineTotals=itemsData.map(it=>Math.max(0,it.qty*it.price-Math.min(it.discount,it.qty*it.price)));
- const subtotal=lineTotals.reduce((a,b)=>a+b,0);
- const discType=$('globalDiscountType').value;
- const globalDiscInput=safeNum($('globalDiscountValue').value,0,1e15);
- const globalDiscountAmount=Math.min(subtotal,discType==='percent'?subtotal*Math.min(globalDiscInput,100)/100:globalDiscInput);
- const net=Math.max(0,subtotal-globalDiscountAmount);
- const usePPN=$('usePPN').checked;
- const ppnRate=safeNum($('ppnRate').value,0,100);
- const ppnMode=document.querySelector('input[name="ppnMode"]:checked')?.value||'exclude';
- let dpp=net,ppnAmount=0;
- if(usePPN&&ppnRate>0){if(ppnMode==='include'){dpp=net/(1+ppnRate/100);ppnAmount=net-dpp;}else{dpp=net;ppnAmount=dpp*ppnRate/100;}}
- const usePPh=$('usePPh').checked;
- const pphRate=safeNum($('pphRateInput').value,0,100);
- const pphAmount=usePPh?dpp*pphRate/100:0;
- const shippingFee=safeNum($('shippingFee').value,0,1e15);
- const grandTotal=(ppnMode==='include'&&usePPN?net:net+ppnAmount)-pphAmount+shippingFee;
- return {lineTotals,subtotal,globalDiscountAmount,net,usePPN,ppnRate,ppnMode,dpp,ppnAmount,usePPh,pphRate,pphAmount,shippingFee,grandTotal};
-}
-function renderItemsForm(){
- const cont=$('itemsFormContainer');cont.innerHTML='';
- itemsData.forEach((it,index)=>{
-  const card=document.createElement('div');card.className='item-card';card.dataset.id=it.id;
-  card.innerHTML=`<div class="item-head"><strong><i class="fa-solid fa-grip-vertical drag-handle" title="Tarik untuk mengurutkan" style="color:#94a3b8;cursor:grab;margin-right:7px"></i> Item #${index+1}</strong><button type="button" data-remove="${index}"><i class="fa-solid fa-trash"></i> Hapus</button></div><div class="item-grid"><div class="wide"><label class="mini-label">Nama barang / jasa</label><input class="item-input" data-field="name" value="${escapeHtml(it.name)}" placeholder="Nama barang / jasa"></div><div class="wide"><label class="mini-label">Deskripsi / spesifikasi</label><input class="item-input" data-field="desc" value="${escapeHtml(it.desc)}" placeholder="Deskripsi atau spesifikasi"></div><div><label class="mini-label">Qty</label><input class="item-input" type="number" min="0" step="any" data-field="qty" value="${it.qty}"></div><div><label class="mini-label">Satuan</label><input class="item-input" data-field="unit" value="${escapeHtml(it.unit)}" placeholder="Unit"></div><div><label class="mini-label">Harga satuan</label><input class="item-input" type="number" min="0" step="any" data-field="price" value="${it.price}"></div><div><label class="mini-label">Diskon baris (nominal)</label><input class="item-input" type="number" min="0" step="any" data-field="discount" value="${it.discount}"></div></div>`;
-  card.addEventListener('input',e=>{const f=e.target.dataset.field;if(!f)return;let v=e.target.value;if(['qty','price','discount'].includes(f))v=safeNum(v,0,1e15);itemsData[index][f]=v;updatePreview();});
-  card.querySelector('[data-remove]').addEventListener('click',()=>removeItemRow(index));
-  cont.appendChild(card);
- });
- if(window.Sortable){if(window._itemsSortable){window._itemsSortable.destroy();}window._itemsSortable=Sortable.create(cont,{handle:'.drag-handle',animation:150,draggable:'.item-card',onEnd:evt=>{if(evt.oldIndex===evt.newIndex)return;const moved=itemsData.splice(evt.oldIndex,1)[0];itemsData.splice(evt.newIndex,0,moved);renderItemsForm();updatePreview();}});}
-}
-function addItemRow(){itemsData.push({id:nextItemId++,name:'Nama Item / Jasa Baru',desc:'',qty:1,unit:'Unit',price:0,discount:0});renderItemsForm();updatePreview();}
-function removeItemRow(index){if(itemsData.length<=1){notify('Minimal harus ada satu item.');return;}itemsData.splice(index,1);renderItemsForm();updatePreview();}
-function changeThemeColor(key){currentThemeKey=themes[key]?key:'navy';document.documentElement.style.setProperty('--primary',themes[currentThemeKey].primary);document.documentElement.style.setProperty('--primary-light',themes[currentThemeKey].light);updatePreview();}
-function changeFontFamily(value){currentFontFamily=value;document.documentElement.style.setProperty('--paper-font',value);updatePreview();}
-function setFontSize(which,value){fontSizes[which]=safeNum(value,4,24);updatePreview();}
-function updateLogoControls(){logoWidth=safeNum($('logoWidthInput').value,50,300);logoHeight=safeNum($('logoHeightInput').value,30,150);logoAlign=$('logoAlignSelect').value;logoOffsetY=safeNum($('logoOffsetYInput').value,-30,40);$('logoWidthVal').textContent=logoWidth+' px';$('logoHeightVal').textContent=logoHeight+' px';$('logoOffsetYVal').textContent=logoOffsetY+' px';updatePreview();}
-function handleLogoUpload(event){const file=event.target.files?.[0];if(!file)return;if(file.size>5*1024*1024){notify('Ukuran logo maksimum 5 MB.');event.target.value='';return;}if(!file.type.startsWith('image/')){notify('Pilih file gambar yang valid.');event.target.value='';return;}const r=new FileReader();r.onload=()=>{logoBase64=String(r.result||'');updatePreview();};r.onerror=()=>notify('Logo tidak bisa dibaca.');r.readAsDataURL(file);}
-function removeLogo(){logoBase64='';$('inputLogo').value='';updatePreview();}
-function togglePPhDetails(){$('pphDetailsContainer').style.display=$('usePPh').checked?'grid':'none';}
-function handlePPhTypeChange(){const type=$('pphType').value;const rates={'23_service':2,'22_goods':1.5,'4_2_final':0.5};if(type!=='custom')$('pphRateInput').value=rates[type];updatePreview();}
-function toggleSigMethod(method){$('sigDrawContainer').classList.toggle('hidden',method!=='draw');$('sigUploadContainer').classList.toggle('hidden',method!=='upload');}
-function handleSigUpload(event){const file=event.target.files?.[0];if(!file)return;if(file.size>5*1024*1024){notify('Ukuran gambar tanda tangan maksimum 5 MB.');event.target.value='';return;}if(!file.type.startsWith('image/')){notify('Pilih file gambar yang valid.');return;}const r=new FileReader();r.onload=()=>{sigImageBase64=String(r.result||'');signatureHasInk=true;updatePreview();};r.onerror=()=>notify('Gambar tanda tangan tidak bisa dibaca.');r.readAsDataURL(file);}
-function initSignatureCanvas(){const canvas=$('sigCanvas'),ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.strokeStyle='#111827';ctx.lineWidth=4;ctx.lineCap='round';ctx.lineJoin='round';let drawing=false;
- const point=e=>{const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height};};
- canvas.addEventListener('pointerdown',e=>{drawing=true;canvas.setPointerCapture?.(e.pointerId);const p=point(e);ctx.beginPath();ctx.moveTo(p.x,p.y);});
- canvas.addEventListener('pointermove',e=>{if(!drawing)return;const p=point(e);ctx.lineTo(p.x,p.y);ctx.stroke();signatureHasInk=true;sigImageBase64=canvas.toDataURL('image/png');updatePreview();});
- const end=()=>{if(drawing){drawing=false;sigImageBase64=signatureHasInk?canvas.toDataURL('image/png'):'';updatePreview();}};canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',end);canvas.addEventListener('pointerleave',()=>{if(drawing)end();});
-}
-function clearSignature(){const c=$('sigCanvas'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);signatureHasInk=false;sigImageBase64='';$('sigFileInput').value='';updatePreview();}
-function getVal(id,fallback='-'){const v=$(id)?.value;return v&&String(v).trim()?String(v).trim():fallback;}
-function buildSummaryHTML(t,curr){let rows=`<div class="sumrow"><span>Subtotal Items</span><span>${formatCurrency(t.subtotal,curr)}</span></div>`;
- if(t.globalDiscountAmount>0)rows+=`<div class="sumrow"><span>Diskon Tambahan</span><span style="color:#be123c">− ${formatCurrency(t.globalDiscountAmount,curr)}</span></div>`;
- if(t.usePPN)rows+=`<div class="sumrow"><span>PPN (${t.ppnRate}%)${t.ppnMode==='include'?' · incl.':''}</span><span>${formatCurrency(t.ppnAmount,curr)}</span></div>`;
- if(t.usePPh&&t.pphAmount>0)rows+=`<div class="sumrow"><span>Potongan PPh (${t.pphRate}%)</span><span style="color:#be123c">− ${formatCurrency(t.pphAmount,curr)}</span></div>`;
- if(t.shippingFee>0)rows+=`<div class="sumrow"><span>Biaya lain</span><span>${formatCurrency(t.shippingFee,curr)}</span></div>`;
- rows+=`<div class="sumrow total"><span>GRAND TOTAL</span><span>${formatCurrency(t.grandTotal,curr)}</span></div>`;return rows;}
-function renderPage(pageItems,pageIndex,totalPages,t,curr){const theme=themes[currentThemeKey]||themes.navy;const final=pageIndex===totalPages-1;const page=document.createElement('div');page.className='a4-page';page.style.fontFamily=currentFontFamily;
- const rows=pageItems.map((it,i)=>{const n=pageIndex*6+i+1;const total=Math.max(0,it.qty*it.price-Math.min(it.discount,it.qty*it.price));return `<tr><td class="center" style="width:5%;font-size:${fontSizes.numeric}pt">${n}</td><td style="width:35%;font-size:${fontSizes.table}pt"><div class="item-name">${escapeHtml(it.name||'-')}</div>${it.desc?`<div class="item-desc" style="font-size:${fontSizes.desc}pt">${escapeHtml(it.desc)}</div>`:''}</td><td class="center" style="width:7%;font-size:${fontSizes.numeric}pt">${escapeHtml(it.qty)}</td><td class="center" style="width:9%;font-size:${fontSizes.numeric}pt">${escapeHtml(it.unit||'-')}</td><td class="right" style="width:16%;font-size:${fontSizes.numeric}pt">${formatCurrency(it.price,curr)}</td><td class="right" style="width:12%;font-size:${fontSizes.numeric}pt">${it.discount>0?'− '+formatCurrency(Math.min(it.discount,it.qty*it.price),curr):'-'}</td><td class="right" style="width:16%;font-weight:800;font-size:${fontSizes.numeric}pt">${formatCurrency(total,curr)}</td></tr>`;}).join('');
- const logo=logoBase64?`<div class="logo-box" style="justify-content:${logoAlign==='left'?'flex-start':logoAlign==='center'?'center':'flex-end'};transform:translateY(${logoOffsetY}px)"><img src="${logoBase64}" alt="Logo" style="width:${logoWidth}px;height:auto;max-height:${logoHeight}px"></div>`:'';
- const companyMeta=[`<p>Telp: ${escapeHtml(getVal('companyPhone'))}</p>`, $('showCompanyEmail').checked?`<p>Email: ${escapeHtml(getVal('companyEmail'))}</p>`:'', $('showCompanyTaxId').checked?`<p>NPWP: ${escapeHtml(getVal('companyTaxId'))}</p>`:''].join('');
- const clientMeta=[ $('showClientAddress').checked?`<p>${escapeHtml(getVal('clientAddress'))}</p>`:'', $('showClientPhone').checked?`<p>Telp: ${escapeHtml(getVal('clientPhone'))}</p>`:'', $('showClientEmail').checked?`<p>Email: ${escapeHtml(getVal('clientEmail'))}</p>`:''].join('');
- page.innerHTML=`<div class="paper-main"><div class="paper-head" style="border-color:${theme.primary}">${logo}<div class="paper-head-row"><div class="paper-company" style="font-size:${fontSizes.header}pt"><h2 style="font-size:${fontSizes.header+3}pt">${escapeHtml(getVal('companyName','Nama Perusahaan'))}</h2><p>${escapeHtml(getVal('companyAddress'))}</p>${companyMeta}</div><div class="paper-doc" style="font-size:${fontSizes.header}pt"><h1 style="font-size:${fontSizes.header+6}pt">PENAWARAN HARGA</h1><div class="en">QUOTATION</div><div class="doc-meta"><div><span>No. Penawaran:</span> <b>${escapeHtml(getVal('docNumber'))}</b></div><div><span>Tanggal:</span> <b>${formatDate($('docDate').value)}</b></div><div><span>Berlaku s.d.:</span> <b>${formatDate($('docValidDate').value)}</b></div></div></div></div></div>
- <div class="client-box" style="font-size:${fontSizes.client}pt"><div><div class="paper-label">KEPADA YTH:</div><h3 style="font-size:${fontSizes.client+1}pt">${escapeHtml(getVal('clientName','Nama Klien'))}</h3><p>Up: ${escapeHtml(getVal('clientContact'))}</p>${clientMeta}</div><div><div class="paper-label">PERIHAL / SUBJECT:</div><div class="subject">${escapeHtml(getVal('docSubject'))}</div></div></div>
- <div class="items-table-wrap"><table class="items-table"><colgroup><col style="width:5%"><col style="width:35%"><col style="width:7%"><col style="width:9%"><col style="width:16%"><col style="width:12%"><col style="width:16%"></colgroup><thead><tr><th style="text-align:center">NO</th><th>DESKRIPSI & SPESIFIKASI</th><th style="text-align:center">QTY</th><th style="text-align:center">SATUAN</th><th style="text-align:right">HARGA SATUAN</th><th style="text-align:right">DISKON</th><th style="text-align:right">TOTAL HARGA</th></tr></thead><tbody>${rows}</tbody></table></div>
- ${final?`<div class="summary" style="font-size:${fontSizes.numeric}pt">${buildSummaryHTML(t,curr)}</div><div class="paper-footer" style="font-size:${fontSizes.footer}pt"><div><h4>REKENING PEMBAYARAN</h4><p><b>${escapeHtml(getVal('bankName'))}</b> · ${escapeHtml(getVal('bankAccount'))}</p><p>A/N: ${escapeHtml(getVal('bankHolder'))}</p><h4 style="margin-top:9px">SYARAT & KETENTUAN</h4><p style="font-size:${Math.max(6,fontSizes.footer-1)}pt">${escapeHtml(getVal('termsText')).replace(/\n/g,'<br>')}</p></div><div class="sign-area"><p>Hormat Kami,</p>${sigImageBase64?`<img class="sign-img" src="${sigImageBase64}" alt="Tanda tangan">`:'<div style="height:58px"></div>'}<div><p class="sign-name">${escapeHtml(getVal('signerName','Nama Terang'))}</p><p style="color:#64748b">${escapeHtml(getVal('signerTitle','Jabatan'))}</p></div></div></div>`:''}</div><div class="page-foot"><span>Dokumen penawaran harga · QuotationPRO</span><span>Halaman ${pageIndex+1} dari ${totalPages}</span></div>`;
- // Apply theme to dynamically rendered document details.
- page.querySelectorAll('.paper-label,.paper-company h2,.paper-doc h1,.sumrow.total,.paper-footer h4').forEach(el=>el.style.color=theme.primary);
- return page;
-}
-function updatePreview(){
- const container=$('quotationPaperPagesContainer');if(!container)return;
- const t=calcTotals(),curr=$('currencySymbol').value||'Rp';
- // Six rows per page leaves space for longer descriptions, totals, terms, and signatures.
- const perPage=6;const totalPages=Math.max(1,Math.ceil(itemsData.length/perPage));container.innerHTML='';
- for(let i=0;i<totalPages;i++)container.appendChild(renderPage(itemsData.slice(i*perPage,(i+1)*perPage),i,totalPages,t,curr));
- // Keep the item inputs in a safe range after a pasted or typed excessive discount.
- saveDraftQuietly();
-}
-function getDocumentData(){const t=calcTotals();return {t,curr:$('currencySymbol').value||'Rp',compName:getVal('companyName',''),compAddr:getVal('companyAddress',''),compPhone:getVal('companyPhone',''),compEmail:getVal('companyEmail',''),clientName:getVal('clientName',''),clientContact:getVal('clientContact',''),clientAddr:getVal('clientAddress',''),docNumber:getVal('docNumber','Draft'),docSubject:getVal('docSubject',''),date:formatDate($('docDate').value),valid:formatDate($('docValidDate').value)};}
-async function exportPDF(){if(!window.html2pdf){notify('Library PDF belum termuat. Periksa koneksi internet lalu coba lagi.');return;}const container=$('quotationPaperPagesContainer');const opt={margin:0,filename:`Quotation_${cleanFileName($('docNumber').value)}.pdf`,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true,logging:false,scrollY:0,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:['css','legacy']}};try{await html2pdf().set(opt).from(container).save();notify('PDF berhasil dibuat.');}catch(err){console.error(err);notify('PDF gagal dibuat. Coba gunakan tombol Cetak lalu pilih Simpan sebagai PDF.');}}
-function exportExcel(){if(!window.XLSX){notify('Library Excel belum termuat. Periksa koneksi internet.');return;}const {t,curr,compName,compAddr,compPhone,compEmail,clientName,clientContact,clientAddr,docNumber,docSubject,date,valid}=getDocumentData();const data=[[compName],[compAddr],[`Telp: ${compPhone} | Email: ${compEmail}`],[],['PENAWARAN HARGA / QUOTATION'],['Nomor',docNumber,'Tanggal',date],['Perihal',docSubject,'Masa berlaku',valid],[],['KEPADA YTH',clientName],['UP',clientContact],['Alamat',clientAddr],[],['No','Nama Barang/Jasa','Deskripsi/Spesifikasi','Qty','Satuan',`Harga Satuan (${curr})`,`Diskon (${curr})`,`Total Harga (${curr})`]];itemsData.forEach((it,i)=>data.push([i+1,it.name,it.desc,it.qty,it.unit,it.price,Math.min(it.discount,it.qty*it.price),t.lineTotals[i]]));data.push([],['','','','','','','Subtotal',t.subtotal]);if(t.globalDiscountAmount)data.push(['','','','','','','Diskon Global',-t.globalDiscountAmount]);if(t.usePPN)data.push(['','','','','','','PPN '+t.ppnRate+'%',t.ppnAmount]);if(t.usePPh&&t.pphAmount)data.push(['','','','','','','Potongan PPh '+t.pphRate+'%',-t.pphAmount]);if(t.shippingFee)data.push(['','','','','','','Biaya lain',t.shippingFee]);data.push(['','','','','','','GRAND TOTAL',t.grandTotal],[],['REKENING PEMBAYARAN'],[getVal('bankName')+' | '+getVal('bankAccount')+' | A/N: '+getVal('bankHolder')],[],['SYARAT & KETENTUAN'],[getVal('termsText','')]);const ws=XLSX.utils.aoa_to_sheet(data);ws['!cols']=[{wch:6},{wch:34},{wch:44},{wch:9},{wch:12},{wch:19},{wch:16},{wch:22}];ws['!freeze']={xSplit:0,ySplit:13};const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Penawaran');XLSX.writeFile(wb,`Quotation_${cleanFileName(docNumber)}.xlsx`);notify('Excel berhasil dibuat.');}
-async function exportWord(){if(!window.docx){notify('Library Word belum termuat. Periksa koneksi internet.');return;}try{const d=getDocumentData(),D=window.docx;const p=(text,opts={})=>new D.Paragraph({children:[new D.TextRun({text:String(text??''),...opts})]});const rows=[['NO','DESKRIPSI / SPESIFIKASI','QTY','SATUAN','HARGA SATUAN','DISKON','TOTAL HARGA'],...itemsData.map((it,i)=>[String(i+1),`${it.name}${it.desc?'\n'+it.desc:''}`,String(it.qty),it.unit,formatCurrency(it.price,d.curr),it.discount?formatCurrency(Math.min(it.discount,it.qty*it.price),d.curr):'-',formatCurrency(d.t.lineTotals[i],d.curr)])];const tableRows=rows.map((row,i)=>new D.TableRow({tableHeader:i===0,children:row.map((cell,j)=>new D.TableCell({width:{size:[5,35,7,9,16,12,16][j],type:D.WidthType.PERCENTAGE},children:[p(cell,{bold:i===0,color:i===0?'FFFFFF':'1E293B',size:18})],shading:i===0?{fill:'1E3A8A'}:undefined,verticalAlign:D.VerticalAlign.CENTER}))}));const summary=[`Subtotal: ${formatCurrency(d.t.subtotal,d.curr)}`];if(d.t.globalDiscountAmount)summary.push(`Diskon global: -${formatCurrency(d.t.globalDiscountAmount,d.curr)}`);if(d.t.usePPN)summary.push(`PPN (${d.t.ppnRate}%): ${formatCurrency(d.t.ppnAmount,d.curr)}`);if(d.t.usePPh&&d.t.pphAmount)summary.push(`Potongan PPh (${d.t.pphRate}%): -${formatCurrency(d.t.pphAmount,d.curr)}`);if(d.t.shippingFee)summary.push(`Biaya lain: ${formatCurrency(d.t.shippingFee,d.curr)}`);summary.push(`GRAND TOTAL: ${formatCurrency(d.t.grandTotal,d.curr)}`);const children=[p(d.compName,{bold:true,size:30,color:'1E3A8A'}),p(d.compAddr),p(`Telp: ${d.compPhone} | Email: ${d.compEmail}`),p('PENAWARAN HARGA / QUOTATION',{bold:true,size:26,color:'1E3A8A'}),p(`Nomor: ${d.docNumber}     Tanggal: ${d.date}     Berlaku sampai: ${d.valid}`),p(`Perihal: ${d.docSubject}`),p(`Kepada Yth: ${d.clientName}`),p(`UP: ${d.clientContact}`),p(`Alamat: ${d.clientAddr}`),new D.Table({width:{size:100,type:D.WidthType.PERCENTAGE},rows:tableRows}),p(''),...summary.map((s,i)=>p(s,{bold:i===summary.length-1,size:i===summary.length-1?24:20,color:i===summary.length-1?'1E3A8A':'1E293B'})),p('REKENING PEMBAYARAN',{bold:true}),p(`${getVal('bankName')} · ${getVal('bankAccount')} · A/N: ${getVal('bankHolder')}`),p('SYARAT & KETENTUAN',{bold:true}),...getVal('termsText','-').split('\n').map(s=>p(s)),p('Hormat Kami,'),p(''),p(getVal('signerName'),{bold:true}),p(getVal('signerTitle'))];const doc=new D.Document({sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,bottom:720,left:720,right:720}}},children}]});const blob=await D.Packer.toBlob(doc);const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`Quotation_${cleanFileName(d.docNumber)}.docx`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);notify('Word berhasil dibuat.');}catch(err){console.error(err);notify('Word gagal dibuat. Periksa koneksi internet atau muat ulang aplikasi.');}}
-function collectDraft(){const fields={};document.querySelectorAll('.form-panel input[id],.form-panel textarea[id],.form-panel select[id]').forEach(el=>{if(el.type==='file')return;fields[el.id]=el.type==='checkbox'?el.checked:el.value;});const radios={};document.querySelectorAll('input[type=radio][name]').forEach(el=>{if(el.checked)radios[el.name]=el.value;});return {fields,radios,itemsData,logoBase64,sigImageBase64,logoWidth,logoHeight,logoAlign,logoOffsetY,currentThemeKey,currentFontFamily,fontSizes};}
-function applyDraft(data){if(!data||typeof data!=='object')throw new Error('Draft tidak valid');Object.entries(data.fields||{}).forEach(([id,value])=>{const el=$(id);if(!el||el.type==='file')return;if(el.type==='checkbox')el.checked=!!value;else el.value=String(value??'');});Object.entries(data.radios||{}).forEach(([name,value])=>{const el=document.querySelector(`input[type="radio"][name="${name}"][value="${value}"]`);if(el)el.checked=true;});if(Array.isArray(data.itemsData)&&data.itemsData.length){itemsData=data.itemsData;nextItemId=Math.max(1,...itemsData.map(i=>Number(i.id)||0))+1;}logoBase64=data.logoBase64||'';sigImageBase64=data.sigImageBase64||'';logoWidth=data.logoWidth||140;logoHeight=data.logoHeight||60;logoAlign=data.logoAlign||'left';logoOffsetY=data.logoOffsetY||0;currentThemeKey=themes[data.currentThemeKey]?data.currentThemeKey:'navy';currentFontFamily=data.currentFontFamily||currentFontFamily;Object.assign(fontSizes,data.fontSizes||{});$('logoWidthInput').value=logoWidth;$('logoHeightInput').value=logoHeight;$('logoAlignSelect').value=logoAlign;$('logoOffsetYInput').value=logoOffsetY;$('colorThemeSelect').value=currentThemeKey;$('fontFamilySelect').value=currentFontFamily;for(const [key,id] of Object.entries({header:'headerFontSizeSelect',client:'clientFontSizeSelect',table:'tableFontSizeSelect',desc:'itemDescFontSizeSelect',numeric:'numericFontSizeSelect',total:'grandTotalFontSizeSelect',footer:'footerFontSizeSelect'}))$(id).value=fontSizes[key];if(sigImageBase64){signatureHasInk=true;const c=$('sigCanvas'),ctx=c.getContext('2d'),img=new Image();img.onload=()=>{ctx.clearRect(0,0,c.width,c.height);ctx.drawImage(img,0,0,c.width,c.height);};img.src=sigImageBase64;}changeThemeColor(currentThemeKey);changeFontFamily(currentFontFamily);updateLogoControls();togglePPhDetails();renderItemsForm();updatePreview();}
-function saveDraft(){try{localStorage.setItem('quotationproDraftV2',JSON.stringify(collectDraft()));notify('Draft tersimpan di perangkat ini.');}catch(err){console.error(err);notify('Draft gagal disimpan. Kemungkinan penyimpanan browser penuh karena gambar terlalu besar.');}}
-let saveTimer;function saveDraftQuietly(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{try{localStorage.setItem('quotationproDraftV2',JSON.stringify(collectDraft()));}catch(_){}},500);}
-function loadDraft(){try{const raw=localStorage.getItem('quotationproDraftV2');if(!raw){notify('Belum ada draft tersimpan di browser ini.');return;}applyDraft(JSON.parse(raw));notify('Draft berhasil dimuat.');}catch(err){console.error(err);notify('Draft tidak dapat dibaca atau formatnya rusak.');}}
-function init(){const today=localISODate(),valid=new Date();valid.setDate(valid.getDate()+30);$('docDate').value=today;$('docValidDate').value=localISODate(valid);initSignatureCanvas();togglePPhDetails();renderItemsForm();changeThemeColor(currentThemeKey);changeFontFamily(currentFontFamily);updatePreview();}
-document.addEventListener('DOMContentLoaded',init);
-</script>
+<body class="h-full text-slate-800 antialiased flex flex-col bg-slate-100">
+
+    <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-50 no-print border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-blue-600 to-indigo-500 text-white p-2.5 rounded-xl shadow-md flex items-center justify-center">
+                    <i class="fa-solid fa-file-invoice-dollar text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                        QuotationPRO <span class="bg-blue-500/20 text-blue-300 border border-blue-400/30 text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-full">Pro Edition</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">Generator Penawaran Harga Elegan, Presisi & Multi-Export</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <button onclick="saveDraft()" title="Simpan ke LocalStorage" class="inline-flex items-center px-3 py-2 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-400 transition shadow-sm active:scale-95">
+                    <i class="fa-solid fa-floppy-disk mr-1.5 text-sm"></i> Simpan
+                </button>
+                <button onclick="exportPDF()" class="inline-flex items-center px-3.5 py-2 text-xs font-semibold rounded-lg bg-rose-600 hover:bg-rose-700 text-white transition shadow-sm hover:shadow active:scale-95">
+                    <i class="fa-solid fa-file-pdf mr-1.5 text-sm"></i> PDF
+                </button>
+                <button onclick="exportExcel()" class="inline-flex items-center px-3.5 py-2 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-sm hover:shadow active:scale-95">
+                    <i class="fa-solid fa-file-excel mr-1.5 text-sm"></i> Excel
+                </button>
+                <button onclick="exportWord()" class="inline-flex items-center px-3.5 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition shadow-sm hover:shadow active:scale-95">
+                    <i class="fa-solid fa-file-word mr-1.5 text-sm"></i> Word
+                </button>
+                <button onclick="window.print()" class="inline-flex items-center px-3.5 py-2 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition shadow-sm hover:shadow active:scale-95">
+                    <i class="fa-solid fa-print mr-1.5 text-sm"></i> Cetak
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        
+        <!-- ================= LEFT FORM INPUT PANEL ================= -->
+        <section class="w-full lg:w-1/2 p-4 sm:p-6 overflow-y-auto h-full border-r border-slate-200/80 custom-scrollbar space-y-6 no-print bg-slate-50">
+            
+            <!-- TEMA WARNA & TIPOGRAFI -->
+            <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+                    <h2 class="text-sm font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-palette text-blue-600 mr-2"></i> Tema Warna Soft & Tipografi
+                    </h2>
+                    <span class="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">Style</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2 p-3 bg-slate-50/80 rounded-xl border border-slate-200/60">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Tema Warna Soft</label>
+                        <select id="colorThemeSelect" onchange="changeThemeColor(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <option value="navy">Classic Corporate Navy</option>
+                            <option value="emerald">Soft Emerald Sage</option>
+                            <option value="slate">Slate Charcoal</option>
+                            <option value="terracotta">Warm Terracotta</option>
+                            <option value="gold">Luxury Muted Gold</option>
+                            <option value="royal">Royal Indigo</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Jenis Font / Text</label>
+                        <select id="fontFamilySelect" onchange="changeFontFamily(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <option value="'Plus Jakarta Sans', sans-serif">Modern Executive (Jakarta Sans)</option>
+                            <option value="'Inter', sans-serif">Clean Neutral (Inter)</option>
+                            <option value="'Playfair Display', serif">Luxury Serif (Playfair)</option>
+                            <option value="'Montserrat', sans-serif">Geometric Bold (Montserrat)</option>
+                            <option value="'Lora', serif">Elegant Classic (Lora)</option>
+                            <option value="'Roboto', sans-serif">Standard Work (Roboto)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text Header</label>
+                        <select id="headerFontSizeSelect" onchange="changeHeaderFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
+                            <option value="8">8 pt</option>
+                            <option value="9">9 pt</option>
+                            <option value="10" selected>10 pt (Default)</option>
+                            <option value="11">11 pt</option>
+                            <option value="12">12 pt</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text Metadata</label>
+                        <select id="clientFontSizeSelect" onchange="changeClientFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
+                            <option value="8">8 pt</option>
+                            <option value="9">9 pt</option>
+                            <option value="10" selected>10 pt (Default)</option>
+                            <option value="11">11 pt</option>
+                            <option value="12">12 pt</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text Tabel</label>
+                        <select id="tableFontSizeSelect" onchange="changeTableFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
+                            <option value="7">7.5 pt</option>
+                            <option value="8" selected>8.5 pt (Rekomendasi)</option>
+                            <option value="9">9.5 pt</option>
+                            <option value="10">10 pt</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Deskripsi Item</label>
+                        <select id="itemDescFontSizeSelect" onchange="changeItemDescFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
+                            <option value="6">6.5 pt</option>
+                            <option value="7.5" selected>7.5 pt (Default)</option>
+                            <option value="8.5">8.5 pt</option>
+                            <option value="9.5">9.5 pt</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Angka/Numeric</label>
+                        <select id="numericFontSizeSelect" onchange="changeNumericFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
+                            <option value="7">7.5 pt</option>
+                            <option value="8.5" selected>8.5 pt (Standard)</option>
+                            <option value="9.5">9.5 pt</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Grand Total</label>
+                        <select id="grandTotalFontSizeSelect" onchange="changeGrandTotalFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
+                            <option value="9">9 pt</option>
+                            <option value="10">10 pt</option>
+                            <option value="11" selected>11 pt (Default)</option>
+                            <option value="12">12 pt</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Footer & TTD</label>
+                        <select id="footerFontSizeSelect" onchange="changeFooterFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
+                            <option value="7">7 pt</option>
+                            <option value="8">8 pt</option>
+                            <option value="9" selected>9 pt (Default)</option>
+                            <option value="10">10 pt</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 1: PERUSAHAAN & LOGO CONTROLS -->
+            <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+                    <h2 class="text-sm font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-building text-blue-600 mr-2"></i> Pengirim & Kontrol Logo Fleksibel
+                    </h2>
+                    <span class="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">Langkah 1</span>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Logo Upload & Controls Panel -->
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-image text-slate-500"></i> Logo Perusahaan (PNG/JPG)
+                            </label>
+                            <button onclick="removeLogo()" type="button" class="text-xs text-rose-600 hover:text-rose-700 font-semibold flex items-center gap-1">
+                                <i class="fa-solid fa-trash text-[11px]"></i> Hapus Logo
+                            </button>
+                        </div>
+
+                        <input type="file" id="inputLogo" accept="image/*" onchange="handleLogoUpload(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
+
+                        <!-- Logo Fine-Tuning Controls -->
+                        <div class="pt-2 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <div class="flex justify-between text-[11px] font-semibold text-slate-600 mb-1">
+                                    <span>Ukuran / Lebar Logo:</span>
+                                    <span id="logoWidthVal" class="text-blue-600 font-bold">140 px</span>
+                                </div>
+                                <input type="range" id="logoWidthInput" min="50" max="300" value="140" oninput="updateLogoControls()" class="w-full accent-blue-600 cursor-pointer">
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-[11px] font-semibold text-slate-600 mb-1">
+                                    <span>Tinggi Max (Aspect Ratio):</span>
+                                    <span id="logoHeightVal" class="text-blue-600 font-bold">60 px</span>
+                                </div>
+                                <input type="range" id="logoHeightInput" min="30" max="150" value="60" oninput="updateLogoControls()" class="w-full accent-blue-600 cursor-pointer">
+                            </div>
+
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-600 mb-1">Posisi Horizontal</label>
+                                <select id="logoAlignSelect" onchange="updateLogoControls()" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white font-medium">
+                                    <option value="left" selected>Kiri (Default)</option>
+                                    <option value="center">Tengah</option>
+                                    <option value="right">Kanan</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-[11px] font-semibold text-slate-600 mb-1">
+                                    <span>Geser Vertikal (Atas/Bawah):</span>
+                                    <span id="logoOffsetYVal" class="text-blue-600 font-bold">0 px</span>
+                                </div>
+                                <input type="range" id="logoOffsetYInput" min="-30" max="40" value="0" oninput="updateLogoControls()" class="w-full accent-blue-600 cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Company Info -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Perusahaan (Pengirim)</label>
+                            <input type="text" id="companyName" value="PT Solusi Digital Perkasa" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">No. Telp / WA</label>
+                            <input type="text" id="companyPhone" value="+62 812-3456-7890" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Perusahaan</label>
+                            <textarea id="companyAddress" rows="2" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">Jl. Jendral Sudirman No. 45, Jakarta Selatan 12190</textarea>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-700">Email Perusahaan</label>
+                                <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
+                                    <input type="checkbox" id="showCompanyEmail" checked onchange="updatePreview()" class="rounded text-blue-600 mr-1"> Tampilkan
+                                </label>
+                            </div>
+                            <input type="email" id="companyEmail" value="info@solusidigital.co.id" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-700">NPWP Perusahaan</label>
+                                <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
+                                    <input type="checkbox" id="showCompanyTaxId" checked onchange="updatePreview()" class="rounded text-blue-600 mr-1"> Tampilkan
+                                </label>
+                            </div>
+                            <input type="text" id="companyTaxId" value="01.234.567.8-012.000" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Client Info -->
+                <div class="mt-6 border-t border-slate-100 pt-4">
+                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 text-blue-700 flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-tie"></i> Informasi Klien / Penerima
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Perusahaan / Client</label>
+                            <input type="text" id="clientName" value="PT Nusantara Cemerlang" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">UP (Contact Person)</label>
+                            <input type="text" id="clientContact" value="Bpk. Hendra Wijaya" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-700">Email Klien</label>
+                                <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
+                                    <input type="checkbox" id="showClientEmail" checked onchange="updatePreview()" class="rounded text-blue-600 mr-1"> Tampilkan
+                                </label>
+                            </div>
+                            <input type="text" id="clientEmail" value="hendra@nusantaracemerlang.com" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-700">No. Telp / HP</label>
+                                <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
+                                    <input type="checkbox" id="showClientPhone" checked onchange="updatePreview()" class="rounded text-blue-600 mr-1"> Tampilkan
+                                </label>
+                            </div>
+                            <input type="text" id="clientPhone" value="+62 811-9876-5432" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-700">Alamat Klien</label>
+                                <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
+                                    <input type="checkbox" id="showClientAddress" checked onchange="updatePreview()" class="rounded text-blue-600 mr-1"> Tampilkan
+                                </label>
+                            </div>
+                            <textarea id="clientAddress" rows="2" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">Gedung Menara Indah Lt. 12, Jl. Asia Afrika No. 8, Bandung</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Document Metadata -->
+                <div class="mt-6 border-t border-slate-100 pt-4">
+                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 text-blue-700 flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-signature"></i> Metadata Dokumen
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nomor Penawaran</label>
+                            <input type="text" id="docNumber" value="QUO/2026/X/001" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Perihal / Subject</label>
+                            <input type="text" id="docSubject" value="Penawaran Harga Pengadaan Server & Jaringan Web" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Penawaran</label>
+                            <input type="date" id="docDate" onchange="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Masa Berlaku (Valid Until)</label>
+                            <input type="date" id="docValidDate" onchange="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: TABEL BARANG / JASA -->
+            <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-800 flex items-center">
+                            <i class="fa-solid fa-list-check text-blue-600 mr-2"></i> Rincian Item / Jasa
+                        </h2>
+                        <p class="text-[11px] text-slate-500">Gunakan icon drag untuk menyusun ulang urutan item.</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <select id="currencySymbol" onchange="updatePreview()" class="text-xs p-1.5 border border-slate-300 rounded-lg font-semibold bg-slate-50 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <option value="Rp">IDR (Rp)</option>
+                            <option value="$">USD ($)</option>
+                            <option value="€">EUR (€)</option>
+                            <option value="S$">SGD (S$)</option>
+                        </select>
+                        <span class="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">Langkah 2</span>
+                    </div>
+                </div>
+
+                <!-- Katalog Cepat Template -->
+                <div class="mb-3 p-3 bg-blue-50/60 rounded-xl border border-blue-100 flex items-center justify-between">
+                    <span class="text-xs font-semibold text-blue-900"><i class="fa-solid fa-bolt text-blue-600 mr-1"></i> Tambah Cepat dari Katalog:</span>
+                    <select onchange="addFromCatalog(this)" class="text-xs p-1.5 border border-blue-300 rounded-lg bg-white font-medium text-blue-900 focus:outline-none">
+                        <option value="">-- Pilih Layanan / Produk --</option>
+                        <option value="server">Server Enterprise (Rp 48.000.000)</option>
+                        <option value="switch">Cisco Gigabit Switch (Rp 12.500.000)</option>
+                        <option value="network">Jasa Konfigurasi Jaringan (Rp 8.500.000)</option>
+                        <option value="web">Pengembangan Web Aplikasi Custom (Rp 25.000.000)</option>
+                        <option value="maintenance">Maintenance Bulanan Sistem (Rp 3.500.000)</option>
+                    </select>
+                </div>
+
+                <!-- Form Dynamic Line Items Container -->
+                <div id="itemsFormContainer" class="space-y-3">
+                    <!-- Dynamic Rows Will Be Rendered By JS -->
+                </div>
+
+                <div class="flex gap-2 mt-4">
+                    <button onclick="addItemRow()" type="button" class="flex-1 py-2.5 border-2 border-dashed border-blue-500 text-blue-700 hover:bg-blue-50 font-semibold rounded-xl text-xs transition flex items-center justify-center">
+                        <i class="fa-solid fa-plus mr-2"></i> Tambah Item Baru
+                    </button>
+                    <button onclick="clearAllItems()" type="button" class="px-3 py-2.5 border border-rose-300 text-rose-600 hover:bg-rose-50 font-semibold rounded-xl text-xs transition">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: KALKULASI PAJAK & BIAYA -->
+            <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+                    <h2 class="text-sm font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-calculator text-blue-600 mr-2"></i> Pengaturan Pajak & Biaya
+                    </h2>
+                    <span class="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">Langkah 3</span>
+                </div>
+
+                <div class="space-y-3">
+                    <!-- Diskon Global -->
+                    <div class="grid grid-cols-3 gap-2 items-center bg-slate-50 p-2.5 rounded-lg border border-slate-200/60">
+                        <label class="text-xs font-semibold text-slate-700 col-span-1">Diskon Global</label>
+                        <select id="globalDiscountType" onchange="updatePreview()" class="text-xs p-2 border border-slate-300 rounded-lg bg-white">
+                            <option value="nominal">Nominal</option>
+                            <option value="percent">Persen (%)</option>
+                        </select>
+                        <input type="number" id="globalDiscountValue" value="0" min="0" oninput="updatePreview()" class="text-xs p-2 border border-slate-300 rounded-lg bg-white">
+                    </div>
+
+                    <!-- Toggle PPN -->
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200/60 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <label class="inline-flex items-center cursor-pointer text-xs font-semibold text-slate-800">
+                                <input type="checkbox" id="usePPN" checked onchange="updatePreview()" class="rounded text-blue-600 mr-2 h-4 w-4">
+                                Gunakan PPN (Pajak Pertambahan Nilai)
+                            </label>
+                            <div class="flex items-center space-x-1">
+                                <input type="number" id="ppnRate" value="11" min="0" max="100" step="0.1" oninput="updatePreview()" class="w-16 text-xs p-1 border border-slate-300 rounded text-center bg-white">
+                                <span class="text-xs text-slate-600">%</span>
+                            </div>
+                        </div>
+
+                        <div id="ppnTypeContainer" class="flex items-center space-x-4 pl-6 text-xs">
+                            <label class="inline-flex items-center cursor-pointer">
+                                <input type="radio" name="ppnMode" value="exclude" checked onchange="updatePreview()" class="text-blue-600">
+                                <span class="ml-1.5 text-slate-700">Exclude PPN (Tambahkan di luar)</span>
+                            </label>
+                            <label class="inline-flex items-center cursor-pointer">
+                                <input type="radio" name="ppnMode" value="include" onchange="updatePreview()" class="text-blue-600">
+                                <span class="ml-1.5 text-slate-700">Include PPN (Sudah termasuk)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Toggle PPh -->
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200/60 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <label class="inline-flex items-center cursor-pointer text-xs font-semibold text-slate-800">
+                                <input type="checkbox" id="usePPh" onchange="updatePreview()" class="rounded text-blue-600 mr-2 h-4 w-4">
+                                Potong PPh (Pajak Penghasilan)
+                            </label>
+                        </div>
+
+                        <div id="pphDetailsContainer" class="grid grid-cols-2 gap-2 pl-6 text-xs hidden">
+                            <div>
+                                <label class="block text-slate-600 mb-1">Jenis PPh</label>
+                                <select id="pphType" onchange="handlePPhTypeChange()" class="w-full p-1.5 border border-slate-300 rounded text-xs bg-white">
+                                    <option value="23_service">PPh 23 Jasa (2%)</option>
+                                    <option value="22_goods">PPh 22 Barang (1.5%)</option>
+                                    <option value="4_2_final">PPh Final 4(2) (0.5%)</option>
+                                    <option value="custom">Custom Rate (%)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-600 mb-1">Tarif PPh (%)</label>
+                                <input type="number" id="pphRateInput" value="2" step="0.1" oninput="updatePreview()" class="w-full p-1.5 border border-slate-300 rounded text-xs bg-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Fees -->
+                    <div class="grid grid-cols-3 gap-2 items-center bg-slate-50 p-2.5 rounded-lg border border-slate-200/60">
+                        <label class="text-xs font-semibold text-slate-700 col-span-1">Biaya Pengiriman / Lainnya</label>
+                        <input type="number" id="shippingFee" value="0" min="0" oninput="updatePreview()" class="col-span-2 text-xs p-2 border border-slate-300 rounded-lg bg-white">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: TERMS & TANDA TANGAN -->
+            <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+                    <h2 class="text-sm font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-file-contract text-blue-600 mr-2"></i> Rekening, Syarat & Ttd
+                    </h2>
+                    <span class="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">Langkah 4</span>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Bank Account Info -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Bank</label>
+                            <input type="text" id="bankName" value="Bank Mandiri" oninput="updatePreview()" class="w-full text-xs p-2 border border-slate-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nomor Rekening</label>
+                            <input type="text" id="bankAccount" value="123-00-9876543-2" oninput="updatePreview()" class="w-full text-xs p-2 border border-slate-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Atas Nama (A/N)</label>
+                            <input type="text" id="bankHolder" value="PT Solusi Digital Perkasa" oninput="updatePreview()" class="w-full text-xs p-2 border border-slate-300 rounded-lg">
+                        </div>
+                    </div>
+
+                    <!-- Terms & Conditions -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Syarat & Ketentuan (T&C)</label>
+                        <textarea id="termsText" rows="4" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg">1. Pembayaran DP 50% saat penawaran disetujui.
+2. Pelunasan 50% dilakukan sebelum pengiriman/serah terima.
+3. Estimasi pengerjaan: 14 Hari Kerja setelah DP diterima.
+4. Garansi pemeliharaan berlaku selama 3 (tiga) bulan.</textarea>
+                    </div>
+
+                    <!-- Signature Pad / Upload -->
+                    <div class="border-t border-slate-100 pt-4">
+                        <h3 class="text-xs font-bold text-slate-800 mb-3">Tanda Tangan Digital</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Penandatangan</label>
+                                <input type="text" id="signerName" value="Budi Santoso, S.Kom" oninput="updatePreview()" class="w-full text-xs p-2 border border-slate-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Jabatan</label>
+                                <input type="text" id="signerTitle" value="Sales & Commercial Director" oninput="updatePreview()" class="w-full text-xs p-2 border border-slate-300 rounded-lg">
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Metode Tanda Tangan</label>
+                            <div class="flex items-center space-x-4 mb-2">
+                                <label class="text-xs inline-flex items-center cursor-pointer">
+                                    <input type="radio" name="sigMethod" value="draw" checked onchange="toggleSigMethod('draw')" class="text-blue-600">
+                                    <span class="ml-1.5">Gambar Langsung</span>
+                                </label>
+                                <label class="text-xs inline-flex items-center cursor-pointer">
+                                    <input type="radio" name="sigMethod" value="upload" onchange="toggleSigMethod('upload')" class="text-blue-600">
+                                    <span class="ml-1.5">Upload Stempel/Gambar</span>
+                                </label>
+                            </div>
+
+                            <!-- Draw Pad -->
+                            <div id="sigDrawContainer" class="space-y-2">
+                                <div class="border border-slate-300 rounded-xl bg-white overflow-hidden inline-block shadow-xs">
+                                    <canvas id="sigCanvas" width="300" height="110" class="touch-none cursor-crosshair bg-slate-50/50"></canvas>
+                                </div>
+                                <div>
+                                    <button type="button" onclick="clearSignature()" class="text-xs text-rose-600 bg-rose-50 hover:bg-rose-100 px-3 py-1 rounded-lg border border-rose-200 transition">
+                                        <i class="fa-solid fa-eraser mr-1"></i> Bersihkan Pad
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Upload Image Pad -->
+                            <div id="sigUploadContainer" class="hidden">
+                                <input type="file" id="sigFileInput" accept="image/*" onchange="handleSigUpload(event)" class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-blue-50 file:text-blue-700">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= RIGHT LIVE PREVIEW PANEL ================= -->
+        <section class="w-full lg:w-1/2 p-4 sm:p-8 overflow-y-auto h-full bg-slate-300/60 custom-scrollbar flex flex-col items-center">
+            <div id="quotationPaperPagesContainer" class="w-full flex flex-col items-center">
+                <!-- Pages will be generated dynamically via JavaScript -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Custom Toast Notification Box -->
+    <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl border border-slate-700 flex items-center space-x-3 text-xs font-medium pointer-events-none">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toastMessage">Pemberitahuan sistem...</span>
+    </div>
+
+    <script>
+        let logoBase64 = '';
+        let sigImageBase64 = '';
+        let signaturePad = null;
+
+        // Logo Fine-Tuning State
+        let logoWidth = 140;
+        let logoHeight = 60;
+        let logoAlign = 'left';
+        let logoOffsetY = 0;
+
+        let itemsData = [
+            { id: 1, name: "Server Dell PowerEdge R750", desc: "Intel Xeon Silver 4310, 32GB RAM, 2x 1TB SSD NVMe Dual PSU", qty: 2, unit: "Unit", price: 48000000, discount: 1000000 },
+            { id: 2, name: "Cisco Catalyst Switch 24-Port Gigabit", desc: "Managed Switch L2+ dengan PoE Support 370W Smart Managed", qty: 1, unit: "Unit", price: 12500000, discount: 0 },
+            { id: 3, name: "Jasa Instalasi & Konfigurasi Jaringan", desc: "Setting Router, Switch, VLAN, & Firewall Security Setup", qty: 1, unit: "Paket", price: 8500000, discount: 500000 }
+        ];
+
+        const themePresets = {
+            navy: { primaryHex: '#1e3a8a', bgLight: '#f8fafc', headerBg: '#f1f5f9', badgeBg: '#eff6ff', badgeText: '#1e40af' },
+            emerald: { primaryHex: '#065f46', bgLight: '#f0fdf4', headerBg: '#e6f4ea', badgeBg: '#ecfdf5', badgeText: '#047857' },
+            slate: { primaryHex: '#334155', bgLight: '#f8fafc', headerBg: '#f1f5f9', badgeBg: '#f1f5f9', badgeText: '#334155' },
+            terracotta: { primaryHex: '#9a3412', bgLight: '#fff7ed', headerBg: '#ffedd5', badgeBg: '#fff7ed', badgeText: '#c2410c' },
+            gold: { primaryHex: '#854d0e', bgLight: '#fefce8', headerBg: '#fef08a', badgeBg: '#fefce8', badgeText: '#a16207' },
+            royal: { primaryHex: '#4338ca', bgLight: '#eef2ff', headerBg: '#e0e7ff', badgeBg: '#eef2ff', badgeText: '#3730a3' }
+        };
+
+        let currentThemeKey = 'navy';
+        let currentFontFamily = "'Plus Jakarta Sans', sans-serif";
+        let currentHeaderFontSizePt = 10;
+        let currentClientFontSizePt = 10;
+        let currentTableFontSizePt = 8.5;
+        let currentItemDescFontSizePt = 7.5;
+        let currentNumericFontSizePt = 8.5;
+        let currentGrandTotalFontSizePt = 11;
+        let currentFooterFontSizePt = 9;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadDraftFromStorage();
+            
+            const today = new Date().toISOString().split('T')[0];
+            const nextMonth = new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0];
+            if (!document.getElementById('docDate').value) document.getElementById('docDate').value = today;
+            if (!document.getElementById('docValidDate').value) document.getElementById('docValidDate').value = nextMonth;
+
+            renderItemsForm();
+            initSignaturePad();
+            initSortable();
+            updatePreview();
+        });
+
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toastNotification');
+            const icon = document.getElementById('toastIcon');
+            const msg = document.getElementById('toastMessage');
+
+            msg.innerText = message;
+            if (isError) {
+                icon.className = 'fa-solid fa-circle-exclamation text-rose-400 text-base';
+            } else {
+                icon.className = 'fa-solid fa-circle-check text-emerald-400 text-base';
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function saveDraft() {
+            const draftData = {
+                companyName: document.getElementById('companyName').value,
+                companyPhone: document.getElementById('companyPhone').value,
+                companyAddress: document.getElementById('companyAddress').value,
+                companyEmail: document.getElementById('companyEmail').value,
+                companyTaxId: document.getElementById('companyTaxId').value,
+                clientName: document.getElementById('clientName').value,
+                clientContact: document.getElementById('clientContact').value,
+                clientEmail: document.getElementById('clientEmail').value,
+                clientPhone: document.getElementById('clientPhone').value,
+                clientAddress: document.getElementById('clientAddress').value,
+                docNumber: document.getElementById('docNumber').value,
+                docSubject: document.getElementById('docSubject').value,
+                docDate: document.getElementById('docDate').value,
+                docValidDate: document.getElementById('docValidDate').value,
+                currencySymbol: document.getElementById('currencySymbol').value,
+                itemsData: itemsData,
+                bankName: document.getElementById('bankName').value,
+                bankAccount: document.getElementById('bankAccount').value,
+                bankHolder: document.getElementById('bankHolder').value,
+                termsText: document.getElementById('termsText').value,
+                signerName: document.getElementById('signerName').value,
+                signerTitle: document.getElementById('signerTitle').value,
+                logoBase64: logoBase64,
+                sigImageBase64: sigImageBase64
+            };
+            localStorage.setItem('quotationpro_draft', JSON.stringify(draftData));
+            showToast("Draft berhasil disimpan ke penyimpanan lokal!");
+        }
+
+        function loadDraftFromStorage() {
+            try {
+                const saved = localStorage.getItem('quotationpro_draft');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (data.companyName) document.getElementById('companyName').value = data.companyName;
+                    if (data.companyPhone) document.getElementById('companyPhone').value = data.companyPhone;
+                    if (data.companyAddress) document.getElementById('companyAddress').value = data.companyAddress;
+                    if (data.companyEmail) document.getElementById('companyEmail').value = data.companyEmail;
+                    if (data.companyTaxId) document.getElementById('companyTaxId').value = data.companyTaxId;
+                    if (data.clientName) document.getElementById('clientName').value = data.clientName;
+                    if (data.clientContact) document.getElementById('clientContact').value = data.clientContact;
+                    if (data.clientEmail) document.getElementById('clientEmail').value = data.clientEmail;
+                    if (data.clientPhone) document.getElementById('clientPhone').value = data.clientPhone;
+                    if (data.clientAddress) document.getElementById('clientAddress').value = data.clientAddress;
+                    if (data.docNumber) document.getElementById('docNumber').value = data.docNumber;
+                    if (data.docSubject) document.getElementById('docSubject').value = data.docSubject;
+                    if (data.docDate) document.getElementById('docDate').value = data.docDate;
+                    if (data.docValidDate) document.getElementById('docValidDate').value = data.docValidDate;
+                    if (data.currencySymbol) document.getElementById('currencySymbol').value = data.currencySymbol;
+                    if (data.itemsData && Array.isArray(data.itemsData)) itemsData = data.itemsData;
+                    if (data.bankName) document.getElementById('bankName').value = data.bankName;
+                    if (data.bankAccount) document.getElementById('bankAccount').value = data.bankAccount;
+                    if (data.bankHolder) document.getElementById('bankHolder').value = data.bankHolder;
+                    if (data.termsText) document.getElementById('termsText').value = data.termsText;
+                    if (data.signerName) document.getElementById('signerName').value = data.signerName;
+                    if (data.signerTitle) document.getElementById('signerTitle').value = data.signerTitle;
+                    if (data.logoBase64) logoBase64 = data.logoBase64;
+                    if (data.sigImageBase64) sigImageBase64 = data.sigImageBase64;
+                }
+            } catch (e) {
+                console.error("Gagal memuat draft:", e);
+            }
+        }
+
+        function addFromCatalog(selectEl) {
+            const val = selectEl.value;
+            if (!val) return;
+
+            let newItem = { id: Date.now(), name: "", desc: "", qty: 1, unit: "Unit", price: 0, discount: 0 };
+            if (val === 'server') {
+                newItem.name = "Server Dell PowerEdge R750";
+                newItem.desc = "Intel Xeon Silver 4310, 32GB RAM, 2x 1TB SSD NVMe Dual PSU";
+                newItem.price = 48000000;
+            } else if (val === 'switch') {
+                newItem.name = "Cisco Catalyst Switch 24-Port Gigabit";
+                newItem.desc = "Managed Switch L2+ dengan PoE Support 370W Smart Managed";
+                newItem.price = 12500000;
+            } else if (val === 'network') {
+                newItem.name = "Jasa Instalasi & Konfigurasi Jaringan";
+                newItem.desc = "Setting Router, Switch, VLAN, & Firewall Security Setup";
+                newItem.unit = "Paket";
+                newItem.price = 8500000;
+            } else if (val === 'web') {
+                newItem.name = "Pengembangan Web Aplikasi Custom";
+                newItem.desc = "Full-stack development, Dashboard Admin, API integration & Testing";
+                newItem.unit = "Proyek";
+                newItem.price = 25000000;
+            } else if (val === 'maintenance') {
+                newItem.name = "Maintenance Bulanan Sistem & Infrastruktur";
+                newItem.desc = "Routine check, security update, backup & troubleshooting support";
+                newItem.unit = "Bulan";
+                newItem.price = 3500000;
+            }
+
+            itemsData.push(newItem);
+            selectEl.value = "";
+            renderItemsForm();
+            updatePreview();
+            showToast("Item berhasil ditambahkan dari katalog.");
+        }
+
+        function clearAllItems() {
+            itemsData = [{ id: Date.now(), name: "Item Baru", desc: "Deskripsi", qty: 1, unit: "Unit", price: 1000000, discount: 0 }];
+            renderItemsForm();
+            updatePreview();
+            showToast("Semua item diatur ulang.");
+        }
+
+        function updateLogoControls() {
+            logoWidth = parseInt(document.getElementById('logoWidthInput').value) || 140;
+            logoHeight = parseInt(document.getElementById('logoHeightInput').value) || 60;
+            logoAlign = document.getElementById('logoAlignSelect').value || 'left';
+            logoOffsetY = parseInt(document.getElementById('logoOffsetYInput').value) || 0;
+
+            document.getElementById('logoWidthVal').innerText = logoWidth + ' px';
+            document.getElementById('logoHeightVal').innerText = logoHeight + ' px';
+            document.getElementById('logoOffsetYVal').innerText = logoOffsetY + ' px';
+
+            updatePreview();
+        }
+
+        function initSignaturePad() {
+            const canvas = document.getElementById('sigCanvas');
+            if (canvas) {
+                signaturePad = new SignaturePad(canvas, { backgroundColor: 'rgb(255, 255, 255)' });
+                signaturePad.addEventListener("endStroke", () => {
+                    sigImageBase64 = signaturePad.toDataURL();
+                    updatePreview();
+                });
+            }
+        }
+
+        function initSortable() {
+            const el = document.getElementById('itemsFormContainer');
+            if (el) {
+                Sortable.create(el, {
+                    handle: '.drag-handle',
+                    animation: 150,
+                    onEnd: function (evt) {
+                        const itemEl = itemsData.splice(evt.oldIndex, 1)[0];
+                        itemsData.splice(evt.newIndex, 0, itemEl);
+                        renderItemsForm();
+                        updatePreview();
+                    }
+                });
+            }
+        }
+
+        function renderItemsForm() {
+            const container = document.getElementById('itemsFormContainer');
+            container.innerHTML = '';
+
+            itemsData.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'bg-slate-50/80 p-3 rounded-xl border border-slate-200/80 space-y-2 relative group hover:border-blue-200 transition';
+                itemDiv.dataset.id = item.id;
+                
+                itemDiv.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <span class="drag-handle cursor-grab text-slate-400 hover:text-slate-600 p-1">
+                                <i class="fa-solid fa-grip-vertical"></i>
+                            </span>
+                            <span class="text-xs font-bold text-slate-700">Item #${index + 1}</span>
+                        </div>
+                        <button onclick="removeItemRow(${index})" type="button" class="text-xs text-rose-500 hover:text-rose-700 font-semibold transition">
+                            <i class="fa-solid fa-trash mr-1"></i> Hapus
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div>
+                            <input type="text" placeholder="Nama Barang / Jasa" value="${escapeHtml(item.name)}" oninput="updateItemData(${index}, 'name', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-semibold bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Deskripsi Singkat / Spesifikasi" value="${escapeHtml(item.desc)}" oninput="updateItemData(${index}, 'desc', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <div>
+                            <label class="text-[10px] text-slate-500 font-semibold block">Qty</label>
+                            <input type="number" min="1" value="${item.qty}" oninput="updateItemData(${index}, 'qty', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-500 font-semibold block">Satuan</label>
+                            <input type="text" placeholder="pcs/unit/jam" value="${escapeHtml(item.unit)}" oninput="updateItemData(${index}, 'unit', this.value)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-500 font-semibold block">Harga Satuan</label>
+                            <input type="number" min="0" value="${item.price}" oninput="updateItemData(${index}, 'price', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-500 font-semibold block">Diskon Item</label>
+                            <input type="number" min="0" value="${item.discount}" oninput="updateItemData(${index}, 'discount', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
+                        </div>
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+
+        function addItemRow() {
+            itemsData.push({
+                id: Date.now(),
+                name: "Nama Item / Jasa Baru",
+                desc: "Spesifikasi item",
+                qty: 1,
+                unit: "Unit",
+                price: 1000000,
+                discount: 0
+            });
+            renderItemsForm();
+            updatePreview();
+        }
+
+        function removeItemRow(index) {
+            if (itemsData.length <= 1) {
+                showToast("Minimal harus ada 1 item.", true);
+                return;
+            }
+            itemsData.splice(index, 1);
+            renderItemsForm();
+            updatePreview();
+        }
+
+        function updateItemData(index, field, value) {
+            itemsData[index][field] = value;
+            updatePreview();
+        }
+
+        function changeThemeColor(themeKey) {
+            currentThemeKey = themeKey;
+            updatePreview();
+        }
+
+        function changeFontFamily(fontFamily) {
+            currentFontFamily = fontFamily;
+            updatePreview();
+        }
+
+        function changeHeaderFontSize(sizePt) {
+            currentHeaderFontSizePt = parseFloat(sizePt) || 10;
+            updatePreview();
+        }
+
+        function changeClientFontSize(sizePt) {
+            currentClientFontSizePt = parseFloat(sizePt) || 10;
+            updatePreview();
+        }
+
+        function changeTableFontSize(sizePt) {
+            currentTableFontSizePt = parseFloat(sizePt) || 8.5;
+            updatePreview();
+        }
+
+        function changeItemDescFontSize(sizePt) {
+            currentItemDescFontSizePt = parseFloat(sizePt) || 7.5;
+            updatePreview();
+        }
+
+        function changeNumericFontSize(sizePt) {
+            currentNumericFontSizePt = parseFloat(sizePt) || 8.5;
+            updatePreview();
+        }
+
+        function changeGrandTotalFontSize(sizePt) {
+            currentGrandTotalFontSizePt = parseFloat(sizePt) || 11;
+            updatePreview();
+        }
+
+        function changeFooterFontSize(sizePt) {
+            currentFooterFontSizePt = parseFloat(sizePt) || 9;
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const pagesContainer = document.getElementById('quotationPaperPagesContainer');
+            pagesContainer.innerHTML = '';
+
+            const headerFontPt = currentHeaderFontSizePt;
+            const clientFontPt = currentClientFontSizePt;
+            const tableFontPt = currentTableFontSizePt;
+            const itemDescFontPt = currentItemDescFontSizePt;
+            const numericFontPt = currentNumericFontSizePt;
+            const grandTotalFontPt = currentGrandTotalFontSizePt;
+            const footerFontPt = currentFooterFontSizePt;
+            
+            const ITEMS_PER_PAGE = 8;
+            const totalPages = Math.ceil(itemsData.length / ITEMS_PER_PAGE) || 1;
+            const theme = themePresets[currentThemeKey] || themePresets.navy;
+            const curr = document.getElementById('currencySymbol').value;
+
+            // Form Values
+            const compName = document.getElementById('companyName').value || 'Nama Perusahaan';
+            const compPhone = document.getElementById('companyPhone').value || '-';
+            const compAddr = document.getElementById('companyAddress').value || '-';
+            const compEmail = document.getElementById('companyEmail').value || '';
+            const compTaxId = document.getElementById('companyTaxId').value || '';
+            const showEmail = document.getElementById('showCompanyEmail').checked;
+            const showTaxId = document.getElementById('showCompanyTaxId').checked;
+
+            const clientName = document.getElementById('clientName').value || 'Nama Klien';
+            const clientContact = document.getElementById('clientContact').value || '-';
+            const clientAddr = document.getElementById('clientAddress').value || '-';
+            const clientPhone = document.getElementById('clientPhone').value || '-';
+            const clientEmail = document.getElementById('clientEmail').value || '-';
+            const showClientAddress = document.getElementById('showClientAddress') ? document.getElementById('showClientAddress').checked : true;
+            const showClientPhone = document.getElementById('showClientPhone') ? document.getElementById('showClientPhone').checked : true;
+            const showClientEmail = document.getElementById('showClientEmail') ? document.getElementById('showClientEmail').checked : true;
+
+            const docNum = document.getElementById('docNumber').value || '-';
+            const docSubj = document.getElementById('docSubject').value || '-';
+            const docDateVal = formatDate(document.getElementById('docDate').value);
+            const docValidVal = formatDate(document.getElementById('docValidDate').value);
+
+            // Financial Calculations
+            let subtotal = 0;
+            itemsData.forEach(item => {
+                subtotal += (item.qty * item.price) - item.discount;
+            });
+
+            let globalDiscountAmount = 0;
+            const globalDiscType = document.getElementById('globalDiscountType').value;
+            const globalDiscVal = parseFloat(document.getElementById('globalDiscountValue').value) || 0;
+            if (globalDiscType === 'percent') {
+                globalDiscountAmount = subtotal * (globalDiscVal / 100);
+            } else {
+                globalDiscountAmount = globalDiscVal;
+            }
+
+            const subtotalAfterDisc = Math.max(0, subtotal - globalDiscountAmount);
+
+            const usePPN = document.getElementById('usePPN').checked;
+            const ppnRate = parseFloat(document.getElementById('ppnRate').value) || 0;
+            const ppnMode = document.querySelector('input[name="ppnMode"]:checked').value;
+            let ppnAmount = 0;
+            let dpp = subtotalAfterDisc;
+
+            if (usePPN && ppnRate > 0) {
+                if (ppnMode === 'exclude') {
+                    dpp = subtotalAfterDisc;
+                    ppnAmount = dpp * (ppnRate / 100);
+                } else {
+                    dpp = subtotalAfterDisc / (1 + (ppnRate / 100));
+                    ppnAmount = subtotalAfterDisc - dpp;
+                }
+            }
+
+            const usePPh = document.getElementById('usePPh').checked;
+            const pphRate = parseFloat(document.getElementById('pphRateInput').value) || 0;
+            let pphAmount = (usePPh && pphRate > 0) ? dpp * (pphRate / 100) : 0;
+
+            const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
+            let grandTotal = (ppnMode === 'include') ? (subtotalAfterDisc - pphAmount + shippingFee) : (subtotalAfterDisc + ppnAmount - pphAmount + shippingFee);
+
+            // Render Logo Alignment Classes
+            let logoAlignClass = 'justify-start';
+            if (logoAlign === 'center') logoAlignClass = 'justify-center';
+            if (logoAlign === 'right') logoAlignClass = 'justify-end';
+
+            // Render Each Page
+            for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
+                const pageNum = pageIndex + 1;
+                const pageItems = itemsData.slice(pageIndex * ITEMS_PER_PAGE, (pageIndex + 1) * ITEMS_PER_PAGE);
+                const isLastPage = pageNum === totalPages;
+
+                const pageDiv = document.createElement('div');
+                pageDiv.className = `a4-page transition-all duration-300 flex flex-col justify-between`;
+                pageDiv.style.fontFamily = currentFontFamily;
+
+                let tableRowsHtml = '';
+                pageItems.forEach((item, idx) => {
+                    const actualIdx = (pageIndex * ITEMS_PER_PAGE) + idx + 1;
+                    const itemTotal = (item.qty * item.price) - item.discount;
+                    const isEven = idx % 2 === 0;
+                    const bgClass = isEven ? 'bg-white' : 'bg-slate-50/70';
+
+                    tableRowsHtml += `
+                        <tr class="${bgClass} border-b border-slate-200/80 hover:bg-slate-100/60 transition-colors">
+                            <td class="py-2.5 px-1.5 text-center text-slate-500 font-medium tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt">${actualIdx}</td>
+                            <td class="py-2.5 px-3 border-r border-slate-200/60" style="word-break: break-word;">
+                                <strong class="text-slate-800 font-bold block leading-tight" style="font-size: ${tableFontPt}pt">${escapeHtml(item.name)}</strong>
+                                ${item.desc ? `<span class="text-slate-500 block whitespace-pre-line leading-relaxed mt-1" style="font-size: ${itemDescFontPt}pt">${escapeHtml(item.desc)}</span>` : ''}
+                            </td>
+                            <td class="py-2.5 px-1 text-center font-semibold text-slate-700 tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt">${item.qty}</td>
+                            <td class="py-2.5 px-1 text-center text-slate-600 font-medium border-r border-slate-200/60" style="font-size: ${numericFontPt}pt">${escapeHtml(item.unit)}</td>
+                            <td class="py-2.5 px-2 text-right text-slate-700 font-medium tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt">${formatCurrency(item.price, curr)}</td>
+                            <td class="py-2.5 px-2 text-right text-rose-600 font-medium tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</td>
+                            <td class="py-2.5 px-2.5 text-right font-bold text-slate-900 tabular-nums" style="font-size: ${numericFontPt}pt">${formatCurrency(itemTotal, curr)}</td>
+                        </tr>
+                    `;
+                });
+
+                let summaryAndFooterSection = '';
+                if (isLastPage) {
+                    summaryAndFooterSection = `
+                        <!-- Financial Summary -->
+                        <div class="flex justify-end mb-4 page-break-inside-avoid">
+                            <div class="w-80 rounded-xl overflow-hidden border border-slate-200/90 bg-slate-50/80 p-3.5 shadow-xs space-y-2">
+                                <div class="flex justify-between text-slate-600" style="font-size: ${numericFontPt}pt">
+                                    <span>Subtotal Items</span>
+                                    <span class="font-semibold text-slate-800 tabular-nums">${formatCurrency(subtotal, curr)}</span>
+                                </div>
+                                ${globalDiscountAmount > 0 ? `
+                                <div class="flex justify-between text-slate-600" style="font-size: ${numericFontPt}pt">
+                                    <span>Diskon Tambahan</span>
+                                    <span class="font-semibold text-rose-600 tabular-nums">- ${formatCurrency(globalDiscountAmount, curr)}</span>
+                                </div>` : ''}
+                                ${usePPN ? `
+                                <div class="flex justify-between text-slate-600" style="font-size: ${numericFontPt}pt">
+                                    <span>PPN (${ppnRate}%) ${ppnMode === 'include' ? '[Incl.]' : ''}</span>
+                                    <span class="font-semibold text-slate-800 tabular-nums">${formatCurrency(ppnAmount, curr)}</span>
+                                </div>` : ''}
+                                ${usePPh && pphAmount > 0 ? `
+                                <div class="flex justify-between text-slate-600" style="font-size: ${numericFontPt}pt">
+                                    <span>Potongan PPh (${pphRate}%)</span>
+                                    <span class="font-semibold text-rose-600 tabular-nums">- ${formatCurrency(pphAmount, curr)}</span>
+                                </div>` : ''}
+                                ${shippingFee > 0 ? `
+                                <div class="flex justify-between text-slate-600" style="font-size: ${numericFontPt}pt">
+                                    <span>Biaya Pengiriman</span>
+                                    <span class="font-semibold text-slate-800 tabular-nums">${formatCurrency(shippingFee, curr)}</span>
+                                </div>` : ''}
+                                <div class="flex justify-between items-center font-bold border-t border-slate-300 pt-2.5 mt-1" style="color: ${theme.primaryHex}; font-size: ${grandTotalFontPt}pt">
+                                    <span>GRAND TOTAL</span>
+                                    <span class="tabular-nums">${formatCurrency(grandTotal, curr)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terms, Bank & Signature -->
+                        <div class="grid grid-cols-2 gap-4 border-t border-slate-200/80 pt-3 page-break-inside-avoid" style="font-size: ${footerFontPt}pt">
+                            <div class="space-y-2">
+                                <div>
+                                    <h4 class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(6, footerFontPt - 1)}pt">REKENING PEMBAYARAN:</h4>
+                                    <p class="text-slate-700"><span>${escapeHtml(document.getElementById('bankName').value || '-')}</span>: <strong class="text-slate-900">${escapeHtml(document.getElementById('bankAccount').value || '-')}</strong></p>
+                                    <p class="text-slate-600"><span>A/N:</span> <span>${escapeHtml(document.getElementById('bankHolder').value || '-')}</span></p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(6, footerFontPt - 1)}pt">SYARAT & KETENTUAN:</h4>
+                                    <p class="text-slate-600 whitespace-pre-line leading-relaxed" style="font-size: ${Math.max(6, footerFontPt - 1)}pt">${escapeHtml(document.getElementById('termsText').value || '-')}</p>
+                                </div>
+                            </div>
+
+                            <div class="text-center flex flex-col items-center justify-between min-h-[105px]">
+                                <p class="text-slate-600 font-medium">Hormat Kami,</p>
+                                <div class="my-1 h-12 flex items-center justify-center">
+                                    ${sigImageBase64 ? `<img src="${sigImageBase64}" alt="Signature" class="max-h-12 object-contain">` : ''}
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-900 underline">${escapeHtml(document.getElementById('signerName').value || 'Nama Terang')}</p>
+                                    <p class="text-slate-500 font-medium" style="font-size: ${Math.max(6, footerFontPt - 1.5)}pt">${escapeHtml(document.getElementById('signerTitle').value || 'Jabatan')}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                pageDiv.innerHTML = `
+                    <div>
+                        <!-- Header Section -->
+                        <div class="border-b-2 pb-3 mb-3 transition-colors" style="border-color: ${theme.primaryHex};">
+                            
+                            <!-- Dynamic Logo Container (Flexible Controls) -->
+                            ${logoBase64 ? `
+                            <div class="flex ${logoAlignClass} mb-2" style="transform: translateY(${logoOffsetY}px);">
+                                <img src="${logoBase64}" alt="Company Logo" style="width: ${logoWidth}px; max-height: ${logoHeight}px; object-fit: contain;">
+                            </div>
+                            ` : ''}
+
+                            <div class="flex justify-between items-start">
+                                <div class="max-w-[58%]" style="font-size: ${headerFontPt}pt">
+                                    <h2 class="font-extrabold tracking-tight transition-colors" style="color: ${theme.primaryHex}; font-size: ${headerFontPt + 3}pt">${escapeHtml(compName)}</h2>
+                                    <p class="text-slate-600 whitespace-pre-line leading-snug mt-0.5">${escapeHtml(compAddr)}</p>
+                                    <p class="text-slate-600"><span>Telp:</span> <span class="font-medium">${escapeHtml(compPhone)}</span></p>
+                                    ${showEmail ? `<p class="text-slate-600"><span>Email:</span> <span class="font-medium">${escapeHtml(compEmail)}</span></p>` : ''}
+                                    ${showTaxId ? `<p class="text-slate-600"><span>NPWP:</span> <span class="font-medium">${escapeHtml(compTaxId)}</span></p>` : ''}
+                                </div>
+
+                                <div class="text-right" style="font-size: ${headerFontPt}pt">
+                                    <h1 class="font-black tracking-wider uppercase transition-colors" style="color: ${theme.primaryHex}; font-size: ${headerFontPt + 6}pt">PENAWARAN HARGA</h1>
+                                    <p class="text-slate-400 font-bold uppercase tracking-widest" style="font-size: ${Math.max(6, headerFontPt - 2)}pt">QUOTATION</p>
+                                    
+                                    <div class="mt-2 space-y-0.5 bg-slate-50 p-2 rounded-lg border border-slate-200/70 inline-block text-left">
+                                        <p><span class="text-slate-500">No. Penawaran:</span> <strong class="text-slate-800">${escapeHtml(docNum)}</strong></p>
+                                        <p><span class="text-slate-500">Tanggal:</span> <strong class="text-slate-800">${docDateVal}</strong></p>
+                                        <p><span class="text-slate-500">Berlaku S.d:</span> <strong class="text-slate-800">${docValidVal}</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Client & Subject Information -->
+                        <div class="grid grid-cols-2 gap-3 mb-3 bg-slate-50 p-3 rounded-xl border border-slate-200/80" style="font-size: ${clientFontPt}pt">
+                            <div>
+                                <p class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(6, clientFontPt - 2)}pt">KEPADA YTH:</p>
+                                <h3 class="font-extrabold text-slate-800" style="font-size: ${clientFontPt + 1}pt">${escapeHtml(clientName)}</h3>
+                                <p class="text-slate-600"><span>Up:</span> <span class="font-medium">${escapeHtml(clientContact)}</span></p>
+                                ${showClientAddress ? `<p class="text-slate-600 whitespace-pre-line leading-tight mt-0.5">${escapeHtml(clientAddr)}</p>` : ''}
+                                ${showClientPhone ? `<p class="text-slate-600"><span>Telp:</span> <span class="font-medium">${escapeHtml(clientPhone)}</span></p>` : ''}
+                                ${showClientEmail ? `<p class="text-slate-600"><span>Email:</span> <span class="font-medium">${escapeHtml(clientEmail)}</span></p>` : ''}
+                            </div>
+                            <div>
+                                <p class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(6, clientFontPt - 2)}pt">PERIHAL / SUBJECT:</p>
+                                <p class="font-semibold text-slate-800 leading-snug">${escapeHtml(docSubj)}</p>
+                            </div>
+                        </div>
+
+                        <!-- Items Table -->
+                        <div class="mb-3 overflow-hidden rounded-xl border border-slate-200/90 shadow-xs">
+                            <table class="w-full border-collapse table-fixed">
+                                <thead>
+                                    <tr class="text-white uppercase tracking-wider font-bold" style="background-color: ${theme.primaryHex}; font-size: ${Math.max(7, tableFontPt - 0.5)}pt">
+                                        <th class="py-2.5 px-1.5 text-center border-r border-white/20" style="width: 5%;">NO</th>
+                                        <th class="py-2.5 px-3 text-left border-r border-white/20" style="width: 37%;">DESKRIPSI & SPESIFIKASI</th>
+                                        <th class="py-2.5 px-1 text-center border-r border-white/20" style="width: 7%;">QTY</th>
+                                        <th class="py-2.5 px-1 text-center border-r border-white/20" style="width: 9%;">SATUAN</th>
+                                        <th class="py-2.5 px-2 text-right border-r border-white/20" style="width: 15%;">HARGA SATUAN</th>
+                                        <th class="py-2.5 px-2 text-right border-r border-white/20" style="width: 11%;">DISKON</th>
+                                        <th class="py-2.5 px-2.5 text-right" style="width: 16%;">TOTAL HARGA</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${tableRowsHtml}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        ${summaryAndFooterSection}
+                    </div>
+
+                    <!-- Footer Page Count -->
+                    <div class="border-t border-slate-200/80 pt-2 text-slate-400 flex justify-between items-center no-print-footer" style="font-size: ${Math.max(6, footerFontPt - 2)}pt">
+                        <span>Dokumen penawaran harga ini diterbitkan secara resmi melalui sistem QuotationPRO.</span>
+                        <span class="font-bold text-slate-600">Halaman ${pageNum} dari ${totalPages}</span>
+                    </div>
+                `;
+
+                pagesContainer.appendChild(pageDiv);
+            }
+        }
+
+        function formatCurrency(amount, currencySymbol = 'Rp') {
+            return currencySymbol + ' ' + Math.round(amount).toLocaleString('id-ID');
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    logoBase64 = e.target.result;
+                    updatePreview();
+                    showToast("Logo berhasil diunggah.");
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeLogo() {
+            logoBase64 = '';
+            document.getElementById('inputLogo').value = '';
+            updatePreview();
+            showToast("Logo dihapus.");
+        }
+
+        function toggleSigMethod(method) {
+            const drawCont = document.getElementById('sigDrawContainer');
+            const uploadCont = document.getElementById('sigUploadContainer');
+            if (method === 'draw') {
+                drawCont.classList.remove('hidden');
+                uploadCont.classList.add('hidden');
+            } else {
+                drawCont.classList.add('hidden');
+                uploadCont.classList.remove('hidden');
+            }
+        }
+
+        function clearSignature() {
+            if (signaturePad) {
+                signaturePad.clear();
+                sigImageBase64 = '';
+                updatePreview();
+                showToast("Tandatangan dibersihkan.");
+            }
+        }
+
+        function handleSigUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    sigImageBase64 = e.target.result;
+                    updatePreview();
+                    showToast("Stempel/TTD berhasil diunggah.");
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handlePPhTypeChange() {
+            const type = document.getElementById('pphType').value;
+            const rateInput = document.getElementById('pphRateInput');
+            if (type === '23_service') rateInput.value = 2;
+            else if (type === '22_goods') rateInput.value = 1.5;
+            else if (type === '4_2_final') rateInput.value = 0.5;
+            updatePreview();
+        }
+
+        document.getElementById('usePPh').addEventListener('change', function() {
+            const details = document.getElementById('pphDetailsContainer');
+            if (this.checked) details.classList.remove('hidden');
+            else details.classList.add('hidden');
+        });
+
+        function exportPDF() {
+            const pages = document.querySelectorAll('.a4-page');
+            if (!pages || pages.length === 0) return;
+
+            showToast("Sedang memproses file PDF...");
+            const container = document.getElementById('quotationPaperPagesContainer');
+            container.classList.add('export-clean');
+
+            const opt = {
+                margin:       [0, 0, 0, 0],
+                filename:     `Quotation_${(document.getElementById('docNumber').value || 'Draft').replace(/[\/\\?%*:|"<>]/g, '-')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { 
+                    scale: 2,
+                    useCORS: true, 
+                    logging: false,
+                    letterRendering: true,
+                    scrollY: 0
+                },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true }
+            };
+
+            if (pages.length === 1) {
+                html2pdf().set(opt).from(pages[0]).save().then(() => {
+                    container.classList.remove('export-clean');
+                    showToast("PDF berhasil diunduh!");
+                }).catch(err => {
+                    container.classList.remove('export-clean');
+                    showToast("Gagal mengunduh PDF.", true);
+                });
+            } else {
+                const tempWrapper = document.createElement('div');
+                pages.forEach((page, idx) => {
+                    const clonedPage = page.cloneNode(true);
+                    if (idx < pages.length - 1) {
+                        clonedPage.style.pageBreakAfter = 'always';
+                    }
+                    tempWrapper.appendChild(clonedPage);
+                });
+                html2pdf().set(opt).from(tempWrapper).save().then(() => {
+                    container.classList.remove('export-clean');
+                    showToast("PDF berhasil diunduh!");
+                }).catch(err => {
+                    container.classList.remove('export-clean');
+                    showToast("Gagal mengunduh PDF.", true);
+                });
+            }
+        }
+
+        function exportExcel() {
+            const curr = document.getElementById('currencySymbol').value;
+            const wb = XLSX.utils.book_new();
+
+            const compName = document.getElementById('companyName').value || '';
+            const compAddr = document.getElementById('companyAddress').value || '';
+            const compPhone = document.getElementById('companyPhone').value || '';
+            const compEmail = document.getElementById('companyEmail').value || '';
+            
+            const clientName = document.getElementById('clientName').value || '';
+            const clientContact = document.getElementById('clientContact').value || '';
+            const clientAddr = document.getElementById('clientAddress').value || '';
+
+            let subtotal = 0;
+            itemsData.forEach(item => {
+                subtotal += (item.qty * item.price) - item.discount;
+            });
+
+            let globalDiscountAmount = 0;
+            const globalDiscType = document.getElementById('globalDiscountType').value;
+            const globalDiscVal = parseFloat(document.getElementById('globalDiscountValue').value) || 0;
+            if (globalDiscType === 'percent') {
+                globalDiscountAmount = subtotal * (globalDiscVal / 100);
+            } else {
+                globalDiscountAmount = globalDiscVal;
+            }
+
+            const subtotalAfterDisc = Math.max(0, subtotal - globalDiscountAmount);
+            const usePPN = document.getElementById('usePPN').checked;
+            const ppnRate = parseFloat(document.getElementById('ppnRate').value) || 0;
+            const ppnMode = document.querySelector('input[name="ppnMode"]:checked').value;
+            let ppnAmount = 0;
+            let dpp = subtotalAfterDisc;
+
+            if (usePPN && ppnRate > 0) {
+                if (ppnMode === 'exclude') {
+                    dpp = subtotalAfterDisc;
+                    ppnAmount = dpp * (ppnRate / 100);
+                } else {
+                    dpp = subtotalAfterDisc / (1 + (ppnRate / 100));
+                    ppnAmount = subtotalAfterDisc - dpp;
+                }
+            }
+
+            const usePPh = document.getElementById('usePPh').checked;
+            const pphRate = parseFloat(document.getElementById('pphRateInput').value) || 0;
+            let pphAmount = (usePPh && pphRate > 0) ? dpp * (pphRate / 100) : 0;
+            const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
+            let grandTotal = (ppnMode === 'include') ? (subtotalAfterDisc - pphAmount + shippingFee) : (subtotalAfterDisc + ppnAmount - pphAmount + shippingFee);
+            
+            const excelData = [
+                [compName.toUpperCase()],
+                [compAddr],
+                [`Telp: ${compPhone} | Email: ${compEmail}`],
+                [""],
+                ["PENAWARAN HARGA / QUOTATION"],
+                ["No. Penawaran:", document.getElementById('docNumber').value, "", "Tanggal:", formatDate(document.getElementById('docDate').value)],
+                ["Perihal:", document.getElementById('docSubject').value, "", "Masa Berlaku:", formatDate(document.getElementById('docValidDate').value)],
+                [""],
+                ["KEPADA YTH:"],
+                [clientName],
+                [`UP: ${clientContact}`],
+                [clientAddr],
+                [""],
+                ["No", "Deskripsi Barang / Jasa", "Spesifikasi / Detail", "Qty", "Satuan", `Harga Satuan (${curr})`, `Diskon (${curr})`, `Total Harga (${curr})`]
+            ];
+
+            itemsData.forEach((item, index) => {
+                const total = (item.qty * item.price) - item.discount;
+                excelData.push([
+                    index + 1,
+                    item.name,
+                    item.desc || '-',
+                    item.qty,
+                    item.unit,
+                    item.price,
+                    item.discount,
+                    total
+                ]);
+            });
+
+            excelData.push([""]);
+            excelData.push(["", "", "", "", "", "", "Subtotal:", subtotal]);
+            if (globalDiscountAmount > 0) {
+                excelData.push(["", "", "", "", "", "", "Diskon Tambahan:", -globalDiscountAmount]);
+            }
+            if (usePPN) {
+                excelData.push(["", "", "", "", "", "", `PPN (${ppnRate}%):`, ppnAmount]);
+            }
+            if (usePPh && pphAmount > 0) {
+                excelData.push(["", "", "", "", "", "", `Potongan PPh (${pphRate}%):`, -pphAmount]);
+            }
+            if (shippingFee > 0) {
+                excelData.push(["", "", "", "", "", "", "Biaya Pengiriman:", shippingFee]);
+            }
+            excelData.push(["", "", "", "", "", "", "GRAND TOTAL:", grandTotal]);
+
+            excelData.push([""]);
+            excelData.push(["REKENING PEMBAYARAN:"]);
+            excelData.push([`${document.getElementById('bankName').value || '-'} - A/N: ${document.getElementById('bankHolder').value || '-'} (${document.getElementById('bankAccount').value || '-'})`]);
+            excelData.push([""]);
+            excelData.push(["SYARAT & KETENTUAN:"]);
+            
+            const termsLines = (document.getElementById('termsText').value || '-').split('\n');
+            termsLines.forEach(line => {
+                excelData.push([line]);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(excelData);
+            
+            const colWidths = [
+                { wch: 6 },
+                { wch: 35 },
+                { wch: 45 },
+                { wch: 8 },
+                { wch: 10 },
+                { wch: 18 },
+                { wch: 14 },
+                { wch: 22 }
+            ];
+            ws['!cols'] = colWidths;
+
+            XLSX.utils.book_append_sheet(wb, ws, "Quotation");
+            XLSX.writeFile(wb, `Quotation_${(document.getElementById('docNumber').value || 'Draft').replace(/[\/\\?%*:|"<>]/g, '-')}.xlsx`);
+            showToast("File Excel berhasil diunduh!");
+        }
+
+        function exportWord() {
+            try {
+                const curr = document.getElementById('currencySymbol').value;
+                const compName = document.getElementById('companyName').value || 'Nama Perusahaan';
+                const compAddr = document.getElementById('companyAddress').value || '-';
+                const compPhone = document.getElementById('companyPhone').value || '-';
+                const compEmail = document.getElementById('companyEmail').value || '';
+                
+                const clientName = document.getElementById('clientName').value || 'Nama Klien';
+                const clientContact = document.getElementById('clientContact').value || '-';
+                const clientAddr = document.getElementById('clientAddress').value || '-';
+
+                let subtotal = 0;
+                itemsData.forEach(item => {
+                    subtotal += (item.qty * item.price) - item.discount;
+                });
+
+                let globalDiscountAmount = 0;
+                const globalDiscType = document.getElementById('globalDiscountType').value;
+                const globalDiscVal = parseFloat(document.getElementById('globalDiscountValue').value) || 0;
+                if (globalDiscType === 'percent') {
+                    globalDiscountAmount = subtotal * (globalDiscVal / 100);
+                } else {
+                    globalDiscountAmount = globalDiscVal;
+                }
+
+                const subtotalAfterDisc = Math.max(0, subtotal - globalDiscountAmount);
+                const usePPN = document.getElementById('usePPN').checked;
+                const ppnRate = parseFloat(document.getElementById('ppnRate').value) || 0;
+                const ppnMode = document.querySelector('input[name="ppnMode"]:checked').value;
+                let ppnAmount = 0;
+                let dpp = subtotalAfterDisc;
+
+                if (usePPN && ppnRate > 0) {
+                    if (ppnMode === 'exclude') {
+                        dpp = subtotalAfterDisc;
+                        ppnAmount = dpp * (ppnRate / 100);
+                    } else {
+                        dpp = subtotalAfterDisc / (1 + (ppnRate / 100));
+                        ppnAmount = subtotalAfterDisc - dpp;
+                    }
+                }
+
+                const usePPh = document.getElementById('usePPh').checked;
+                const pphRate = parseFloat(document.getElementById('pphRateInput').value) || 0;
+                let pphAmount = (usePPh && pphRate > 0) ? dpp * (pphRate / 100) : 0;
+                const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
+                let grandTotal = (ppnMode === 'include') ? (subtotalAfterDisc - pphAmount + shippingFee) : (subtotalAfterDisc + ppnAmount - pphAmount + shippingFee);
+
+                const tableRows = [
+                    new docx.TableRow({
+                        tableHeader: true,
+                        children: [
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: "NO", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 5, type: docx.WidthType.PERCENTAGE } }),
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: "DESKRIPSI & SPESIFIKASI", bold: true })], width: { size: 37, type: docx.WidthType.PERCENTAGE } }),
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: "QTY", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 7, type: docx.WidthType.PERCENTAGE } }),
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: "SATUAN", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 10, type: docx.WidthType.PERCENTAGE } }),
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: `HARGA (${curr})`, bold: true, alignment: docx.AlignmentType.RIGHT })], width: { size: 15, type: docx.WidthType.PERCENTAGE } }),
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: `DISKON (${curr})`, bold: true, alignment: docx.AlignmentType.RIGHT })], width: { size: 10, type: docx.WidthType.PERCENTAGE } }),
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: `TOTAL (${curr})`, bold: true, alignment: docx.AlignmentType.RIGHT })], width: { size: 16, type: docx.WidthType.PERCENTAGE } }),
+                        ],
+                    }),
+                    ...itemsData.map((item, idx) => {
+                        const descParagraphs = item.desc 
+                            ? item.desc.split('\n').map(d => new docx.Paragraph({ text: d })) 
+                            : [];
+
+                        return new docx.TableRow({
+                            children: [
+                                new docx.TableCell({ children: [new docx.Paragraph({ text: String(idx + 1), alignment: docx.AlignmentType.CENTER })] }),
+                                new docx.TableCell({ 
+                                    children: [
+                                        new docx.Paragraph({ text: item.name, bold: true }),
+                                        ...descParagraphs
+                                    ] 
+                                }),
+                                new docx.TableCell({ children: [new docx.Paragraph({ text: String(item.qty), alignment: docx.AlignmentType.CENTER })] }),
+                                new docx.TableCell({ children: [new docx.Paragraph({ text: item.unit, alignment: docx.AlignmentType.CENTER })] }),
+                                new docx.TableCell({ children: [new docx.Paragraph({ text: formatCurrency(item.price, '').trim(), alignment: docx.AlignmentType.RIGHT })] }),
+                                new docx.TableCell({ children: [new docx.Paragraph({ text: item.discount > 0 ? '-' + formatCurrency(item.discount, '').trim() : '-', alignment: docx.AlignmentType.RIGHT })] }),
+                                new docx.TableCell({ children: [new docx.Paragraph({ text: formatCurrency((item.qty * item.price) - item.discount, '').trim(), alignment: docx.AlignmentType.RIGHT })] }),
+                            ]
+                        });
+                    })
+                ];
+
+                const termsParagraphs = (document.getElementById('termsText').value || '-').split('\n').map(t => new docx.Paragraph({ text: t }));
+
+                const doc = new docx.Document({
+                    sections: [{
+                        properties: {
+                            page: {
+                                margin: {
+                                    top: 720,
+                                    bottom: 720,
+                                    left: 720,
+                                    right: 720,
+                                }
+                            }
+                        },
+                        children: [
+                            new docx.Paragraph({
+                                children: [
+                                    new docx.TextRun({ text: compName, bold: true, size: 28, color: "1E3A8A" }),
+                                ],
+                            }),
+                            new docx.Paragraph({ text: compAddr }),
+                            new docx.Paragraph({ text: `Telp: ${compPhone} | Email: ${compEmail}` }),
+                            new docx.Paragraph({ text: "--------------------------------------------------------------------------------------------------" }),
+                            new docx.Paragraph({ text: "" }),
+                            new docx.Paragraph({
+                                children: [
+                                    new docx.TextRun({ text: "PENAWARAN HARGA / QUOTATION", bold: true, size: 24, color: "1E3A8A" })
+                                ]
+                            }),
+                            new docx.Paragraph({ text: `No. Penawaran: ${document.getElementById('docNumber').value}` }),
+                            new docx.Paragraph({ text: `Tanggal: ${formatDate(document.getElementById('docDate').value)}` }),
+                            new docx.Paragraph({ text: `Berlaku s/d: ${formatDate(document.getElementById('docValidDate').value)}` }),
+                            new docx.Paragraph({ text: "" }),
+                            new docx.Paragraph({ children: [new docx.TextRun({ text: "KEPADA YTH:", bold: true })] }),
+                            new docx.Paragraph({ text: clientName }),
+                            new docx.Paragraph({ text: `Up: ${clientContact}` }),
+                            new docx.Paragraph({ text: clientAddr }),
+                            new docx.Paragraph({ text: "" }),
+                            new docx.Table({
+                                rows: tableRows,
+                                width: { size: 100, type: docx.WidthType.PERCENTAGE }
+                            }),
+                            new docx.Paragraph({ text: "" }),
+                            new docx.Paragraph({ text: `Subtotal: ${formatCurrency(subtotal, curr)}`, alignment: docx.AlignmentType.RIGHT }),
+                            ...(globalDiscountAmount > 0 ? [new docx.Paragraph({ text: `Diskon Global: -${formatCurrency(globalDiscountAmount, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
+                            ...(usePPN ? [new docx.Paragraph({ text: `PPN (${ppnRate}%): ${formatCurrency(ppnAmount, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
+                            ...(usePPh && pphAmount > 0 ? [new docx.Paragraph({ text: `Potongan PPh (${pphRate}%): -${formatCurrency(pphAmount, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
+                            ...(shippingFee > 0 ? [new docx.Paragraph({ text: `Biaya Pengiriman: ${formatCurrency(shippingFee, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
+                            new docx.Paragraph({ children: [new docx.TextRun({ text: `GRAND TOTAL: ${formatCurrency(grandTotal, curr)}`, bold: true, size: 22 })], alignment: docx.AlignmentType.RIGHT }),
+                            new docx.Paragraph({ text: "" }),
+                            new docx.Paragraph({ children: [new docx.TextRun({ text: "REKENING PEMBAYARAN:", bold: true })] }),
+                            new docx.Paragraph({ text: `${document.getElementById('bankName').value || '-'} - ${document.getElementById('bankAccount').value || '-'} (A/N: ${document.getElementById('bankHolder').value || '-'})` }),
+                            new docx.Paragraph({ text: "" }),
+                            new docx.Paragraph({ children: [new docx.TextRun({ text: "SYARAT & KETENTUAN:", bold: true })] }),
+                            ...termsParagraphs,
+                            new docx.Paragraph({ text: "" }),
+                            new docx.Paragraph({ text: "" }),
+                            new docx.Paragraph({ text: "Hormat Kami,", alignment: docx.AlignmentType.RIGHT }),
+                            new docx.Paragraph({ text: "" }),
+                            new docx.Paragraph({ text: "" }),
+                            new docx.Paragraph({ children: [new docx.TextRun({ text: document.getElementById('signerName').value || 'Nama Terang', bold: true, underline: {} })], alignment: docx.AlignmentType.RIGHT }),
+                            new docx.Paragraph({ text: document.getElementById('signerTitle').value || 'Jabatan', alignment: docx.AlignmentType.RIGHT }),
+                        ]
+                    }]
+                });
+
+                docx.Packer.toBlob(doc).then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = `Quotation_${(document.getElementById('docNumber').value || 'Draft').replace(/[\/\\?%*:|"<>]/g, '-')}.docx`;
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    showToast("File Word (.docx) berhasil diunduh!");
+                });
+            } catch (err) {
+                console.error("Export Word Error:", err);
+                showToast("Gagal mengunduh file Word.", true);
+            }
+        }
+    </script>
 </body>
 </html>
+```
