@@ -141,9 +141,9 @@
                 </div>
 
                 <!-- SELECTOR TEMA WARNA & FONT -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6 p-3 bg-slate-50 rounded-lg border border-slate-200">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Tema Warna Soft Elegant</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Tema Warna Soft</label>
                         <select id="colorThemeSelect" onchange="changeThemeColor(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
                             <option value="navy">Classic Corporate Navy</option>
                             <option value="emerald">Soft Emerald Sage</option>
@@ -154,13 +154,32 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Variasi Jenis Font / Text</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Jenis Font / Text</label>
                         <select id="fontFamilySelect" onchange="changeFontFamily(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
                             <option value="'Inter', sans-serif">Modern Clean (Inter)</option>
                             <option value="'Playfair Display', serif">Luxury Serif (Playfair Display)</option>
                             <option value="'Montserrat', sans-serif">Geometric Modern (Montserrat)</option>
                             <option value="'Lora', serif">Elegant Classic (Lora)</option>
                             <option value="'Roboto', sans-serif">Clean Neutral (Roboto)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text (Font Size)</label>
+                        <select id="fontSizeSelect" onchange="changeFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
+                            <option value="4">4 pt (Sangat Kecil)</option>
+                            <option value="5">5 pt</option>
+                            <option value="6">6 pt</option>
+                            <option value="7">7 pt</option>
+                            <option value="8">8 pt</option>
+                            <option value="9">9 pt (Compact)</option>
+                            <option value="10" selected>10 pt (Normal Standard)</option>
+                            <option value="11">11 pt</option>
+                            <option value="12">12 pt (Prominen)</option>
+                            <option value="13">13 pt</option>
+                            <option value="14">14 pt</option>
+                            <option value="15">15 pt</option>
+                            <option value="16">16 pt (Sangat Besar)</option>
                         </select>
                     </div>
                 </div>
@@ -510,6 +529,7 @@
 
         let currentThemeKey = 'navy';
         let currentFontFamily = "'Inter', sans-serif";
+        let currentFontSizePt = 10; // Default font size in pt
 
         function changeThemeColor(themeKey) {
             currentThemeKey = themeKey;
@@ -518,6 +538,11 @@
 
         function changeFontFamily(fontFamily) {
             currentFontFamily = fontFamily;
+            updatePreview();
+        }
+
+        function changeFontSize(sizePt) {
+            currentFontSizePt = parseInt(sizePt) || 10;
             updatePreview();
         }
 
@@ -676,7 +701,17 @@
             const pagesContainer = document.getElementById('quotationPaperPagesContainer');
             pagesContainer.innerHTML = '';
 
-            const ITEMS_PER_PAGE = 26;
+            const fontPt = currentFontSizePt;
+            
+            // Hitung estimasi item per halaman secara dinamis berdasarkan ukuran font (pt)
+            // Ukuran font yang lebih kecil memuat lebih banyak baris item
+            let dynamicItemsPerPage = Math.floor(200 / (fontPt / 6));
+            if (dynamicItemsPerPage > 200) dynamicItemsPerPage = 200;
+            if (dynamicItemsPerPage < 1) dynamicItemsPerPage = 1;
+
+            const MAX_ITEMS_LIMIT_PER_PAGE = 200; 
+            const ITEMS_PER_PAGE = Math.min(dynamicItemsPerPage, MAX_ITEMS_LIMIT_PER_PAGE);
+
             const totalPages = Math.ceil(itemsData.length / ITEMS_PER_PAGE) || 1;
             const theme = themePresets[currentThemeKey] || themePresets.navy;
             const curr = document.getElementById('currencySymbol').value;
@@ -741,15 +776,16 @@
             const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
             let grandTotal = (ppnMode === 'include') ? (subtotalAfterDisc - pphAmount + shippingFee) : (subtotalAfterDisc + ppnAmount - pphAmount + shippingFee);
 
-            // Render Each Page
+            // Render Each Page dynamically
             for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
                 const pageNum = pageIndex + 1;
                 const pageItems = itemsData.slice(pageIndex * ITEMS_PER_PAGE, (pageIndex + 1) * ITEMS_PER_PAGE);
                 const isLastPage = pageNum === totalPages;
 
                 const pageDiv = document.createElement('div');
-                pageDiv.className = 'a4-page text-slate-800 text-xs transition-all duration-300 flex flex-col justify-between';
+                pageDiv.className = `a4-page transition-all duration-300 flex flex-col justify-between`;
                 pageDiv.style.fontFamily = currentFontFamily;
+                pageDiv.style.fontSize = `${fontPt}pt`;
 
                 let tableRowsHtml = '';
                 pageItems.forEach((item, idx) => {
@@ -757,16 +793,16 @@
                     const itemTotal = (item.qty * item.price) - item.discount;
                     tableRowsHtml += `
                         <tr class="border-b border-slate-100">
-                            <td class="py-2 px-2 text-center text-slate-500">${actualIdx}</td>
-                            <td class="py-2 px-2">
+                            <td class="py-1 px-1.5 text-center text-slate-500">${actualIdx}</td>
+                            <td class="py-1 px-1.5">
                                 <strong class="text-slate-800 block">${escapeHtml(item.name)}</strong>
-                                ${item.desc ? `<span class="text-slate-500 text-[10px] block whitespace-pre-line">${escapeHtml(item.desc)}</span>` : ''}
+                                ${item.desc ? `<span class="text-slate-500 block whitespace-pre-line" style="font-size: ${Math.max(4, fontPt - 1.5)}pt">${escapeHtml(item.desc)}</span>` : ''}
                             </td>
-                            <td class="py-2 px-2 text-center font-medium">${item.qty}</td>
-                            <td class="py-2 px-2 text-center text-slate-600">${escapeHtml(item.unit)}</td>
-                            <td class="py-2 px-2 text-right">${formatCurrency(item.price, curr)}</td>
-                            <td class="py-2 px-2 text-right text-red-600">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</td>
-                            <td class="py-2 px-2 text-right font-bold text-slate-800">${formatCurrency(itemTotal, curr)}</td>
+                            <td class="py-1 px-1.5 text-center font-medium">${item.qty}</td>
+                            <td class="py-1 px-1.5 text-center text-slate-600">${escapeHtml(item.unit)}</td>
+                            <td class="py-1 px-1.5 text-right">${formatCurrency(item.price, curr)}</td>
+                            <td class="py-1 px-1.5 text-right text-red-600">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</td>
+                            <td class="py-1 px-1.5 text-right font-bold text-slate-800">${formatCurrency(itemTotal, curr)}</td>
                         </tr>
                     `;
                 });
@@ -776,8 +812,8 @@
                 if (isLastPage) {
                     summaryAndFooterSection = `
                         <!-- Financial Summary -->
-                        <div class="flex justify-end mb-4 page-break-inside-avoid">
-                            <div class="w-72 space-y-1.5 text-[11px] border-t border-slate-300 pt-2">
+                        <div class="flex justify-end mb-3 page-break-inside-avoid">
+                            <div class="w-72 space-y-1 border-t border-slate-300 pt-2" style="font-size: ${Math.max(4, fontPt - 0.5)}pt">
                                 <div class="flex justify-between text-slate-600">
                                     <span>Subtotal Items</span>
                                     <span class="font-semibold text-slate-800">${formatCurrency(subtotal, curr)}</span>
@@ -802,7 +838,7 @@
                                     <span>Biaya Pengiriman</span>
                                     <span class="font-semibold text-slate-800">${formatCurrency(shippingFee, curr)}</span>
                                 </div>` : ''}
-                                <div class="flex justify-between items-center text-sm font-bold border-t-2 pt-2 transition-colors" style="color: ${theme.primaryHex}; border-color: ${theme.primaryHex};">
+                                <div class="flex justify-between items-center font-bold border-t-2 pt-2 transition-colors" style="color: ${theme.primaryHex}; border-color: ${theme.primaryHex}; font-size: ${fontPt + 1}pt">
                                     <span>GRAND TOTAL</span>
                                     <span>${formatCurrency(grandTotal, curr)}</span>
                                 </div>
@@ -810,27 +846,27 @@
                         </div>
 
                         <!-- Terms, Bank & Signature -->
-                        <div class="grid grid-cols-2 gap-6 border-t pt-4 text-[11px] page-break-inside-avoid">
-                            <div class="space-y-3">
+                        <div class="grid grid-cols-2 gap-4 border-t pt-2 page-break-inside-avoid" style="font-size: ${Math.max(4, fontPt - 0.5)}pt">
+                            <div class="space-y-2">
                                 <div>
-                                    <h4 class="font-bold uppercase text-[10px] tracking-wider mb-1" style="color: ${theme.primaryHex};">REKENING PEMBAYARAN:</h4>
+                                    <h4 class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, fontPt - 1)}pt">REKENING PEMBAYARAN:</h4>
                                     <p class="text-slate-700">${document.getElementById('bankName').value || '-'}: <strong class="text-slate-900">${document.getElementById('bankAccount').value || '-'}</strong></p>
                                     <p class="text-slate-600">A/N: <span>${document.getElementById('bankHolder').value || '-'}</span></p>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold uppercase text-[10px] tracking-wider mb-1" style="color: ${theme.primaryHex};">SYARAT & KETENTUAN:</h4>
-                                    <p class="text-slate-600 whitespace-pre-line leading-relaxed">${escapeHtml(document.getElementById('termsText').value || '-')}</p>
+                                    <h4 class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, fontPt - 1)}pt">SYARAT & KETENTUAN:</h4>
+                                    <p class="text-slate-600 whitespace-pre-line leading-relaxed" style="font-size: ${Math.max(4, fontPt - 1)}pt">${escapeHtml(document.getElementById('termsText').value || '-')}</p>
                                 </div>
                             </div>
 
-                            <div class="text-center flex flex-col items-center justify-between min-h-[130px]">
+                            <div class="text-center flex flex-col items-center justify-between min-h-[100px]">
                                 <p class="text-slate-600">Hormat Kami,</p>
-                                <div class="my-1 h-14 flex items-center justify-center">
-                                    ${sigImageBase64 ? `<img src="${sigImageBase64}" alt="Signature" class="max-h-14 object-contain">` : ''}
+                                <div class="my-1 h-12 flex items-center justify-center">
+                                    ${sigImageBase64 ? `<img src="${sigImageBase64}" alt="Signature" class="max-h-12 object-contain">` : ''}
                                 </div>
                                 <div>
                                     <p class="font-bold text-slate-900 underline">${escapeHtml(document.getElementById('signerName').value || 'Nama Terang')}</p>
-                                    <p class="text-slate-500 text-[10px]">${escapeHtml(document.getElementById('signerTitle').value || 'Jabatan')}</p>
+                                    <p class="text-slate-500" style="font-size: ${Math.max(4, fontPt - 1.5)}pt">${escapeHtml(document.getElementById('signerTitle').value || 'Jabatan')}</p>
                                 </div>
                             </div>
                         </div>
@@ -840,21 +876,21 @@
                 pageDiv.innerHTML = `
                     <div>
                         <!-- Header Section -->
-                        <div class="flex justify-between items-start border-b-2 pb-4 mb-4 transition-colors" style="border-color: ${theme.primaryHex};">
+                        <div class="flex justify-between items-start border-b-2 pb-2 mb-2 transition-colors" style="border-color: ${theme.primaryHex};">
                             <div class="max-w-[55%]">
-                                ${logoBase64 ? `<div class="mb-2"><img src="${logoBase64}" alt="Company Logo" class="max-h-14 max-w-[180px] object-contain"></div>` : ''}
-                                <h2 class="text-base font-bold transition-colors" style="color: ${theme.primaryHex};">${escapeHtml(compName)}</h2>
-                                <p class="text-slate-600 text-[10px] whitespace-pre-line leading-relaxed">${escapeHtml(compAddr)}</p>
-                                <p class="text-slate-600 text-[10px]">Telp: ${escapeHtml(compPhone)}</p>
-                                ${showEmail ? `<p class="text-slate-600 text-[10px]">Email: ${escapeHtml(compEmail)}</p>` : ''}
-                                ${showTaxId ? `<p class="text-slate-600 text-[10px]">NPWP: ${escapeHtml(compTaxId)}</p>` : ''}
+                                ${logoBase64 ? `<div class="mb-1"><img src="${logoBase64}" alt="Company Logo" class="max-h-10 max-w-[160px] object-contain"></div>` : ''}
+                                <h2 class="font-bold transition-colors" style="color: ${theme.primaryHex}; font-size: ${fontPt + 2}pt">${escapeHtml(compName)}</h2>
+                                <p class="text-slate-600 whitespace-pre-line leading-tight" style="font-size: ${Math.max(4, fontPt - 1.5)}pt">${escapeHtml(compAddr)}</p>
+                                <p class="text-slate-600" style="font-size: ${Math.max(4, fontPt - 1.5)}pt">Telp: ${escapeHtml(compPhone)}</p>
+                                ${showEmail ? `<p class="text-slate-600" style="font-size: ${Math.max(4, fontPt - 1.5)}pt">Email: ${escapeHtml(compEmail)}</p>` : ''}
+                                ${showTaxId ? `<p class="text-slate-600" style="font-size: ${Math.max(4, fontPt - 1.5)}pt">NPWP: ${escapeHtml(compTaxId)}</p>` : ''}
                             </div>
 
                             <div class="text-right">
-                                <h1 class="text-xl font-black tracking-wider uppercase transition-colors" style="color: ${theme.primaryHex};">PENAWARAN HARGA</h1>
-                                <p class="text-slate-500 font-semibold text-[10px]">QUOTATION</p>
+                                <h1 class="font-black tracking-wider uppercase transition-colors" style="color: ${theme.primaryHex}; font-size: ${fontPt + 4}pt">PENAWARAN HARGA</h1>
+                                <p class="text-slate-500 font-semibold" style="font-size: ${Math.max(4, fontPt - 1.5)}pt">QUOTATION</p>
                                 
-                                <div class="mt-3 space-y-0.5 text-[10px]">
+                                <div class="mt-1 space-y-0.5" style="font-size: ${Math.max(4, fontPt - 1)}pt">
                                     <p><span class="text-slate-500">No. Penawaran:</span> <strong class="text-slate-800">${escapeHtml(docNum)}</strong></p>
                                     <p><span class="text-slate-500">Tanggal:</span> <strong class="text-slate-800">${docDateVal}</strong></p>
                                     <p><span class="text-slate-500">Berlaku S.d:</span> <strong class="text-slate-800">${docValidVal}</strong></p>
@@ -863,36 +899,36 @@
                         </div>
 
                         <!-- Client & Subject Information -->
-                        <div class="grid grid-cols-2 gap-3 mb-4 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <div class="grid grid-cols-2 gap-2 mb-2 bg-slate-50 p-2 rounded-lg border border-slate-200">
                             <div>
-                                <p class="text-[9px] font-bold uppercase tracking-wider mb-0.5 transition-colors" style="color: ${theme.primaryHex};">KEPADA YTH:</p>
-                                <h3 class="font-bold text-slate-800 text-xs">${escapeHtml(clientName)}</h3>
-                                <p class="text-slate-600 text-[10px]">Up: ${escapeHtml(clientContact)}</p>
-                                <p class="text-slate-600 text-[10px] whitespace-pre-line leading-tight">${escapeHtml(clientAddr)}</p>
-                                <p class="text-slate-600 text-[10px]">Telp: ${escapeHtml(clientPhone)}</p>
-                                <p class="text-slate-600 text-[10px]">Email: ${escapeHtml(clientEmail)}</p>
+                                <p class="font-bold uppercase tracking-wider mb-0.5 transition-colors" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, fontPt - 2)}pt">KEPADA YTH:</p>
+                                <h3 class="font-bold text-slate-800" style="font-size: ${fontPt}pt">${escapeHtml(clientName)}</h3>
+                                <p class="text-slate-600" style="font-size: ${Math.max(4, fontPt - 1)}pt">Up: ${escapeHtml(clientContact)}</p>
+                                <p class="text-slate-600 whitespace-pre-line leading-tight" style="font-size: ${Math.max(4, fontPt - 1)}pt">${escapeHtml(clientAddr)}</p>
+                                <p class="text-slate-600" style="font-size: ${Math.max(4, fontPt - 1)}pt">Telp: ${escapeHtml(clientPhone)}</p>
+                                <p class="text-slate-600" style="font-size: ${Math.max(4, fontPt - 1)}pt">Email: ${escapeHtml(clientEmail)}</p>
                             </div>
                             <div>
-                                <p class="text-[9px] font-bold uppercase tracking-wider mb-0.5 transition-colors" style="color: ${theme.primaryHex};">PERIHAL / SUBJECT:</p>
-                                <p class="font-semibold text-slate-800 text-[11px] leading-snug">${escapeHtml(docSubj)}</p>
+                                <p class="font-bold uppercase tracking-wider mb-0.5 transition-colors" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, fontPt - 2)}pt">PERIHAL / SUBJECT:</p>
+                                <p class="font-semibold text-slate-800 leading-snug" style="font-size: ${fontPt}pt">${escapeHtml(docSubj)}</p>
                             </div>
                         </div>
 
                         <!-- Items Table for Current Page -->
-                        <div class="mb-4 overflow-hidden">
+                        <div class="mb-2 overflow-hidden">
                             <table class="w-full border-collapse">
                                 <thead>
-                                    <tr class="text-white text-[9px] uppercase tracking-wider transition-colors" style="background-color: ${theme.primaryHex};">
-                                        <th class="py-2 px-2 text-center w-8 rounded-tl-md">No</th>
-                                        <th class="py-2 px-2 text-left">Deskripsi & Spesifikasi Items</th>
-                                        <th class="py-2 px-2 text-center w-10">Qty</th>
-                                        <th class="py-2 px-2 text-center w-12">Satuan</th>
-                                        <th class="py-2 px-2 text-right w-24">Harga Satuan</th>
-                                        <th class="py-2 px-2 text-right w-16">Diskon</th>
-                                        <th class="py-2 px-2 text-right w-24 rounded-tr-md">Total Harga</th>
+                                    <tr class="text-white uppercase tracking-wider transition-colors" style="background-color: ${theme.primaryHex}; font-size: ${Math.max(4, fontPt - 1)}pt">
+                                        <th class="py-1 px-1.5 text-center w-8 rounded-tl-md">No</th>
+                                        <th class="py-1 px-1.5 text-left">Deskripsi & Spesifikasi Items</th>
+                                        <th class="py-1 px-1.5 text-center w-10">Qty</th>
+                                        <th class="py-1 px-1.5 text-center w-12">Satuan</th>
+                                        <th class="py-1 px-1.5 text-right w-24">Harga Satuan</th>
+                                        <th class="py-1 px-1.5 text-right w-16">Diskon</th>
+                                        <th class="py-1 px-1.5 text-right w-24 rounded-tr-md">Total Harga</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-200 text-[10px]">
+                                <tbody class="divide-y divide-slate-200">
                                     ${tableRowsHtml}
                                 </tbody>
                             </table>
@@ -902,7 +938,7 @@
                     </div>
 
                     <!-- Footer Page Count -->
-                    <div class="border-t border-slate-200 pt-2 text-[9px] text-slate-400 flex justify-between items-center no-print-footer">
+                    <div class="border-t border-slate-200 pt-1 text-slate-400 flex justify-between items-center no-print-footer" style="font-size: ${Math.max(4, fontPt - 2)}pt">
                         <span>Dokumen penawaran harga ini diterbitkan secara resmi melalui sistem QuotationPRO.</span>
                         <span class="font-semibold text-slate-600">Halaman ${pageNum} dari ${totalPages}</span>
                     </div>
