@@ -838,16 +838,16 @@
                     const itemTotal = (item.qty * item.price) - item.discount;
                     tableRowsHtml += `
                         <tr class="border-b border-slate-100">
-                            <td class="py-1 px-1.5 text-center text-slate-500"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${actualIdx}</span></td>
+                            <td class="py-1 px-1.5 text-center text-slate-500" style="font-size: ${tableFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${actualIdx}</span></td>
                             <td class="py-1 px-1.5">
                                 <strong contenteditable="true" class="text-slate-800 block focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${tableFontPt}pt">${escapeHtml(item.name)}</strong>
                                 ${item.desc ? `<span contenteditable="true" class="text-slate-500 block whitespace-pre-line focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${itemDescFontPt}pt">${escapeHtml(item.desc)}</span>` : ''}
                             </td>
-                            <td class="py-1 px-1.5 text-center font-medium"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${item.qty}</span></td>
-                            <td class="py-1 px-1.5 text-center text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(item.unit)}</span></td>
-                            <td class="py-1 px-1.5 text-right"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(item.price, curr)}</span></td>
-                            <td class="py-1 px-1.5 text-right text-red-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</span></td>
-                            <td class="py-1 px-1.5 text-right font-bold text-slate-800"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(itemTotal, curr)}</span></td>
+                            <td class="py-1 px-1.5 text-center font-medium" style="font-size: ${tableFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${item.qty}</span></td>
+                            <td class="py-1 px-1.5 text-center text-slate-600" style="font-size: ${tableFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(item.unit)}</span></td>
+                            <td class="py-1 px-1.5 text-right" style="font-size: ${tableFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(item.price, curr)}</span></td>
+                            <td class="py-1 px-1.5 text-right text-red-600" style="font-size: ${tableFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</span></td>
+                            <td class="py-1 px-1.5 text-right font-bold text-slate-800" style="font-size: ${tableFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(itemTotal, curr)}</span></td>
                         </tr>
                     `;
                 });
@@ -962,7 +962,7 @@
                         <div class="mb-2 overflow-hidden" style="font-size: ${tableFontPt}pt">
                             <table class="w-full border-collapse">
                                 <thead>
-                                    <tr class="text-white uppercase tracking-wider transition-colors" style="background-color: ${theme.primaryHex}; font-size: ${Math.max(4, tableFontPt - 1)}pt">
+                                    <tr class="text-white uppercase tracking-wider transition-colors" style="background-color: ${theme.primaryHex}; font-size: ${tableFontPt}pt">
                                         <th class="py-1 px-1.5 text-center w-8 rounded-tl-md"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">No</span></th>
                                         <th class="py-1 px-1.5 text-left"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">Deskripsi & Spesifikasi Items</span></th>
                                         <th class="py-1 px-1.5 text-center w-10"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">Qty</span></th>
