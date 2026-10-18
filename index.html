@@ -10,7 +10,7 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <!-- HTML2PDF CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- SheetJS (XLSX) CDN -->
@@ -39,6 +39,7 @@
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        mono: ['"Roboto Mono"', 'monospace'],
                     }
                 }
             }
@@ -47,6 +48,11 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+            font-family: 'Roboto Mono', monospace, sans-serif;
+        }
+
         /* CSS Khusus Cetak A4 / PDF Preview */
         .a4-page {
             width: 210mm;
@@ -355,15 +361,30 @@
                             <input type="text" id="clientContact" value="Bpk. Hendra Wijaya" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">Email Klien</label>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-700">Email Klien</label>
+                                <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
+                                    <input type="checkbox" id="showClientEmail" checked onchange="updatePreview()" class="rounded text-brand-600 mr-1"> Tampilkan
+                                </label>
+                            </div>
                             <input type="text" id="clientEmail" value="hendra@nusantaracemerlang.com" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">No. Telp / HP</label>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-700">No. Telp / HP</label>
+                                <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
+                                    <input type="checkbox" id="showClientPhone" checked onchange="updatePreview()" class="rounded text-brand-600 mr-1"> Tampilkan
+                                </label>
+                            </div>
                             <input type="text" id="clientPhone" value="+62 811-9876-5432" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
                         </div>
                         <div class="sm:col-span-2">
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Klien</label>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-700">Alamat Klien</label>
+                                <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
+                                    <input type="checkbox" id="showClientAddress" checked onchange="updatePreview()" class="rounded text-brand-600 mr-1"> Tampilkan
+                                </label>
+                            </div>
                             <textarea id="clientAddress" rows="2" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">Gedung Menara Indah Lt. 12, Jl. Asia Afrika No. 8, Bandung</textarea>
                         </div>
                     </div>
@@ -606,11 +627,11 @@
         ];
 
         const themePresets = {
-            navy: { primaryHex: '#1e3a8a' },
-            emerald: { primaryHex: '#065f46' },
-            slate: { primaryHex: '#334155' },
-            terracotta: { primaryHex: '#9a3412' },
-            gold: { primaryHex: '#854d0e' }
+            navy: { primaryHex: '#1e3a8a', bgLight: '#f8fafc', headerBg: '#f1f5f9' },
+            emerald: { primaryHex: '#065f46', bgLight: '#f0fdf4', headerBg: '#e6f4ea' },
+            slate: { primaryHex: '#334155', bgLight: '#f8fafc', headerBg: '#f1f5f9' },
+            terracotta: { primaryHex: '#9a3412', bgLight: '#fff7ed', headerBg: '#ffedd5' },
+            gold: { primaryHex: '#854d0e', bgLight: '#fefce8', headerBg: '#fef08a' }
         };
 
         let currentThemeKey = 'navy';
@@ -826,6 +847,9 @@
             const clientAddr = document.getElementById('clientAddress').value || '-';
             const clientPhone = document.getElementById('clientPhone').value || '-';
             const clientEmail = document.getElementById('clientEmail').value || '-';
+            const showClientAddress = document.getElementById('showClientAddress') ? document.getElementById('showClientAddress').checked : true;
+            const showClientPhone = document.getElementById('showClientPhone') ? document.getElementById('showClientPhone').checked : true;
+            const showClientEmail = document.getElementById('showClientEmail') ? document.getElementById('showClientEmail').checked : true;
 
             const docNum = document.getElementById('docNumber').value || '-';
             const docSubj = document.getElementById('docSubject').value || '-';
@@ -886,18 +910,21 @@
                 pageItems.forEach((item, idx) => {
                     const actualIdx = (pageIndex * ITEMS_PER_PAGE) + idx + 1;
                     const itemTotal = (item.qty * item.price) - item.discount;
+                    const isEven = idx % 2 === 0;
+                    const bgClass = isEven ? 'bg-white' : 'bg-slate-50/60';
+
                     tableRowsHtml += `
-                        <tr class="border-b border-slate-100">
-                            <td class="py-1 px-1.5 text-center text-slate-500" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${actualIdx}</span></td>
-                            <td class="py-1 px-1.5">
-                                <strong contenteditable="true" class="text-slate-800 block focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${tableFontPt}pt">${escapeHtml(item.name)}</strong>
-                                ${item.desc ? `<span contenteditable="true" class="text-slate-500 block whitespace-pre-line focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${itemDescFontPt}pt">${escapeHtml(item.desc)}</span>` : ''}
+                        <tr class="${bgClass} border-b border-slate-200/70 hover:bg-slate-100/50 transition-colors">
+                            <td class="py-2.5 px-2 text-center text-slate-500 font-medium tabular-nums border-r border-slate-100" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${actualIdx}</span></td>
+                            <td class="py-2.5 px-3 border-r border-slate-100">
+                                <strong contenteditable="true" class="text-slate-800 font-semibold block focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${tableFontPt}pt">${escapeHtml(item.name)}</strong>
+                                ${item.desc ? `<span contenteditable="true" class="text-slate-500 block whitespace-pre-line leading-relaxed focus:outline-none focus:bg-amber-50 rounded mt-0.5" style="font-size: ${itemDescFontPt}pt">${escapeHtml(item.desc)}</span>` : ''}
                             </td>
-                            <td class="py-1 px-1.5 text-center font-medium" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${item.qty}</span></td>
-                            <td class="py-1 px-1.5 text-center text-slate-600" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(item.unit)}</span></td>
-                            <td class="py-1 px-1.5 text-right" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(item.price, curr)}</span></td>
-                            <td class="py-1 px-1.5 text-right text-red-600" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</span></td>
-                            <td class="py-1 px-1.5 text-right font-bold text-slate-800" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(itemTotal, curr)}</span></td>
+                            <td class="py-2.5 px-2 text-center font-medium text-slate-700 tabular-nums border-r border-slate-100" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${item.qty}</span></td>
+                            <td class="py-2.5 px-2 text-center text-slate-600 font-medium border-r border-slate-100" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${escapeHtml(item.unit)}</span></td>
+                            <td class="py-2.5 px-2.5 text-right text-slate-700 font-medium tabular-nums border-r border-slate-100" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${formatCurrency(item.price, curr)}</span></td>
+                            <td class="py-2.5 px-2.5 text-right text-rose-600 font-medium tabular-nums border-r border-slate-100" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</span></td>
+                            <td class="py-2.5 px-3 text-right font-bold text-slate-800 tabular-nums" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${formatCurrency(itemTotal, curr)}</span></td>
                         </tr>
                     `;
                 });
@@ -906,41 +933,41 @@
                 if (isLastPage) {
                     summaryAndFooterSection = `
                         <!-- Financial Summary -->
-                        <div class="flex justify-end mb-3 page-break-inside-avoid">
-                            <div class="w-80 space-y-1 border-t border-slate-300 pt-2">
+                        <div class="flex justify-end mb-4 page-break-inside-avoid">
+                            <div class="w-80 rounded-lg overflow-hidden border border-slate-200 bg-slate-50/50 p-3 shadow-xs space-y-1.5">
                                 <div class="flex justify-between text-slate-600" style="font-size: ${numericFontPt}pt">
                                     <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Subtotal Items</span>
-                                    <span contenteditable="true" class="font-semibold text-slate-800 focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(subtotal, curr)}</span>
+                                    <span contenteditable="true" class="font-semibold text-slate-800 tabular-nums focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(subtotal, curr)}</span>
                                 </div>
                                 ${globalDiscountAmount > 0 ? `
                                 <div class="flex justify-between text-slate-600" style="font-size: ${numericFontPt}pt">
                                     <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Diskon Tambahan</span>
-                                    <span contenteditable="true" class="font-semibold text-red-600 focus:outline-none focus:bg-amber-50 rounded">- ${formatCurrency(globalDiscountAmount, curr)}</span>
+                                    <span contenteditable="true" class="font-semibold text-rose-600 tabular-nums focus:outline-none focus:bg-amber-50 rounded">- ${formatCurrency(globalDiscountAmount, curr)}</span>
                                 </div>` : ''}
                                 ${usePPN ? `
                                 <div class="flex justify-between text-slate-600" style="font-size: ${numericFontPt}pt">
                                     <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">PPN (${ppnRate}%) ${ppnMode === 'include' ? '[Incl.]' : ''}</span>
-                                    <span contenteditable="true" class="font-semibold text-slate-800 focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(ppnAmount, curr)}</span>
+                                    <span contenteditable="true" class="font-semibold text-slate-800 tabular-nums focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(ppnAmount, curr)}</span>
                                 </div>` : ''}
                                 ${usePPh && pphAmount > 0 ? `
                                 <div class="flex justify-between text-slate-600" style="font-size: ${numericFontPt}pt">
                                     <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Potongan PPh (${pphRate}%)</span>
-                                    <span contenteditable="true" class="font-semibold text-red-600 focus:outline-none focus:bg-amber-50 rounded">- ${formatCurrency(pphAmount, curr)}</span>
+                                    <span contenteditable="true" class="font-semibold text-rose-600 tabular-nums focus:outline-none focus:bg-amber-50 rounded">- ${formatCurrency(pphAmount, curr)}</span>
                                 </div>` : ''}
                                 ${shippingFee > 0 ? `
                                 <div class="flex justify-between text-slate-600" style="font-size: ${numericFontPt}pt">
                                     <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Biaya Pengiriman</span>
-                                    <span contenteditable="true" class="font-semibold text-slate-800 focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(shippingFee, curr)}</span>
+                                    <span contenteditable="true" class="font-semibold text-slate-800 tabular-nums focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(shippingFee, curr)}</span>
                                 </div>` : ''}
-                                <div class="flex justify-between items-center font-bold border-t-2 pt-2 transition-colors" style="color: ${theme.primaryHex}; border-color: ${theme.primaryHex}; font-size: ${grandTotalFontPt}pt">
+                                <div class="flex justify-between items-center font-bold border-t border-slate-300 pt-2.5 mt-1 transition-colors" style="color: ${theme.primaryHex}; font-size: ${grandTotalFontPt}pt">
                                     <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">GRAND TOTAL</span>
-                                    <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(grandTotal, curr)}</span>
+                                    <span contenteditable="true" class="tabular-nums focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(grandTotal, curr)}</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Terms, Bank & Signature -->
-                        <div class="grid grid-cols-2 gap-4 border-t pt-2 page-break-inside-avoid" style="font-size: ${footerFontPt}pt">
+                        <div class="grid grid-cols-2 gap-4 border-t border-slate-200 pt-3 page-break-inside-avoid" style="font-size: ${footerFontPt}pt">
                             <div class="space-y-2">
                                 <div>
                                     <h4 contenteditable="true" class="font-bold uppercase tracking-wider mb-0.5 focus:outline-none focus:bg-amber-50 rounded" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, footerFontPt - 1)}pt">REKENING PEMBAYARAN:</h4>
@@ -970,7 +997,7 @@
                 pageDiv.innerHTML = `
                     <div>
                         <!-- Header Section -->
-                        <div class="flex justify-between items-start border-b-2 pb-2 mb-2 transition-colors" style="border-color: ${theme.primaryHex};">
+                        <div class="flex justify-between items-start border-b-2 pb-3 mb-3 transition-colors" style="border-color: ${theme.primaryHex};">
                             <div class="max-w-[55%]" style="font-size: ${headerFontPt}pt">
                                 ${logoBase64 ? `<div class="mb-1"><img src="${logoBase64}" alt="Company Logo" class="max-h-10 max-w-[160px] object-contain"></div>` : ''}
                                 <h2 contenteditable="true" class="font-bold transition-colors focus:outline-none focus:bg-amber-50 rounded" style="color: ${theme.primaryHex}; font-size: ${headerFontPt + 3}pt">${escapeHtml(compName)}</h2>
@@ -993,14 +1020,14 @@
                         </div>
 
                         <!-- Client & Subject Information -->
-                        <div class="grid grid-cols-2 gap-2 mb-2 bg-slate-50 p-2 rounded-lg border border-slate-200" style="font-size: ${clientFontPt}pt">
+                        <div class="grid grid-cols-2 gap-2 mb-3 bg-slate-50/80 p-2.5 rounded-lg border border-slate-200/80" style="font-size: ${clientFontPt}pt">
                             <div>
                                 <p contenteditable="true" class="font-bold uppercase tracking-wider mb-0.5 transition-colors focus:outline-none focus:bg-amber-50 rounded" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, clientFontPt - 2)}pt">KEPADA YTH:</p>
                                 <h3 contenteditable="true" class="font-bold text-slate-800 focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${clientFontPt + 1}pt">${escapeHtml(clientName)}</h3>
                                 <p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Up:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(clientContact)}</span></p>
-                                <p contenteditable="true" class="text-slate-600 whitespace-pre-line leading-tight focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(clientAddr)}</p>
-                                <p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Telp:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(clientPhone)}</span></p>
-                                <p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Email:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(clientEmail)}</span></p>
+                                ${showClientAddress ? `<p contenteditable="true" class="text-slate-600 whitespace-pre-line leading-tight focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(clientAddr)}</p>` : ''}
+                                ${showClientPhone ? `<p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Telp:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(clientPhone)}</span></p>` : ''}
+                                ${showClientEmail ? `<p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Email:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(clientEmail)}</span></p>` : ''}
                             </div>
                             <div>
                                 <p contenteditable="true" class="font-bold uppercase tracking-wider mb-0.5 transition-colors focus:outline-none focus:bg-amber-50 rounded" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, clientFontPt - 2)}pt">PERIHAL / SUBJECT:</p>
@@ -1009,20 +1036,20 @@
                         </div>
 
                         <!-- Items Table -->
-                        <div class="mb-2 overflow-hidden" style="font-size: ${tableFontPt}pt">
+                        <div class="mb-3 overflow-hidden rounded-lg border border-slate-200 shadow-xs" style="font-size: ${tableFontPt}pt">
                             <table class="w-full border-collapse">
                                 <thead>
-                                    <tr class="text-white uppercase tracking-wider transition-colors" style="background-color: ${theme.primaryHex}; font-size: ${tableFontPt}pt">
-                                        <th class="py-1 px-1.5 text-center w-8 rounded-tl-md" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">No</span></th>
-                                        <th class="py-1 px-1.5 text-left"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">Deskripsi & Spesifikasi Items</span></th>
-                                        <th class="py-1 px-1.5 text-center w-10" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">Qty</span></th>
-                                        <th class="py-1 px-1.5 text-center w-12" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">Satuan</span></th>
-                                        <th class="py-1 px-1.5 text-right w-24" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">Harga Satuan</span></th>
-                                        <th class="py-1 px-1.5 text-right w-16" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">Diskon</span></th>
-                                        <th class="py-1 px-1.5 text-right w-24 rounded-tr-md" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">Total Harga</span></th>
+                                    <tr class="text-white uppercase tracking-wider transition-colors font-semibold" style="background-color: ${theme.primaryHex}; font-size: ${Math.max(6, tableFontPt - 0.5)}pt">
+                                        <th class="py-2 px-2 text-center w-8 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">NO</span></th>
+                                        <th class="py-2 px-3 text-left border-r border-white/20"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">DESKRIPSI & SPESIFIKASI ITEMS</span></th>
+                                        <th class="py-2 px-2 text-center w-12 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">QTY</span></th>
+                                        <th class="py-2 px-2 text-center w-14 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">SATUAN</span></th>
+                                        <th class="py-2 px-2.5 text-right w-28 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">HARGA SATUAN</span></th>
+                                        <th class="py-2 px-2.5 text-right w-20 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">DISKON</span></th>
+                                        <th class="py-2 px-3 text-right w-32" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">TOTAL HARGA</span></th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-200">
+                                <tbody>
                                     ${tableRowsHtml}
                                 </tbody>
                             </table>
@@ -1032,7 +1059,7 @@
                     </div>
 
                     <!-- Footer Page Count -->
-                    <div class="border-t border-slate-200 pt-1 text-slate-400 flex justify-between items-center no-print-footer" style="font-size: ${Math.max(4, footerFontPt - 2)}pt">
+                    <div class="border-t border-slate-200 pt-1.5 text-slate-400 flex justify-between items-center no-print-footer" style="font-size: ${Math.max(4, footerFontPt - 2)}pt">
                         <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Dokumen penawaran harga ini diterbitkan secara resmi melalui sistem QuotationPRO.</span>
                         <span class="font-semibold text-slate-600">Halaman ${pageNum} dari ${totalPages}</span>
                     </div>
@@ -1235,10 +1262,11 @@
 
             docx.Packer.toBlob(doc).then((blob) => {
                 const url = window.URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = `Quotation_${document.getElementById('docNumber').value.replace(/[\/\\?%*:|"<>]/g, '-')}.docx`;
-                a.click();
+                const a="href";
+                const downloadLink = document.createElement("a");
+                downloadLink.href = url;
+                downloadLink.download = `Quotation_${document.getElementById('docNumber').value.replace(/[\/\\?%*:|"<>]/g, '-')}.docx`;
+                downloadLink.click();
             });
         }
     </script>
