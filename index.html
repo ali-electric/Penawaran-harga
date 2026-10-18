@@ -67,6 +67,14 @@
             flex-direction: column;
             justify-content: space-between;
             border-radius: 4px;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+
+        /* Mencegah pemotongan elemen saat eksport PDF */
+        tr, .page-break-inside-avoid {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
         }
 
         @media print {
@@ -965,9 +973,9 @@
                     tableRowsHtml += `
                         <tr class="${bgClass} border-b border-slate-200/80 hover:bg-slate-100/60 transition-colors">
                             <td class="py-2.5 px-2 text-center text-slate-500 font-medium tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${actualIdx}</span></td>
-                            <td class="py-2.5 px-3 border-r border-slate-200/60">
-                                <strong contenteditable="true" class="text-slate-800 font-bold block focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${tableFontPt}pt">${escapeHtml(item.name)}</strong>
-                                ${item.desc ? `<span contenteditable="true" class="text-slate-500 block whitespace-pre-line leading-relaxed focus:outline-none focus:bg-amber-50 rounded mt-0.5" style="font-size: ${itemDescFontPt}pt">${escapeHtml(item.desc)}</span>` : ''}
+                            <td class="py-2.5 px-3 border-r border-slate-200/60 break-words max-w-[220px]">
+                                <strong contenteditable="true" class="text-slate-800 font-bold block focus:outline-none focus:bg-amber-50 rounded break-words" style="font-size: ${tableFontPt}pt">${escapeHtml(item.name)}</strong>
+                                ${item.desc ? `<span contenteditable="true" class="text-slate-500 block whitespace-pre-line leading-relaxed focus:outline-none focus:bg-amber-50 rounded mt-0.5 break-words" style="font-size: ${itemDescFontPt}pt">${escapeHtml(item.desc)}</span>` : ''}
                             </td>
                             <td class="py-2.5 px-2 text-center font-semibold text-slate-700 tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${item.qty}</span></td>
                             <td class="py-2.5 px-2 text-center text-slate-600 font-medium border-r border-slate-200/60" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${escapeHtml(item.unit)}</span></td>
@@ -1215,15 +1223,15 @@
             container.classList.add('export-clean');
 
             const opt = {
-                margin:       [0, 0, 0, 0],
+                margin:       [4, 0, 4, 0],
                 filename:     `Quotation_${(document.getElementById('docNumber').value || 'Draft').replace(/[\/\\?%*:|"<>]/g, '-')}.pdf`,
-                image:        { type: 'jpeg', quality: 1.0 },
+                image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { 
-                    scale: 3,
+                    scale: 2,
                     useCORS: true, 
                     logging: false,
                     letterRendering: true,
-                    windowWidth: 1024
+                    scrollY: 0
                 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true }
             };
@@ -1349,20 +1357,26 @@
             excelData.push([`${document.getElementById('bankName').value || '-'} - A/N: ${document.getElementById('bankHolder').value || '-'} (${document.getElementById('bankAccount').value || '-'})`]);
             excelData.push([""]);
             excelData.push(["SYARAT & KETENTUAN:"]);
-            excelData.push([document.getElementById('termsText').value || '-']);
+            
+            const termsLines = (document.getElementById('termsText').value || '-').split('\n');
+            termsLines.forEach(line => {
+                excelData.push([line]);
+            });
 
             const ws = XLSX.utils.aoa_to_sheet(excelData);
             
-            ws['!cols'] = [
+            // Perhitungannya dinamis menyesuaikan isi terpanjang
+            const colWidths = [
                 { wch: 6 },
-                { wch: 32 },
-                { wch: 38 },
+                { wch: 35 },
+                { wch: 45 },
                 { wch: 8 },
                 { wch: 10 },
                 { wch: 18 },
                 { wch: 14 },
-                { wch: 20 }
+                { wch: 22 }
             ];
+            ws['!cols'] = colWidths;
 
             XLSX.utils.book_append_sheet(wb, ws, "Quotation");
             XLSX.writeFile(wb, `Quotation_${(document.getElementById('docNumber').value || 'Draft').replace(/[\/\\?%*:|"<>]/g, '-')}.xlsx`);
@@ -1420,30 +1434,38 @@
                 new docx.TableRow({
                     tableHeader: true,
                     children: [
-                        new docx.TableCell({ children: [new docx.Paragraph({ text: "NO", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 5, type: docx.WidthType.PERCENTAGE } }),
-                        new docx.TableCell({ children: [new docx.Paragraph({ text: "DESKRIPSI & SPESIFIKASI", bold: true })], width: { size: 45, type: docx.WidthType.PERCENTAGE } }),
-                        new docx.TableCell({ children: [new docx.Paragraph({ text: "QTY", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 10, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: "NO", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 6, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: "DESKRIPSI & SPESIFIKASI", bold: true })], width: { size: 44, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: "QTY", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 8, type: docx.WidthType.PERCENTAGE } }),
                         new docx.TableCell({ children: [new docx.Paragraph({ text: "SATUAN", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 10, type: docx.WidthType.PERCENTAGE } }),
-                        new docx.TableCell({ children: [new docx.Paragraph({ text: `HARGA (${curr})`, bold: true, alignment: docx.AlignmentType.RIGHT })], width: { size: 15, type: docx.WidthType.PERCENTAGE } }),
-                        new docx.TableCell({ children: [new docx.Paragraph({ text: `TOTAL (${curr})`, bold: true, alignment: docx.AlignmentType.RIGHT })], width: { size: 15, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: `HARGA (${curr})`, bold: true, alignment: docx.AlignmentType.RIGHT })], width: { size: 16, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: `TOTAL (${curr})`, bold: true, alignment: docx.AlignmentType.RIGHT })], width: { size: 16, type: docx.WidthType.PERCENTAGE } }),
                     ],
                 }),
-                ...itemsData.map((item, idx) => new docx.TableRow({
-                    children: [
-                        new docx.TableCell({ children: [new docx.Paragraph({ text: String(idx + 1), alignment: docx.AlignmentType.CENTER })] }),
-                        new docx.TableCell({ 
-                            children: [
-                                new docx.Paragraph({ text: item.name, bold: true }),
-                                ...(item.desc ? [new docx.Paragraph({ text: item.desc, style: "caption" })] : [])
-                            ] 
-                        }),
-                        new docx.TableCell({ children: [new docx.Paragraph({ text: String(item.qty), alignment: docx.AlignmentType.CENTER })] }),
-                        new docx.TableCell({ children: [new docx.Paragraph({ text: item.unit, alignment: docx.AlignmentType.CENTER })] }),
-                        new docx.TableCell({ children: [new docx.Paragraph({ text: formatCurrency(item.price, '').trim(), alignment: docx.AlignmentType.RIGHT })] }),
-                        new docx.TableCell({ children: [new docx.Paragraph({ text: formatCurrency((item.qty * item.price) - item.discount, '').trim(), alignment: docx.AlignmentType.RIGHT })] }),
-                    ]
-                }))
+                ...itemsData.map((item, idx) => {
+                    const descParagraphs = item.desc 
+                        ? item.desc.split('\n').map(d => new docx.Paragraph({ text: d, style: "caption" })) 
+                        : [];
+
+                    return new docx.TableRow({
+                        children: [
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: String(idx + 1), alignment: docx.AlignmentType.CENTER })] }),
+                            new docx.TableCell({ 
+                                children: [
+                                    new docx.Paragraph({ text: item.name, bold: true }),
+                                    ...descParagraphs
+                                ] 
+                            }),
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: String(item.qty), alignment: docx.AlignmentType.CENTER })] }),
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: item.unit, alignment: docx.AlignmentType.CENTER })] }),
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: formatCurrency(item.price, '').trim(), alignment: docx.AlignmentType.RIGHT })] }),
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: formatCurrency((item.qty * item.price) - item.discount, '').trim(), alignment: docx.AlignmentType.RIGHT })] }),
+                        ]
+                    });
+                })
             ];
+
+            const termsParagraphs = (document.getElementById('termsText').value || '-').split('\n').map(t => new docx.Paragraph({ text: t }));
 
             const doc = new docx.Document({
                 sections: [{
@@ -1504,7 +1526,7 @@
                         new docx.Paragraph({ text: `${document.getElementById('bankName').value || '-'} : ${document.getElementById('bankAccount').value || '-'} (A/N: ${document.getElementById('bankHolder').value || '-'})` }),
                         new docx.Paragraph({ text: "" }),
                         new docx.Paragraph({ text: "Syarat & Ketentuan:", bold: true }),
-                        new docx.Paragraph({ text: document.getElementById('termsText').value || '-' }),
+                        ...termsParagraphs,
                         new docx.Paragraph({ text: "" }),
                         new docx.Paragraph({ text: "Hormat Kami,", alignment: docx.AlignmentType.RIGHT }),
                         new docx.Paragraph({ text: "" }),
