@@ -1,6 +1,6 @@
 ```html
 <!DOCTYPE html>
-<html lang="id" class="h-full bg-slate-50">
+<html lang="id" class="h-full bg-slate-100">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,7 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <!-- HTML2PDF CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- SheetJS (XLSX) CDN -->
@@ -30,15 +30,15 @@
                         brand: {
                             50: '#f0f7ff',
                             100: '#e0effe',
-                            500: '#1d4ed8',
-                            600: '#1e40af',
-                            700: '#1e3a8a',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
                             800: '#1e293b',
                             900: '#0f172a',
                         }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
                         mono: ['"Roboto Mono"', 'monospace'],
                     }
                 }
@@ -46,7 +46,7 @@
         }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
         
         .tabular-nums {
             font-variant-numeric: tabular-nums;
@@ -57,15 +57,16 @@
         .a4-page {
             width: 210mm;
             min-height: 297mm;
-            padding: 16mm 16mm 18mm 16mm;
-            margin: 0 auto 20px auto;
+            padding: 14mm 16mm 16mm 16mm;
+            margin: 0 auto 24px auto;
             background: white;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
             box-sizing: border-box;
             position: relative;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            border-radius: 4px;
         }
 
         @media print {
@@ -85,22 +86,22 @@
                 page-break-after: always !important;
                 page-break-inside: avoid !important;
                 border: none !important;
+                border-radius: 0 !important;
             }
             .a4-page:last-child {
                 page-break-after: auto !important;
             }
-            /* Hilangkan highlight contenteditable saat print/pdf */
             [contenteditable] {
                 background: transparent !important;
                 outline: none !important;
             }
         }
 
-        /* Class khusus mode ekspor PDF / Print agar bersih tanpa outline editor */
         .export-clean [contenteditable] {
             background-color: transparent !important;
             outline: none !important;
             border-color: transparent !important;
+            box-shadow: none !important;
         }
 
         .custom-scrollbar::-webkit-scrollbar {
@@ -119,397 +120,402 @@
         }
     </style>
 </head>
-<body class="h-full text-slate-800 antialiased flex flex-col">
+<body class="h-full text-slate-800 antialiased flex flex-col bg-slate-100">
 
-    <header class="bg-brand-900 text-white shadow-md sticky top-0 z-50 no-print">
+    <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-50 no-print border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="bg-brand-500 text-white p-2 rounded-lg flex items-center justify-center shadow-md">
-                    <i class="fa-solid font-bold fa-file-invoice-dollar text-xl"></i>
+                <div class="bg-gradient-to-tr from-blue-600 to-indigo-500 text-white p-2.5 rounded-xl shadow-md flex items-center justify-center">
+                    <i class="fa-solid fa-file-invoice-dollar text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-lg font-bold tracking-tight">QuotationPRO</h1>
-                    <p class="text-xs text-slate-300 hidden sm:block">Generator Penawaran Harga Professional & Presisi</p>
+                    <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                        QuotationPRO <span class="bg-blue-500/20 text-blue-300 border border-blue-400/30 text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-full">Pro Edition</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">Generator Penawaran Harga Elegan, Presisi & Multi-Export</p>
                 </div>
             </div>
             
-            <div class="flex items-center space-x-2">
-                <button onclick="exportPDF()" class="inline-flex items-center px-3 py-2 text-xs font-semibold rounded-lg bg-red-600 hover:bg-red-700 text-white transition shadow-sm">
-                    <i class="fa-solid fa-file-pdf mr-1.5"></i> PDF
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <button onclick="exportPDF()" class="inline-flex items-center px-3.5 py-2 text-xs font-semibold rounded-lg bg-rose-600 hover:bg-rose-700 text-white transition shadow-sm hover:shadow active:scale-95">
+                    <i class="fa-solid fa-file-pdf mr-1.5 text-sm"></i> PDF
                 </button>
-                <button onclick="exportExcel()" class="inline-flex items-center px-3 py-2 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-sm">
-                    <i class="fa-solid fa-file-excel mr-1.5"></i> Excel
+                <button onclick="exportExcel()" class="inline-flex items-center px-3.5 py-2 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-sm hover:shadow active:scale-95">
+                    <i class="fa-solid fa-file-excel mr-1.5 text-sm"></i> Excel
                 </button>
-                <button onclick="exportWord()" class="inline-flex items-center px-3 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition shadow-sm">
-                    <i class="fa-solid fa-file-word mr-1.5"></i> Word
+                <button onclick="exportWord()" class="inline-flex items-center px-3.5 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition shadow-sm hover:shadow active:scale-95">
+                    <i class="fa-solid fa-file-word mr-1.5 text-sm"></i> Word
                 </button>
-                <button onclick="window.print()" class="inline-flex items-center px-3 py-2 text-xs font-semibold rounded-lg bg-slate-700 hover:bg-slate-800 text-white transition shadow-sm">
-                    <i class="fa-solid fa-print mr-1.5"></i> Cetak
+                <button onclick="window.print()" class="inline-flex items-center px-3.5 py-2 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition shadow-sm hover:shadow active:scale-95">
+                    <i class="fa-solid fa-print mr-1.5 text-sm"></i> Cetak
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="flex-1 flex flex-col lg:flex-row overflow-hidden bg-slate-100">
+    <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
         
         <!-- ================= LEFT FORM INPUT PANEL ================= -->
-        <section class="w-full lg:w-1/2 p-4 sm:p-6 overflow-y-auto h-full border-r border-slate-200 custom-scrollbar space-y-6 no-print">
+        <section class="w-full lg:w-1/2 p-4 sm:p-6 overflow-y-auto h-full border-r border-slate-200/80 custom-scrollbar space-y-6 no-print bg-slate-50">
             
             <!-- TEMA WARNA & TIPOGRAFI -->
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                <div class="flex justify-between items-center mb-4 border-b pb-3">
-                    <h2 class="text-base font-bold text-slate-800 flex items-center">
-                        <i class="fa-solid fa-palette text-brand-600 mr-2"></i> Tema Warna Soft & Tipografi
+            <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+                    <h2 class="text-sm font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-palette text-blue-600 mr-2"></i> Tema Warna Soft & Tipografi
                     </h2>
-                    <span class="text-xs bg-brand-50 text-brand-700 font-medium px-2.5 py-1 rounded-full">Kustomisasi</span>
+                    <span class="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">Style</span>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2 p-3 bg-slate-50/80 rounded-xl border border-slate-200/60">
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Tema Warna Soft</label>
-                        <select id="colorThemeSelect" onchange="changeThemeColor(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
+                        <select id="colorThemeSelect" onchange="changeThemeColor(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
                             <option value="navy">Classic Corporate Navy</option>
                             <option value="emerald">Soft Emerald Sage</option>
                             <option value="slate">Slate Charcoal</option>
                             <option value="terracotta">Warm Terracotta</option>
                             <option value="gold">Luxury Muted Gold</option>
+                            <option value="royal">Royal Indigo</option>
                         </select>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Jenis Font / Text</label>
-                        <select id="fontFamilySelect" onchange="changeFontFamily(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
-                            <option value="'Inter', sans-serif">Modern Clean (Inter)</option>
-                            <option value="'Playfair Display', serif">Luxury Serif (Playfair Display)</option>
-                            <option value="'Montserrat', sans-serif">Geometric Modern (Montserrat)</option>
+                        <select id="fontFamilySelect" onchange="changeFontFamily(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <option value="'Plus Jakarta Sans', sans-serif">Modern Executive (Jakarta Sans)</option>
+                            <option value="'Inter', sans-serif">Clean Neutral (Inter)</option>
+                            <option value="'Playfair Display', serif">Luxury Serif (Playfair)</option>
+                            <option value="'Montserrat', sans-serif">Geometric Bold (Montserrat)</option>
                             <option value="'Lora', serif">Elegant Classic (Lora)</option>
-                            <option value="'Roboto', sans-serif">Clean Neutral (Roboto)</option>
+                            <option value="'Roboto', sans-serif">Standard Work (Roboto)</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text Perusahaan (Header)</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text Header</label>
                         <select id="headerFontSizeSelect" onchange="changeHeaderFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
-                            <option value="5">5 pt</option>
-                            <option value="6">6 pt</option>
-                            <option value="7">7 pt</option>
                             <option value="8">8 pt</option>
                             <option value="9">9 pt</option>
                             <option value="10" selected>10 pt (Default)</option>
                             <option value="11">11 pt</option>
                             <option value="12">12 pt</option>
-                            <option value="13">13 pt</option>
                             <option value="14">14 pt</option>
-                            <option value="15">15 pt</option>
-                            <option value="16">16 pt (Besar)</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text Klien & Metadata</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text Metadata</label>
                         <select id="clientFontSizeSelect" onchange="changeClientFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
-                            <option value="5">5 pt</option>
-                            <option value="6">6 pt</option>
-                            <option value="7">7 pt</option>
                             <option value="8">8 pt</option>
                             <option value="9">9 pt</option>
                             <option value="10" selected>10 pt (Default)</option>
                             <option value="11">11 pt</option>
                             <option value="12">12 pt</option>
-                            <option value="13">13 pt</option>
-                            <option value="14">14 pt</option>
-                            <option value="15">15 pt</option>
-                            <option value="16">16 pt (Besar)</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text Tabel Items</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text Tabel</label>
                         <select id="tableFontSizeSelect" onchange="changeTableFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
-                            <option value="5">5 pt (Sangat Kecil)</option>
-                            <option value="6">6 pt</option>
                             <option value="7">7 pt</option>
                             <option value="8">8 pt</option>
-                            <option value="9" selected>9 pt (Standard Tabel)</option>
+                            <option value="9" selected>9 pt (Standard)</option>
                             <option value="10">10 pt</option>
                             <option value="11">11 pt</option>
-                            <option value="12">12 pt</option>
-                            <option value="13">13 pt</option>
-                            <option value="14">14 pt</option>
-                            <option value="15">15 pt</option>
-                            <option value="16">16 pt (Besar)</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text Deskripsi Items</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Deskripsi Item</label>
                         <select id="itemDescFontSizeSelect" onchange="changeItemDescFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
-                            <option value="4">4 pt</option>
-                            <option value="5">5 pt</option>
                             <option value="6">6 pt</option>
                             <option value="7">7 pt</option>
-                            <option value="8" selected>8 pt (Default Deskripsi)</option>
+                            <option value="8" selected>8 pt (Default)</option>
                             <option value="9">9 pt</option>
-                            <option value="10">10 pt</option>
-                            <option value="11">11 pt</option>
-                            <option value="12">12 pt</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text Numeric & Kolom Angka (No, Qty, Satuan, Harga, Diskon, Total)</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Angka/Numeric</label>
                         <select id="numericFontSizeSelect" onchange="changeNumericFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
-                            <option value="5">5 pt</option>
-                            <option value="6">6 pt</option>
                             <option value="7">7 pt</option>
                             <option value="8">8 pt</option>
-                            <option value="9" selected>9 pt (Sama dg Tabel)</option>
+                            <option value="9" selected>9 pt (Standard)</option>
                             <option value="10">10 pt</option>
-                            <option value="11">11 pt</option>
-                            <option value="12">12 pt</option>
-                            <option value="13">13 pt</option>
-                            <option value="14">14 pt</option>
-                            <option value="15">15 pt</option>
-                            <option value="16">16 pt (Besar)</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text Grand Total & Rincian Jumlah</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Grand Total</label>
                         <select id="grandTotalFontSizeSelect" onchange="changeGrandTotalFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
-                            <option value="6">6 pt</option>
-                            <option value="7">7 pt</option>
-                            <option value="8">8 pt</option>
                             <option value="9">9 pt</option>
                             <option value="10">10 pt</option>
                             <option value="11" selected>11 pt (Default)</option>
                             <option value="12">12 pt</option>
-                            <option value="13">13 pt</option>
                             <option value="14">14 pt</option>
-                            <option value="15">15 pt</option>
-                            <option value="16">16 pt</option>
-                            <option value="18">18 pt (Besar & Tegas)</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text Terms & Signatures</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Footer & TTD</label>
                         <select id="footerFontSizeSelect" onchange="changeFooterFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
-                            <option value="5">5 pt</option>
-                            <option value="6">6 pt</option>
                             <option value="7">7 pt</option>
                             <option value="8">8 pt</option>
                             <option value="9" selected>9 pt (Default)</option>
                             <option value="10">10 pt</option>
-                            <option value="11">11 pt</option>
-                            <option value="12">12 pt</option>
-                            <option value="13">13 pt</option>
-                            <option value="14">14 pt</option>
-                            <option value="15">15 pt</option>
-                            <option value="16">16 pt (Besar)</option>
                         </select>
                     </div>
                 </div>
             </div>
 
-            <!-- SECTION 1: PERUSAHAAN & KLIEN -->
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                <div class="flex justify-between items-center mb-4 border-b pb-3">
-                    <h2 class="text-base font-bold text-slate-800 flex items-center">
-                        <i class="fa-solid fa-building text-brand-600 mr-2"></i> Branding & Informasi Perusahaan
+            <!-- SECTION 1: PERUSAHAAN & LOGO CONTROLS -->
+            <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+                    <h2 class="text-sm font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-building text-blue-600 mr-2"></i> Pengirim & Kontrol Logo Fleksibel
                     </h2>
-                    <span class="text-xs bg-brand-50 text-brand-700 font-medium px-2.5 py-1 rounded-full">Langkah 1</span>
+                    <span class="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">Langkah 1</span>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- Logo Upload -->
-                    <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Logo Perusahaan (PNG/JPG)</label>
-                        <div class="flex items-center space-x-3">
-                            <input type="file" id="inputLogo" accept="image/*" onchange="handleLogoUpload(event)" class="text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
-                            <button onclick="removeLogo()" type="button" class="text-xs text-red-600 hover:underline"><i class="fa-solid fa-trash mr-1"></i>Hapus Logo</button>
+                <div class="space-y-4">
+                    <!-- Logo Upload & Controls Panel -->
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-image text-slate-500"></i> Logo Perusahaan (PNG/JPG)
+                            </label>
+                            <button onclick="removeLogo()" type="button" class="text-xs text-rose-600 hover:text-rose-700 font-semibold flex items-center gap-1">
+                                <i class="fa-solid fa-trash text-[11px]"></i> Hapus Logo
+                            </button>
+                        </div>
+
+                        <input type="file" id="inputLogo" accept="image/*" onchange="handleLogoUpload(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
+
+                        <!-- Logo Fine-Tuning Controls -->
+                        <div class="pt-2 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <div class="flex justify-between text-[11px] font-semibold text-slate-600 mb-1">
+                                    <span>Ukuran / Lebar Logo:</span>
+                                    <span id="logoWidthVal" class="text-blue-600 font-bold">140 px</span>
+                                </div>
+                                <input type="range" id="logoWidthInput" min="50" max="300" value="140" oninput="updateLogoControls()" class="w-full accent-blue-600 cursor-pointer">
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-[11px] font-semibold text-slate-600 mb-1">
+                                    <span>Tinggi Max (Aspect Ratio):</span>
+                                    <span id="logoHeightVal" class="text-blue-600 font-bold">60 px</span>
+                                </div>
+                                <input type="range" id="logoHeightInput" min="30" max="150" value="60" oninput="updateLogoControls()" class="w-full accent-blue-600 cursor-pointer">
+                            </div>
+
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-600 mb-1">Posisi Horizontal</label>
+                                <select id="logoAlignSelect" onchange="updateLogoControls()" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white font-medium">
+                                    <option value="left" selected>Kiri (Default)</option>
+                                    <option value="center">Tengah</option>
+                                    <option value="right">Kanan</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-[11px] font-semibold text-slate-600 mb-1">
+                                    <span>Geser Vertikal (Atas/Bawah):</span>
+                                    <span id="logoOffsetYVal" class="text-blue-600 font-bold">0 px</span>
+                                </div>
+                                <input type="range" id="logoOffsetYInput" min="-30" max="40" value="0" oninput="updateLogoControls()" class="w-full accent-blue-600 cursor-pointer">
+                            </div>
                         </div>
                     </div>
 
                     <!-- Company Info -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Perusahaan (Pengirim)</label>
-                        <input type="text" id="companyName" value="PT Solusi Digital Perkasa" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">No. Telp / WA</label>
-                        <input type="text" id="companyPhone" value="+62 812-3456-7890" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
-                    </div>
-                    <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Perusahaan</label>
-                        <textarea id="companyAddress" rows="2" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">Jl. Jendral Sudirman No. 45, Jakarta Selatan 12190</textarea>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-1">
-                            <label class="text-xs font-semibold text-slate-700">Email Perusahaan</label>
-                            <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
-                                <input type="checkbox" id="showCompanyEmail" checked onchange="updatePreview()" class="rounded text-brand-600 mr-1"> Tampilkan
-                            </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Perusahaan (Pengirim)</label>
+                            <input type="text" id="companyName" value="PT Solusi Digital Perkasa" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
-                        <input type="email" id="companyEmail" value="info@solusidigital.co.id" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-1">
-                            <label class="text-xs font-semibold text-slate-700">NPWP Perusahaan</label>
-                            <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
-                                <input type="checkbox" id="showCompanyTaxId" checked onchange="updatePreview()" class="rounded text-brand-600 mr-1"> Tampilkan
-                            </label>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">No. Telp / WA</label>
+                            <input type="text" id="companyPhone" value="+62 812-3456-7890" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
-                        <input type="text" id="companyTaxId" value="01.234.567.8-012.000" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Perusahaan</label>
+                            <textarea id="companyAddress" rows="2" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">Jl. Jendral Sudirman No. 45, Jakarta Selatan 12190</textarea>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-700">Email Perusahaan</label>
+                                <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
+                                    <input type="checkbox" id="showCompanyEmail" checked onchange="updatePreview()" class="rounded text-blue-600 mr-1"> Tampilkan
+                                </label>
+                            </div>
+                            <input type="email" id="companyEmail" value="info@solusidigital.co.id" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-semibold text-slate-700">NPWP Perusahaan</label>
+                                <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
+                                    <input type="checkbox" id="showCompanyTaxId" checked onchange="updatePreview()" class="rounded text-blue-600 mr-1"> Tampilkan
+                                </label>
+                            </div>
+                            <input type="text" id="companyTaxId" value="01.234.567.8-012.000" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
                     </div>
                 </div>
 
                 <!-- Client Info -->
-                <div class="mt-6 border-t pt-4">
-                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 text-brand-700">Informasi Klien / Penerima</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="mt-6 border-t border-slate-100 pt-4">
+                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 text-blue-700 flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-tie"></i> Informasi Klien / Penerima
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Perusahaan / Client</label>
-                            <input type="text" id="clientName" value="PT Nusantara Cemerlang" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            <input type="text" id="clientName" value="PT Nusantara Cemerlang" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">UP (Contact Person)</label>
-                            <input type="text" id="clientContact" value="Bpk. Hendra Wijaya" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            <input type="text" id="clientContact" value="Bpk. Hendra Wijaya" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                         <div>
                             <div class="flex justify-between items-center mb-1">
                                 <label class="text-xs font-semibold text-slate-700">Email Klien</label>
                                 <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
-                                    <input type="checkbox" id="showClientEmail" checked onchange="updatePreview()" class="rounded text-brand-600 mr-1"> Tampilkan
+                                    <input type="checkbox" id="showClientEmail" checked onchange="updatePreview()" class="rounded text-blue-600 mr-1"> Tampilkan
                                 </label>
                             </div>
-                            <input type="text" id="clientEmail" value="hendra@nusantaracemerlang.com" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            <input type="text" id="clientEmail" value="hendra@nusantaracemerlang.com" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                         <div>
                             <div class="flex justify-between items-center mb-1">
                                 <label class="text-xs font-semibold text-slate-700">No. Telp / HP</label>
                                 <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
-                                    <input type="checkbox" id="showClientPhone" checked onchange="updatePreview()" class="rounded text-brand-600 mr-1"> Tampilkan
+                                    <input type="checkbox" id="showClientPhone" checked onchange="updatePreview()" class="rounded text-blue-600 mr-1"> Tampilkan
                                 </label>
                             </div>
-                            <input type="text" id="clientPhone" value="+62 811-9876-5432" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            <input type="text" id="clientPhone" value="+62 811-9876-5432" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                         <div class="sm:col-span-2">
                             <div class="flex justify-between items-center mb-1">
                                 <label class="text-xs font-semibold text-slate-700">Alamat Klien</label>
                                 <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
-                                    <input type="checkbox" id="showClientAddress" checked onchange="updatePreview()" class="rounded text-brand-600 mr-1"> Tampilkan
+                                    <input type="checkbox" id="showClientAddress" checked onchange="updatePreview()" class="rounded text-blue-600 mr-1"> Tampilkan
                                 </label>
                             </div>
-                            <textarea id="clientAddress" rows="2" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">Gedung Menara Indah Lt. 12, Jl. Asia Afrika No. 8, Bandung</textarea>
+                            <textarea id="clientAddress" rows="2" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">Gedung Menara Indah Lt. 12, Jl. Asia Afrika No. 8, Bandung</textarea>
                         </div>
                     </div>
                 </div>
 
                 <!-- Document Metadata -->
-                <div class="mt-6 border-t pt-4">
-                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 text-brand-700">Metadata Dokumen</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="mt-6 border-t border-slate-100 pt-4">
+                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 text-blue-700 flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-signature"></i> Metadata Dokumen
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Nomor Penawaran</label>
-                            <input type="text" id="docNumber" value="QUO/2026/X/001" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            <input type="text" id="docNumber" value="QUO/2026/X/001" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Perihal / Subject</label>
-                            <input type="text" id="docSubject" value="Penawaran Harga Pengadaan Server & Jaringan Web" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            <input type="text" id="docSubject" value="Penawaran Harga Pengadaan Server & Jaringan Web" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Penawaran</label>
-                            <input type="date" id="docDate" onchange="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            <input type="date" id="docDate" onchange="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Masa Berlaku (Valid Until)</label>
-                            <input type="date" id="docValidDate" onchange="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            <input type="date" id="docValidDate" onchange="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- SECTION 2: TABEL BARANG / JASA -->
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                <div class="flex justify-between items-center mb-4 border-b pb-3">
+            <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
                     <div>
-                        <h2 class="text-base font-bold text-slate-800 flex items-center">
-                            <i class="fa-solid fa-list-check text-brand-600 mr-2"></i> Rincian Item / Jasa
+                        <h2 class="text-sm font-bold text-slate-800 flex items-center">
+                            <i class="fa-solid fa-list-check text-blue-600 mr-2"></i> Rincian Item / Jasa
                         </h2>
-                        <p class="text-xs text-slate-500">Gunakan icon drag untuk menyusun ulang urutan item.</p>
+                        <p class="text-[11px] text-slate-500">Gunakan icon drag untuk menyusun ulang urutan item.</p>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <select id="currencySymbol" onchange="updatePreview()" class="text-xs p-1.5 border border-slate-300 rounded-lg font-semibold bg-slate-50">
+                        <select id="currencySymbol" onchange="updatePreview()" class="text-xs p-1.5 border border-slate-300 rounded-lg font-semibold bg-slate-50 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                             <option value="Rp">IDR (Rp)</option>
                             <option value="$">USD ($)</option>
+                            <option value="€">EUR (€)</option>
+                            <option value="S$">SGD (S$)</option>
                         </select>
-                        <span class="text-xs bg-brand-50 text-brand-700 font-medium px-2.5 py-1 rounded-full">Langkah 2</span>
+                        <span class="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">Langkah 2</span>
                     </div>
                 </div>
 
                 <!-- Form Dynamic Line Items Container -->
-                <div id="itemsFormContainer" class="space-y-4">
+                <div id="itemsFormContainer" class="space-y-3">
                     <!-- Dynamic Rows Will Be Rendered By JS -->
                 </div>
 
-                <button onclick="addItemRow()" type="button" class="mt-4 w-full py-2.5 border-2 border-dashed border-brand-500 text-brand-700 hover:bg-brand-50 font-semibold rounded-lg text-xs transition flex items-center justify-center">
+                <button onclick="addItemRow()" type="button" class="mt-4 w-full py-2.5 border-2 border-dashed border-blue-500 text-blue-700 hover:bg-blue-50 font-semibold rounded-xl text-xs transition flex items-center justify-center">
                     <i class="fa-solid fa-plus mr-2"></i> Tambah Item / Jasa Baru
                 </button>
             </div>
 
             <!-- SECTION 3: KALKULASI PAJAK & BIAYA -->
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                <div class="flex justify-between items-center mb-4 border-b pb-3">
-                    <h2 class="text-base font-bold text-slate-800 flex items-center">
-                        <i class="fa-solid fa-calculator text-brand-600 mr-2"></i> Pengaturan Pajak & Biaya
+            <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+                    <h2 class="text-sm font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-calculator text-blue-600 mr-2"></i> Pengaturan Pajak & Biaya
                     </h2>
-                    <span class="text-xs bg-brand-50 text-brand-700 font-medium px-2.5 py-1 rounded-full">Langkah 3</span>
+                    <span class="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">Langkah 3</span>
                 </div>
 
-                <div class="space-y-4">
+                <div class="space-y-3">
                     <!-- Diskon Global -->
-                    <div class="grid grid-cols-3 gap-2 items-center">
+                    <div class="grid grid-cols-3 gap-2 items-center bg-slate-50 p-2.5 rounded-lg border border-slate-200/60">
                         <label class="text-xs font-semibold text-slate-700 col-span-1">Diskon Global</label>
-                        <select id="globalDiscountType" onchange="updatePreview()" class="text-xs p-2 border border-slate-300 rounded-lg">
+                        <select id="globalDiscountType" onchange="updatePreview()" class="text-xs p-2 border border-slate-300 rounded-lg bg-white">
                             <option value="nominal">Nominal</option>
                             <option value="percent">Persen (%)</option>
                         </select>
-                        <input type="number" id="globalDiscountValue" value="0" min="0" oninput="updatePreview()" class="text-xs p-2 border border-slate-300 rounded-lg">
+                        <input type="number" id="globalDiscountValue" value="0" min="0" oninput="updatePreview()" class="text-xs p-2 border border-slate-300 rounded-lg bg-white">
                     </div>
 
                     <!-- Toggle PPN -->
-                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-3">
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200/60 space-y-2.5">
                         <div class="flex items-center justify-between">
                             <label class="inline-flex items-center cursor-pointer text-xs font-semibold text-slate-800">
-                                <input type="checkbox" id="usePPN" checked onchange="updatePreview()" class="rounded text-brand-600 mr-2 h-4 w-4">
+                                <input type="checkbox" id="usePPN" checked onchange="updatePreview()" class="rounded text-blue-600 mr-2 h-4 w-4">
                                 Gunakan PPN (Pajak Pertambahan Nilai)
                             </label>
                             <div class="flex items-center space-x-1">
-                                <input type="number" id="ppnRate" value="11" min="0" max="100" step="0.1" oninput="updatePreview()" class="w-16 text-xs p-1 border border-slate-300 rounded text-center">
+                                <input type="number" id="ppnRate" value="11" min="0" max="100" step="0.1" oninput="updatePreview()" class="w-16 text-xs p-1 border border-slate-300 rounded text-center bg-white">
                                 <span class="text-xs text-slate-600">%</span>
                             </div>
                         </div>
 
                         <div id="ppnTypeContainer" class="flex items-center space-x-4 pl-6 text-xs">
                             <label class="inline-flex items-center cursor-pointer">
-                                <input type="radio" name="ppnMode" value="exclude" checked onchange="updatePreview()" class="text-brand-600">
+                                <input type="radio" name="ppnMode" value="exclude" checked onchange="updatePreview()" class="text-blue-600">
                                 <span class="ml-1.5 text-slate-700">Exclude PPN (Tambahkan di luar)</span>
                             </label>
                             <label class="inline-flex items-center cursor-pointer">
-                                <input type="radio" name="ppnMode" value="include" onchange="updatePreview()" class="text-brand-600">
+                                <input type="radio" name="ppnMode" value="include" onchange="updatePreview()" class="text-blue-600">
                                 <span class="ml-1.5 text-slate-700">Include PPN (Sudah termasuk)</span>
                             </label>
                         </div>
                     </div>
 
                     <!-- Toggle PPh -->
-                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-3">
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200/60 space-y-2.5">
                         <div class="flex items-center justify-between">
                             <label class="inline-flex items-center cursor-pointer text-xs font-semibold text-slate-800">
-                                <input type="checkbox" id="usePPh" onchange="updatePreview()" class="rounded text-brand-600 mr-2 h-4 w-4">
+                                <input type="checkbox" id="usePPh" onchange="updatePreview()" class="rounded text-blue-600 mr-2 h-4 w-4">
                                 Potong PPh (Pajak Penghasilan)
                             </label>
                         </div>
@@ -517,7 +523,7 @@
                         <div id="pphDetailsContainer" class="grid grid-cols-2 gap-2 pl-6 text-xs hidden">
                             <div>
                                 <label class="block text-slate-600 mb-1">Jenis PPh</label>
-                                <select id="pphType" onchange="handlePPhTypeChange()" class="w-full p-1.5 border border-slate-300 rounded text-xs">
+                                <select id="pphType" onchange="handlePPhTypeChange()" class="w-full p-1.5 border border-slate-300 rounded text-xs bg-white">
                                     <option value="23_service">PPh 23 Jasa (2%)</option>
                                     <option value="22_goods">PPh 22 Barang (1.5%)</option>
                                     <option value="4_2_final">PPh Final 4(2) (0.5%)</option>
@@ -526,26 +532,26 @@
                             </div>
                             <div>
                                 <label class="block text-slate-600 mb-1">Tarif PPh (%)</label>
-                                <input type="number" id="pphRate" value="2" step="0.1" oninput="updatePreview()" class="w-full p-1.5 border border-slate-300 rounded text-xs">
+                                <input type="number" id="pphRate" value="2" step="0.1" oninput="updatePreview()" class="w-full p-1.5 border border-slate-300 rounded text-xs bg-white">
                             </div>
                         </div>
                     </div>
 
                     <!-- Shipping Fees -->
-                    <div class="grid grid-cols-3 gap-2 items-center">
+                    <div class="grid grid-cols-3 gap-2 items-center bg-slate-50 p-2.5 rounded-lg border border-slate-200/60">
                         <label class="text-xs font-semibold text-slate-700 col-span-1">Biaya Pengiriman / Lainnya</label>
-                        <input type="number" id="shippingFee" value="0" min="0" oninput="updatePreview()" class="col-span-2 text-xs p-2 border border-slate-300 rounded-lg">
+                        <input type="number" id="shippingFee" value="0" min="0" oninput="updatePreview()" class="col-span-2 text-xs p-2 border border-slate-300 rounded-lg bg-white">
                     </div>
                 </div>
             </div>
 
             <!-- SECTION 4: TERMS & TANDA TANGAN -->
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                <div class="flex justify-between items-center mb-4 border-b pb-3">
-                    <h2 class="text-base font-bold text-slate-800 flex items-center">
-                        <i class="fa-solid fa-file-contract text-brand-600 mr-2"></i> Syarat & Tanda Tangan
+            <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+                    <h2 class="text-sm font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-file-contract text-blue-600 mr-2"></i> Rekening, Syarat & Ttd
                     </h2>
-                    <span class="text-xs bg-brand-50 text-brand-700 font-medium px-2.5 py-1 rounded-full">Langkah 4</span>
+                    <span class="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">Langkah 4</span>
                 </div>
 
                 <div class="space-y-4">
@@ -575,9 +581,9 @@
                     </div>
 
                     <!-- Signature Pad / Upload -->
-                    <div class="border-t pt-4">
-                        <h3 class="text-xs font-bold text-slate-800 mb-3">Tanda Tangan & Pengesahan Digital</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="border-t border-slate-100 pt-4">
+                        <h3 class="text-xs font-bold text-slate-800 mb-3">Tanda Tangan Digital</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Penandatangan</label>
                                 <input type="text" id="signerName" value="Budi Santoso, S.Kom" oninput="updatePreview()" class="w-full text-xs p-2 border border-slate-300 rounded-lg">
@@ -592,22 +598,22 @@
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Metode Tanda Tangan</label>
                             <div class="flex items-center space-x-4 mb-2">
                                 <label class="text-xs inline-flex items-center">
-                                    <input type="radio" name="sigMethod" value="draw" checked onchange="toggleSigMethod('draw')" class="text-brand-600">
+                                    <input type="radio" name="sigMethod" value="draw" checked onchange="toggleSigMethod('draw')" class="text-blue-600">
                                     <span class="ml-1.5">Gambar Langsung</span>
                                 </label>
                                 <label class="text-xs inline-flex items-center">
-                                    <input type="radio" name="sigMethod" value="upload" onchange="toggleSigMethod('upload')" class="text-brand-600">
+                                    <input type="radio" name="sigMethod" value="upload" onchange="toggleSigMethod('upload')" class="text-blue-600">
                                     <span class="ml-1.5">Upload Stempel/Gambar</span>
                                 </label>
                             </div>
 
                             <!-- Draw Pad -->
                             <div id="sigDrawContainer" class="space-y-2">
-                                <div class="border border-slate-300 rounded-lg bg-white overflow-hidden inline-block">
-                                    <canvas id="sigCanvas" width="300" height="120" class="touch-none cursor-crosshair bg-slate-50"></canvas>
+                                <div class="border border-slate-300 rounded-xl bg-white overflow-hidden inline-block shadow-xs">
+                                    <canvas id="sigCanvas" width="300" height="110" class="touch-none cursor-crosshair bg-slate-50/50"></canvas>
                                 </div>
                                 <div>
-                                    <button type="button" onclick="clearSignature()" class="text-xs text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1 rounded border border-red-200">
+                                    <button type="button" onclick="clearSignature()" class="text-xs text-rose-600 bg-rose-50 hover:bg-rose-100 px-3 py-1 rounded-lg border border-rose-200 transition">
                                         <i class="fa-solid fa-eraser mr-1"></i> Bersihkan Pad
                                     </button>
                                 </div>
@@ -615,7 +621,7 @@
 
                             <!-- Upload Image Pad -->
                             <div id="sigUploadContainer" class="hidden">
-                                <input type="file" id="sigFileInput" accept="image/*" onchange="handleSigUpload(event)" class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-brand-50 file:text-brand-700">
+                                <input type="file" id="sigFileInput" accept="image/*" onchange="handleSigUpload(event)" class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-blue-50 file:text-blue-700">
                             </div>
                         </div>
                     </div>
@@ -625,8 +631,8 @@
         </section>
 
         <!-- ================= RIGHT LIVE PREVIEW PANEL ================= -->
-        <section class="w-full lg:w-1/2 p-4 sm:p-8 overflow-y-auto h-full bg-slate-200 custom-scrollbar">
-            <div id="quotationPaperPagesContainer" class="flex flex-col items-center space-y-6">
+        <section class="w-full lg:w-1/2 p-4 sm:p-8 overflow-y-auto h-full bg-slate-300/60 custom-scrollbar flex flex-col items-center">
+            <div id="quotationPaperPagesContainer" class="w-full flex flex-col items-center">
                 <!-- Pages will be generated dynamically via JavaScript -->
             </div>
         </section>
@@ -638,22 +644,29 @@
         let sigImageBase64 = '';
         let signaturePad = null;
 
+        // Logo Fine-Tuning State
+        let logoWidth = 140;
+        let logoHeight = 60;
+        let logoAlign = 'left';
+        let logoOffsetY = 0;
+
         let itemsData = [
-            { id: 1, name: "Server Dell PowerEdge R750", desc: "Intel Xeon Silver 4310, 32GB RAM, 2x 1TB SSD NVMe", qty: 2, unit: "Unit", price: 48000000, discount: 1000000 },
-            { id: 2, name: "Cisco Catalyst Switch 24-Port Gigabit", desc: "Managed Switch L2+ dengan PoE Support 370W", qty: 1, unit: "Unit", price: 12500000, discount: 0 },
-            { id: 3, name: "Jasa Instalasi & Konfigurasi Jaringan", desc: "Setting Router, Switch, VLAN, & Firewall Security", qty: 1, unit: "Paket", price: 8500000, discount: 500000 }
+            { id: 1, name: "Server Dell PowerEdge R750", desc: "Intel Xeon Silver 4310, 32GB RAM, 2x 1TB SSD NVMe Dual PSU", qty: 2, unit: "Unit", price: 48000000, discount: 1000000 },
+            { id: 2, name: "Cisco Catalyst Switch 24-Port Gigabit", desc: "Managed Switch L2+ dengan PoE Support 370W Smart Managed", qty: 1, unit: "Unit", price: 12500000, discount: 0 },
+            { id: 3, name: "Jasa Instalasi & Konfigurasi Jaringan", desc: "Setting Router, Switch, VLAN, & Firewall Security Setup", qty: 1, unit: "Paket", price: 8500000, discount: 500000 }
         ];
 
         const themePresets = {
-            navy: { primaryHex: '#1e3a8a', bgLight: '#f8fafc', headerBg: '#f1f5f9' },
-            emerald: { primaryHex: '#065f46', bgLight: '#f0fdf4', headerBg: '#e6f4ea' },
-            slate: { primaryHex: '#334155', bgLight: '#f8fafc', headerBg: '#f1f5f9' },
-            terracotta: { primaryHex: '#9a3412', bgLight: '#fff7ed', headerBg: '#ffedd5' },
-            gold: { primaryHex: '#854d0e', bgLight: '#fefce8', headerBg: '#fef08a' }
+            navy: { primaryHex: '#1e3a8a', bgLight: '#f8fafc', headerBg: '#f1f5f9', badgeBg: '#eff6ff', badgeText: '#1e40af' },
+            emerald: { primaryHex: '#065f46', bgLight: '#f0fdf4', headerBg: '#e6f4ea', badgeBg: '#ecfdf5', badgeText: '#047857' },
+            slate: { primaryHex: '#334155', bgLight: '#f8fafc', headerBg: '#f1f5f9', badgeBg: '#f1f5f9', badgeText: '#334155' },
+            terracotta: { primaryHex: '#9a3412', bgLight: '#fff7ed', headerBg: '#ffedd5', badgeBg: '#fff7ed', badgeText: '#c2410c' },
+            gold: { primaryHex: '#854d0e', bgLight: '#fefce8', headerBg: '#fef08a', badgeBg: '#fefce8', badgeText: '#a16207' },
+            royal: { primaryHex: '#4338ca', bgLight: '#eef2ff', headerBg: '#e0e7ff', badgeBg: '#eef2ff', badgeText: '#3730a3' }
         };
 
         let currentThemeKey = 'navy';
-        let currentFontFamily = "'Inter', sans-serif";
+        let currentFontFamily = "'Plus Jakarta Sans', sans-serif";
         let currentHeaderFontSizePt = 10;
         let currentClientFontSizePt = 10;
         let currentTableFontSizePt = 9;
@@ -673,6 +686,19 @@
             initSortable();
             updatePreview();
         });
+
+        function updateLogoControls() {
+            logoWidth = parseInt(document.getElementById('logoWidthInput').value) || 140;
+            logoHeight = parseInt(document.getElementById('logoHeightInput').value) || 60;
+            logoAlign = document.getElementById('logoAlignSelect').value || 'left';
+            logoOffsetY = parseInt(document.getElementById('logoOffsetYInput').value) || 0;
+
+            document.getElementById('logoWidthVal').innerText = logoWidth + ' px';
+            document.getElementById('logoHeightVal').innerText = logoHeight + ' px';
+            document.getElementById('logoOffsetYVal').innerText = logoOffsetY + ' px';
+
+            updatePreview();
+        }
 
         function initSignaturePad() {
             const canvas = document.getElementById('sigCanvas');
@@ -707,7 +733,7 @@
 
             itemsData.forEach((item, index) => {
                 const itemDiv = document.createElement('div');
-                itemDiv.className = 'bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2 relative group';
+                itemDiv.className = 'bg-slate-50/80 p-3 rounded-xl border border-slate-200/80 space-y-2 relative group hover:border-blue-200 transition';
                 itemDiv.dataset.id = item.id;
                 
                 itemDiv.innerHTML = `
@@ -718,36 +744,36 @@
                             </span>
                             <span class="text-xs font-bold text-slate-700">Item #${index + 1}</span>
                         </div>
-                        <button onclick="removeItemRow(${index})" type="button" class="text-xs text-red-500 hover:text-red-700 font-semibold">
+                        <button onclick="removeItemRow(${index})" type="button" class="text-xs text-rose-500 hover:text-rose-700 font-semibold transition">
                             <i class="fa-solid fa-trash mr-1"></i> Hapus
                         </button>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div>
-                            <input type="text" placeholder="Nama Barang / Jasa" value="${escapeHtml(item.name)}" oninput="updateItemData(${index}, 'name', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded font-semibold">
+                            <input type="text" placeholder="Nama Barang / Jasa" value="${escapeHtml(item.name)}" oninput="updateItemData(${index}, 'name', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-semibold bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                         <div>
-                            <input type="text" placeholder="Deskripsi Singkat / Spesifikasi" value="${escapeHtml(item.desc)}" oninput="updateItemData(${index}, 'desc', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded">
+                            <input type="text" placeholder="Deskripsi Singkat / Spesifikasi" value="${escapeHtml(item.desc)}" oninput="updateItemData(${index}, 'desc', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                         <div>
-                            <label class="text-[10px] text-slate-500 block">Qty</label>
-                            <input type="number" min="1" value="${item.qty}" oninput="updateItemData(${index}, 'qty', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded">
+                            <label class="text-[10px] text-slate-500 font-semibold block">Qty</label>
+                            <input type="number" min="1" value="${item.qty}" oninput="updateItemData(${index}, 'qty', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
                         </div>
                         <div>
-                            <label class="text-[10px] text-slate-500 block">Satuan</label>
-                            <input type="text" placeholder="pcs/unit/jam" value="${escapeHtml(item.unit)}" oninput="updateItemData(${index}, 'unit', this.value)" class="w-full text-xs p-1.5 border border-slate-300 rounded">
+                            <label class="text-[10px] text-slate-500 font-semibold block">Satuan</label>
+                            <input type="text" placeholder="pcs/unit/jam" value="${escapeHtml(item.unit)}" oninput="updateItemData(${index}, 'unit', this.value)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
                         </div>
                         <div>
-                            <label class="text-[10px] text-slate-500 block">Harga Satuan</label>
-                            <input type="number" min="0" value="${item.price}" oninput="updateItemData(${index}, 'price', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded">
+                            <label class="text-[10px] text-slate-500 font-semibold block">Harga Satuan</label>
+                            <input type="number" min="0" value="${item.price}" oninput="updateItemData(${index}, 'price', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
                         </div>
                         <div>
-                            <label class="text-[10px] text-slate-500 block">Diskon Item</label>
-                            <input type="number" min="0" value="${item.discount}" oninput="updateItemData(${index}, 'discount', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded">
+                            <label class="text-[10px] text-slate-500 font-semibold block">Diskon Item</label>
+                            <input type="number" min="0" value="${item.discount}" oninput="updateItemData(${index}, 'discount', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
                         </div>
                     </div>
                 `;
@@ -874,7 +900,7 @@
             const docDateVal = formatDate(document.getElementById('docDate').value);
             const docValidVal = formatDate(document.getElementById('docValidDate').value);
 
-            // Calculations
+            // Financial Calculations
             let subtotal = 0;
             itemsData.forEach(item => {
                 subtotal += (item.qty * item.price) - item.discount;
@@ -914,6 +940,11 @@
             const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
             let grandTotal = (ppnMode === 'include') ? (subtotalAfterDisc - pphAmount + shippingFee) : (subtotalAfterDisc + ppnAmount - pphAmount + shippingFee);
 
+            // Render Logo Alignment Classes
+            let logoAlignClass = 'justify-start';
+            if (logoAlign === 'center') logoAlignClass = 'justify-center';
+            if (logoAlign === 'right') logoAlignClass = 'justify-end';
+
             // Render Each Page
             for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
                 const pageNum = pageIndex + 1;
@@ -929,20 +960,20 @@
                     const actualIdx = (pageIndex * ITEMS_PER_PAGE) + idx + 1;
                     const itemTotal = (item.qty * item.price) - item.discount;
                     const isEven = idx % 2 === 0;
-                    const bgClass = isEven ? 'bg-white' : 'bg-slate-50/60';
+                    const bgClass = isEven ? 'bg-white' : 'bg-slate-50/70';
 
                     tableRowsHtml += `
-                        <tr class="${bgClass} border-b border-slate-200/70 hover:bg-slate-100/50 transition-colors">
-                            <td class="py-2.5 px-2 text-center text-slate-500 font-medium tabular-nums border-r border-slate-100" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${actualIdx}</span></td>
-                            <td class="py-2.5 px-3 border-r border-slate-100">
-                                <strong contenteditable="true" class="text-slate-800 font-semibold block focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${tableFontPt}pt">${escapeHtml(item.name)}</strong>
+                        <tr class="${bgClass} border-b border-slate-200/80 hover:bg-slate-100/60 transition-colors">
+                            <td class="py-2.5 px-2 text-center text-slate-500 font-medium tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${actualIdx}</span></td>
+                            <td class="py-2.5 px-3 border-r border-slate-200/60">
+                                <strong contenteditable="true" class="text-slate-800 font-bold block focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${tableFontPt}pt">${escapeHtml(item.name)}</strong>
                                 ${item.desc ? `<span contenteditable="true" class="text-slate-500 block whitespace-pre-line leading-relaxed focus:outline-none focus:bg-amber-50 rounded mt-0.5" style="font-size: ${itemDescFontPt}pt">${escapeHtml(item.desc)}</span>` : ''}
                             </td>
-                            <td class="py-2.5 px-2 text-center font-medium text-slate-700 tabular-nums border-r border-slate-100" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${item.qty}</span></td>
-                            <td class="py-2.5 px-2 text-center text-slate-600 font-medium border-r border-slate-100" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${escapeHtml(item.unit)}</span></td>
-                            <td class="py-2.5 px-2.5 text-right text-slate-700 font-medium tabular-nums border-r border-slate-100" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${formatCurrency(item.price, curr)}</span></td>
-                            <td class="py-2.5 px-2.5 text-right text-rose-600 font-medium tabular-nums border-r border-slate-100" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</span></td>
-                            <td class="py-2.5 px-3 text-right font-bold text-slate-800 tabular-nums" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${formatCurrency(itemTotal, curr)}</span></td>
+                            <td class="py-2.5 px-2 text-center font-semibold text-slate-700 tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${item.qty}</span></td>
+                            <td class="py-2.5 px-2 text-center text-slate-600 font-medium border-r border-slate-200/60" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${escapeHtml(item.unit)}</span></td>
+                            <td class="py-2.5 px-2.5 text-right text-slate-700 font-medium tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${formatCurrency(item.price, curr)}</span></td>
+                            <td class="py-2.5 px-2.5 text-right text-rose-600 font-medium tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</span></td>
+                            <td class="py-2.5 px-3 text-right font-bold text-slate-900 tabular-nums" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded px-1">${formatCurrency(itemTotal, curr)}</span></td>
                         </tr>
                     `;
                 });
@@ -952,7 +983,7 @@
                     summaryAndFooterSection = `
                         <!-- Financial Summary -->
                         <div class="flex justify-end mb-4 page-break-inside-avoid">
-                            <div class="w-80 rounded-lg overflow-hidden border border-slate-200 bg-slate-50/50 p-3 shadow-xs space-y-1.5">
+                            <div class="w-80 rounded-xl overflow-hidden border border-slate-200/90 bg-slate-50/80 p-3.5 shadow-xs space-y-2">
                                 <div class="flex justify-between text-slate-600" style="font-size: ${numericFontPt}pt">
                                     <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Subtotal Items</span>
                                     <span contenteditable="true" class="font-semibold text-slate-800 tabular-nums focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(subtotal, curr)}</span>
@@ -977,7 +1008,7 @@
                                     <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Biaya Pengiriman</span>
                                     <span contenteditable="true" class="font-semibold text-slate-800 tabular-nums focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(shippingFee, curr)}</span>
                                 </div>` : ''}
-                                <div class="flex justify-between items-center font-bold border-t border-slate-300 pt-2.5 mt-1 transition-colors" style="color: ${theme.primaryHex}; font-size: ${grandTotalFontPt}pt">
+                                <div class="flex justify-between items-center font-bold border-t border-slate-300 pt-2.5 mt-1" style="color: ${theme.primaryHex}; font-size: ${grandTotalFontPt}pt">
                                     <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">GRAND TOTAL</span>
                                     <span contenteditable="true" class="tabular-nums focus:outline-none focus:bg-amber-50 rounded">${formatCurrency(grandTotal, curr)}</span>
                                 </div>
@@ -985,7 +1016,7 @@
                         </div>
 
                         <!-- Terms, Bank & Signature -->
-                        <div class="grid grid-cols-2 gap-4 border-t border-slate-200 pt-3 page-break-inside-avoid" style="font-size: ${footerFontPt}pt">
+                        <div class="grid grid-cols-2 gap-4 border-t border-slate-200/80 pt-3 page-break-inside-avoid" style="font-size: ${footerFontPt}pt">
                             <div class="space-y-2">
                                 <div>
                                     <h4 contenteditable="true" class="font-bold uppercase tracking-wider mb-0.5 focus:outline-none focus:bg-amber-50 rounded" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, footerFontPt - 1)}pt">REKENING PEMBAYARAN:</h4>
@@ -998,14 +1029,14 @@
                                 </div>
                             </div>
 
-                            <div class="text-center flex flex-col items-center justify-between min-h-[100px]">
-                                <p contenteditable="true" class="text-slate-600 focus:outline-none focus:bg-amber-50 rounded">Hormat Kami,</p>
+                            <div class="text-center flex flex-col items-center justify-between min-h-[105px]">
+                                <p contenteditable="true" class="text-slate-600 font-medium focus:outline-none focus:bg-amber-50 rounded">Hormat Kami,</p>
                                 <div class="my-1 h-12 flex items-center justify-center">
                                     ${sigImageBase64 ? `<img src="${sigImageBase64}" alt="Signature" class="max-h-12 object-contain">` : ''}
                                 </div>
                                 <div>
                                     <p contenteditable="true" class="font-bold text-slate-900 underline focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(document.getElementById('signerName').value || 'Nama Terang')}</p>
-                                    <p contenteditable="true" class="text-slate-500 focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${Math.max(4, footerFontPt - 1.5)}pt">${escapeHtml(document.getElementById('signerTitle').value || 'Jabatan')}</p>
+                                    <p contenteditable="true" class="text-slate-500 font-medium focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${Math.max(4, footerFontPt - 1.5)}pt">${escapeHtml(document.getElementById('signerTitle').value || 'Jabatan')}</p>
                                 </div>
                             </div>
                         </div>
@@ -1015,56 +1046,65 @@
                 pageDiv.innerHTML = `
                     <div>
                         <!-- Header Section -->
-                        <div class="flex justify-between items-start border-b-2 pb-3 mb-3 transition-colors" style="border-color: ${theme.primaryHex};">
-                            <div class="max-w-[55%]" style="font-size: ${headerFontPt}pt">
-                                ${logoBase64 ? `<div class="mb-1"><img src="${logoBase64}" alt="Company Logo" class="max-h-10 max-w-[160px] object-contain"></div>` : ''}
-                                <h2 contenteditable="true" class="font-bold transition-colors focus:outline-none focus:bg-amber-50 rounded" style="color: ${theme.primaryHex}; font-size: ${headerFontPt + 3}pt">${escapeHtml(compName)}</h2>
-                                <p contenteditable="true" class="text-slate-600 whitespace-pre-line leading-tight focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(compAddr)}</p>
-                                <p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Telp:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(compPhone)}</span></p>
-                                ${showEmail ? `<p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Email:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(compEmail)}</span></p>` : ''}
-                                ${showTaxId ? `<p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">NPWP:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(compTaxId)}</span></p>` : ''}
+                        <div class="border-b-2 pb-3 mb-3 transition-colors" style="border-color: ${theme.primaryHex};">
+                            
+                            <!-- Dynamic Logo Container (Flexible Controls) -->
+                            ${logoBase64 ? `
+                            <div class="flex ${logoAlignClass} mb-2" style="transform: translateY(${logoOffsetY}px);">
+                                <img src="${logoBase64}" alt="Company Logo" style="width: ${logoWidth}px; max-height: ${logoHeight}px; object-fit: contain;">
                             </div>
+                            ` : ''}
 
-                            <div class="text-right" style="font-size: ${headerFontPt}pt">
-                                <h1 contenteditable="true" class="font-black tracking-wider uppercase transition-colors focus:outline-none focus:bg-amber-50 rounded" style="color: ${theme.primaryHex}; font-size: ${headerFontPt + 5}pt">PENAWARAN HARGA</h1>
-                                <p contenteditable="true" class="text-slate-500 font-semibold focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${Math.max(4, headerFontPt - 1)}pt">QUOTATION</p>
-                                
-                                <div class="mt-1 space-y-0.5">
-                                    <p><span contenteditable="true" class="text-slate-500 focus:outline-none focus:bg-amber-50 rounded">No. Penawaran:</span> <strong contenteditable="true" class="text-slate-800 focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(docNum)}</strong></p>
-                                    <p><span contenteditable="true" class="text-slate-500 focus:outline-none focus:bg-amber-50 rounded">Tanggal:</span> <strong contenteditable="true" class="text-slate-800 focus:outline-none focus:bg-amber-50 rounded">${docDateVal}</strong></p>
-                                    <p><span contenteditable="true" class="text-slate-500 focus:outline-none focus:bg-amber-50 rounded">Berlaku S.d:</span> <strong contenteditable="true" class="text-slate-800 focus:outline-none focus:bg-amber-50 rounded">${docValidVal}</strong></p>
+                            <div class="flex justify-between items-start">
+                                <div class="max-w-[58%]" style="font-size: ${headerFontPt}pt">
+                                    <h2 contenteditable="true" class="font-extrabold tracking-tight transition-colors focus:outline-none focus:bg-amber-50 rounded" style="color: ${theme.primaryHex}; font-size: ${headerFontPt + 3}pt">${escapeHtml(compName)}</h2>
+                                    <p contenteditable="true" class="text-slate-600 whitespace-pre-line leading-snug focus:outline-none focus:bg-amber-50 rounded mt-0.5">${escapeHtml(compAddr)}</p>
+                                    <p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Telp:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded font-medium">${escapeHtml(compPhone)}</span></p>
+                                    ${showEmail ? `<p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Email:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded font-medium">${escapeHtml(compEmail)}</span></p>` : ''}
+                                    ${showTaxId ? `<p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">NPWP:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded font-medium">${escapeHtml(compTaxId)}</span></p>` : ''}
+                                </div>
+
+                                <div class="text-right" style="font-size: ${headerFontPt}pt">
+                                    <h1 contenteditable="true" class="font-black tracking-wider uppercase transition-colors focus:outline-none focus:bg-amber-50 rounded" style="color: ${theme.primaryHex}; font-size: ${headerFontPt + 6}pt">PENAWARAN HARGA</h1>
+                                    <p contenteditable="true" class="text-slate-400 font-bold uppercase tracking-widest focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${Math.max(4, headerFontPt - 2)}pt">QUOTATION</p>
+                                    
+                                    <div class="mt-2 space-y-0.5 bg-slate-50 p-2 rounded-lg border border-slate-200/70 inline-block text-left">
+                                        <p><span contenteditable="true" class="text-slate-500 focus:outline-none focus:bg-amber-50 rounded">No. Penawaran:</span> <strong contenteditable="true" class="text-slate-800 focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(docNum)}</strong></p>
+                                        <p><span contenteditable="true" class="text-slate-500 focus:outline-none focus:bg-amber-50 rounded">Tanggal:</span> <strong contenteditable="true" class="text-slate-800 focus:outline-none focus:bg-amber-50 rounded">${docDateVal}</strong></p>
+                                        <p><span contenteditable="true" class="text-slate-500 focus:outline-none focus:bg-amber-50 rounded">Berlaku S.d:</span> <strong contenteditable="true" class="text-slate-800 focus:outline-none focus:bg-amber-50 rounded">${docValidVal}</strong></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Client & Subject Information -->
-                        <div class="grid grid-cols-2 gap-2 mb-3 bg-slate-50/80 p-2.5 rounded-lg border border-slate-200/80" style="font-size: ${clientFontPt}pt">
+                        <div class="grid grid-cols-2 gap-3 mb-3 bg-slate-50 p-3 rounded-xl border border-slate-200/80" style="font-size: ${clientFontPt}pt">
                             <div>
-                                <p contenteditable="true" class="font-bold uppercase tracking-wider mb-0.5 transition-colors focus:outline-none focus:bg-amber-50 rounded" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, clientFontPt - 2)}pt">KEPADA YTH:</p>
-                                <h3 contenteditable="true" class="font-bold text-slate-800 focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${clientFontPt + 1}pt">${escapeHtml(clientName)}</h3>
-                                <p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Up:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(clientContact)}</span></p>
-                                ${showClientAddress ? `<p contenteditable="true" class="text-slate-600 whitespace-pre-line leading-tight focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(clientAddr)}</p>` : ''}
-                                ${showClientPhone ? `<p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Telp:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(clientPhone)}</span></p>` : ''}
-                                ${showClientEmail ? `<p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Email:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(clientEmail)}</span></p>` : ''}
+                                <p contenteditable="true" class="font-bold uppercase tracking-wider mb-0.5 focus:outline-none focus:bg-amber-50 rounded" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, clientFontPt - 2)}pt">KEPADA YTH:</p>
+                                <h3 contenteditable="true" class="font-extrabold text-slate-800 focus:outline-none focus:bg-amber-50 rounded" style="font-size: ${clientFontPt + 1}pt">${escapeHtml(clientName)}</h3>
+                                <p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Up:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded font-medium">${escapeHtml(clientContact)}</span></p>
+                                ${showClientAddress ? `<p contenteditable="true" class="text-slate-600 whitespace-pre-line leading-tight focus:outline-none focus:bg-amber-50 rounded mt-0.5">${escapeHtml(clientAddr)}</p>` : ''}
+                                ${showClientPhone ? `<p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Telp:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded font-medium">${escapeHtml(clientPhone)}</span></p>` : ''}
+                                ${showClientEmail ? `<p class="text-slate-600"><span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Email:</span> <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded font-medium">${escapeHtml(clientEmail)}</span></p>` : ''}
                             </div>
                             <div>
-                                <p contenteditable="true" class="font-bold uppercase tracking-wider mb-0.5 transition-colors focus:outline-none focus:bg-amber-50 rounded" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, clientFontPt - 2)}pt">PERIHAL / SUBJECT:</p>
+                                <p contenteditable="true" class="font-bold uppercase tracking-wider mb-0.5 focus:outline-none focus:bg-amber-50 rounded" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, clientFontPt - 2)}pt">PERIHAL / SUBJECT:</p>
                                 <p contenteditable="true" class="font-semibold text-slate-800 leading-snug focus:outline-none focus:bg-amber-50 rounded">${escapeHtml(docSubj)}</p>
                             </div>
                         </div>
 
                         <!-- Items Table -->
-                        <div class="mb-3 overflow-hidden rounded-lg border border-slate-200 shadow-xs" style="font-size: ${tableFontPt}pt">
+                        <div class="mb-3 overflow-hidden rounded-xl border border-slate-200/90 shadow-xs" style="font-size: ${tableFontPt}pt">
                             <table class="w-full border-collapse">
                                 <thead>
-                                    <tr class="text-white uppercase tracking-wider transition-colors font-semibold" style="background-color: ${theme.primaryHex}; font-size: ${Math.max(6, tableFontPt - 0.5)}pt">
-                                        <th class="py-2 px-2 text-center w-8 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">NO</span></th>
-                                        <th class="py-2 px-3 text-left border-r border-white/20"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">DESKRIPSI & SPESIFIKASI ITEMS</span></th>
-                                        <th class="py-2 px-2 text-center w-12 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">QTY</span></th>
-                                        <th class="py-2 px-2 text-center w-14 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">SATUAN</span></th>
-                                        <th class="py-2 px-2.5 text-right w-28 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">HARGA SATUAN</span></th>
-                                        <th class="py-2 px-2.5 text-right w-20 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">DISKON</span></th>
-                                        <th class="py-2 px-3 text-right w-32" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">TOTAL HARGA</span></th>
+                                    <tr class="text-white uppercase tracking-wider font-bold" style="background-color: ${theme.primaryHex}; font-size: ${Math.max(6, tableFontPt - 0.5)}pt">
+                                        <th class="py-2.5 px-2 text-center w-8 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">NO</span></th>
+                                        <th class="py-2.5 px-3 text-left border-r border-white/20"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">DESKRIPSI & SPESIFIKASI ITEMS</span></th>
+                                        <th class="py-2.5 px-2 text-center w-12 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">QTY</span></th>
+                                        <th class="py-2.5 px-2 text-center w-14 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">SATUAN</span></th>
+                                        <th class="py-2.5 px-2.5 text-right w-28 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">HARGA SATUAN</span></th>
+                                        <th class="py-2.5 px-2.5 text-right w-20 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">DISKON</span></th>
+                                        <th class="py-2.5 px-3 text-right w-32" style="font-size: ${numericFontPt}pt"><span contenteditable="true" class="focus:outline-none focus:bg-amber-500 rounded px-1">TOTAL HARGA</span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1077,9 +1117,9 @@
                     </div>
 
                     <!-- Footer Page Count -->
-                    <div class="border-t border-slate-200 pt-1.5 text-slate-400 flex justify-between items-center no-print-footer" style="font-size: ${Math.max(4, footerFontPt - 2)}pt">
+                    <div class="border-t border-slate-200/80 pt-2 text-slate-400 flex justify-between items-center no-print-footer" style="font-size: ${Math.max(4, footerFontPt - 2)}pt">
                         <span contenteditable="true" class="focus:outline-none focus:bg-amber-50 rounded">Dokumen penawaran harga ini diterbitkan secara resmi melalui sistem QuotationPRO.</span>
-                        <span class="font-semibold text-slate-600">Halaman ${pageNum} dari ${totalPages}</span>
+                        <span class="font-bold text-slate-600">Halaman ${pageNum} dari ${totalPages}</span>
                     </div>
                 `;
 
@@ -1171,16 +1211,15 @@
             const pages = document.querySelectorAll('.a4-page');
             if (!pages || pages.length === 0) return;
 
-            // Berikan penanda class agar styling terbebas dari outline / background input editor
             const container = document.getElementById('quotationPaperPagesContainer');
             container.classList.add('export-clean');
 
             const opt = {
-                margin:       [0, 0, 0, 0], // Margin ditangani langsung oleh CSS A4 Page (padding 12-15mm)
+                margin:       [0, 0, 0, 0],
                 filename:     `Quotation_${(document.getElementById('docNumber').value || 'Draft').replace(/[\/\\?%*:|"<>]/g, '-')}.pdf`,
                 image:        { type: 'jpeg', quality: 1.0 },
                 html2canvas:  { 
-                    scale: 3, // Peningkatan skala render untuk hasil super tajam & tidak pudar
+                    scale: 3,
                     useCORS: true, 
                     logging: false,
                     letterRendering: true,
@@ -1189,11 +1228,6 @@
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true }
             };
 
-            const promises = Array.from(pages).map(page => {
-                return html2pdf().set(opt).from(page).toPdf().get('pdf');
-            });
-
-            // Ekspor gabungan halaman dengan layout presisi
             if (pages.length === 1) {
                 html2pdf().set(opt).from(pages[0]).save().then(() => {
                     container.classList.remove('export-clean');
@@ -1226,7 +1260,6 @@
             const clientContact = document.getElementById('clientContact').value || '';
             const clientAddr = document.getElementById('clientAddress').value || '';
 
-            // Hitung finansial
             let subtotal = 0;
             itemsData.forEach(item => {
                 subtotal += (item.qty * item.price) - item.discount;
@@ -1320,16 +1353,15 @@
 
             const ws = XLSX.utils.aoa_to_sheet(excelData);
             
-            // Atur lebar kolom agar rapi
             ws['!cols'] = [
-                { wch: 6 },  // No
-                { wch: 32 }, // Nama Item
-                { wch: 38 }, // Deskripsi
-                { wch: 8 },  // Qty
-                { wch: 10 }, // Satuan
-                { wch: 18 }, // Harga
-                { wch: 14 }, // Diskon
-                { wch: 20 }  // Total
+                { wch: 6 },
+                { wch: 32 },
+                { wch: 38 },
+                { wch: 8 },
+                { wch: 10 },
+                { wch: 18 },
+                { wch: 14 },
+                { wch: 20 }
             ];
 
             XLSX.utils.book_append_sheet(wb, ws, "Quotation");
@@ -1347,7 +1379,6 @@
             const clientContact = document.getElementById('clientContact').value || '-';
             const clientAddr = document.getElementById('clientAddress').value || '-';
 
-            // Calculations
             let subtotal = 0;
             itemsData.forEach(item => {
                 subtotal += (item.qty * item.price) - item.discount;
@@ -1419,7 +1450,7 @@
                     properties: {
                         page: {
                             margin: {
-                                top: 720,    // 0.5 inch (sekitar 12.7mm)
+                                top: 720,
                                 bottom: 720,
                                 left: 720,
                                 right: 720,
