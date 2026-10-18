@@ -69,20 +69,38 @@
         }
 
         @media print {
-            body { background: white !important; padding: 0 !important; }
+            body { background: white !important; padding: 0 !important; margin: 0 !important; }
             .no-print { display: none !important; }
+            @page {
+                size: A4 portrait;
+                margin: 0mm;
+            }
             .a4-page { 
                 box-shadow: none !important; 
                 margin: 0 !important; 
                 width: 210mm !important; 
-                height: 297mm !important; 
-                padding: 12mm !important; 
-                page-break-after: always;
-                page-break-inside: avoid;
+                min-height: 297mm !important; 
+                max-height: 297mm !important;
+                padding: 12mm 15mm !important; 
+                page-break-after: always !important;
+                page-break-inside: avoid !important;
+                border: none !important;
             }
             .a4-page:last-child {
-                page-break-after: auto;
+                page-break-after: auto !important;
             }
+            /* Hilangkan highlight contenteditable saat print/pdf */
+            [contenteditable] {
+                background: transparent !important;
+                outline: none !important;
+            }
+        }
+
+        /* Class khusus mode ekspor PDF / Print agar bersih tanpa outline editor */
+        .export-clean [contenteditable] {
+            background-color: transparent !important;
+            outline: none !important;
+            border-color: transparent !important;
         }
 
         .custom-scrollbar::-webkit-scrollbar {
@@ -1151,49 +1169,124 @@
 
         function exportPDF() {
             const pages = document.querySelectorAll('.a4-page');
+            if (!pages || pages.length === 0) return;
+
+            // Berikan penanda class agar styling terbebas dari outline / background input editor
+            const container = document.getElementById('quotationPaperPagesContainer');
+            container.classList.add('export-clean');
+
             const opt = {
-                margin:       0,
-                filename:     `Quotation_${document.getElementById('docNumber').value.replace(/[\/\\?%*:|"<>]/g, '-')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                margin:       [0, 0, 0, 0], // Margin ditangani langsung oleh CSS A4 Page (padding 12-15mm)
+                filename:     `Quotation_${(document.getElementById('docNumber').value || 'Draft').replace(/[\/\\?%*:|"<>]/g, '-')}.pdf`,
+                image:        { type: 'jpeg', quality: 1.0 },
+                html2canvas:  { 
+                    scale: 3, // Peningkatan skala render untuk hasil super tajam & tidak pudar
+                    useCORS: true, 
+                    logging: false,
+                    letterRendering: true,
+                    windowWidth: 1024
+                },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true }
             };
 
+            const promises = Array.from(pages).map(page => {
+                return html2pdf().set(opt).from(page).toPdf().get('pdf');
+            });
+
+            // Ekspor gabungan halaman dengan layout presisi
             if (pages.length === 1) {
-                html2pdf().set(opt).from(pages[0]).save();
+                html2pdf().set(opt).from(pages[0]).save().then(() => {
+                    container.classList.remove('export-clean');
+                });
             } else {
                 const tempWrapper = document.createElement('div');
-                pages.forEach(page => {
+                pages.forEach((page, idx) => {
                     const clonedPage = page.cloneNode(true);
+                    if (idx < pages.length - 1) {
+                        clonedPage.style.pageBreakAfter = 'always';
+                    }
                     tempWrapper.appendChild(clonedPage);
                 });
-                html2pdf().set(opt).from(tempWrapper).save();
+                html2pdf().set(opt).from(tempWrapper).save().then(() => {
+                    container.classList.remove('export-clean');
+                });
             }
         }
 
         function exportExcel() {
             const curr = document.getElementById('currencySymbol').value;
             const wb = XLSX.utils.book_new();
+
+            const compName = document.getElementById('companyName').value || '';
+            const compAddr = document.getElementById('companyAddress').value || '';
+            const compPhone = document.getElementById('companyPhone').value || '';
+            const compEmail = document.getElementById('companyEmail').value || '';
+            
+            const clientName = document.getElementById('clientName').value || '';
+            const clientContact = document.getElementById('clientContact').value || '';
+            const clientAddr = document.getElementById('clientAddress').value || '';
+
+            // Hitung finansial
+            let subtotal = 0;
+            itemsData.forEach(item => {
+                subtotal += (item.qty * item.price) - item.discount;
+            });
+
+            let globalDiscountAmount = 0;
+            const globalDiscType = document.getElementById('globalDiscountType').value;
+            const globalDiscVal = parseFloat(document.getElementById('globalDiscountValue').value) || 0;
+            if (globalDiscType === 'percent') {
+                globalDiscountAmount = subtotal * (globalDiscVal / 100);
+            } else {
+                globalDiscountAmount = globalDiscVal;
+            }
+
+            const subtotalAfterDisc = Math.max(0, subtotal - globalDiscountAmount);
+            const usePPN = document.getElementById('usePPN').checked;
+            const ppnRate = parseFloat(document.getElementById('ppnRate').value) || 0;
+            const ppnMode = document.querySelector('input[name="ppnMode"]:checked').value;
+            let ppnAmount = 0;
+            let dpp = subtotalAfterDisc;
+
+            if (usePPN && ppnRate > 0) {
+                if (ppnMode === 'exclude') {
+                    dpp = subtotalAfterDisc;
+                    ppnAmount = dpp * (ppnRate / 100);
+                } else {
+                    dpp = subtotalAfterDisc / (1 + (ppnRate / 100));
+                    ppnAmount = subtotalAfterDisc - dpp;
+                }
+            }
+
+            const usePPh = document.getElementById('usePPh').checked;
+            const pphRate = parseFloat(document.getElementById('pphRate').value) || 0;
+            let pphAmount = (usePPh && pphRate > 0) ? dpp * (pphRate / 100) : 0;
+            const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
+            let grandTotal = (ppnMode === 'include') ? (subtotalAfterDisc - pphAmount + shippingFee) : (subtotalAfterDisc + ppnAmount - pphAmount + shippingFee);
             
             const excelData = [
+                [compName.toUpperCase()],
+                [compAddr],
+                [`Telp: ${compPhone} | Email: ${compEmail}`],
+                [""],
                 ["PENAWARAN HARGA / QUOTATION"],
-                ["No. Penawaran:", document.getElementById('docNumber').value],
-                ["Tanggal:", document.getElementById('docDate').value],
-                ["Masa Berlaku:", document.getElementById('docValidDate').value],
+                ["No. Penawaran:", document.getElementById('docNumber').value, "", "Tanggal:", formatDate(document.getElementById('docDate').value)],
+                ["Perihal:", document.getElementById('docSubject').value, "", "Masa Berlaku:", formatDate(document.getElementById('docValidDate').value)],
                 [""],
-                ["PENGIRIM (PERUSAHAAN):", "", "KEPADA KLIEN:"],
-                [document.getElementById('companyName').value, "", document.getElementById('clientName').value],
-                [document.getElementById('companyAddress').value, "", document.getElementById('clientAddress').value],
-                ["Telp: " + document.getElementById('companyPhone').value, "", "Up: " + document.getElementById('clientContact').value],
+                ["KEPADA YTH:"],
+                [clientName],
+                [`UP: ${clientContact}`],
+                [clientAddr],
                 [""],
-                ["No", "Deskripsi Barang / Jasa", "Qty", "Satuan", "Harga Satuan (" + curr + ")", "Diskon (" + curr + ")", "Total Harga (" + curr + ")"]
+                ["No", "Deskripsi Barang / Jasa", "Spesifikasi / Detail", "Qty", "Satuan", `Harga Satuan (${curr})`, `Diskon (${curr})`, `Total Harga (${curr})`]
             ];
 
             itemsData.forEach((item, index) => {
                 const total = (item.qty * item.price) - item.discount;
                 excelData.push([
                     index + 1,
-                    item.name + (item.desc ? ` (${item.desc})` : ''),
+                    item.name,
+                    item.desc || '-',
                     item.qty,
                     item.unit,
                     item.price,
@@ -1202,23 +1295,146 @@
                 ]);
             });
 
+            excelData.push([""]);
+            excelData.push(["", "", "", "", "", "", "Subtotal:", subtotal]);
+            if (globalDiscountAmount > 0) {
+                excelData.push(["", "", "", "", "", "", "Diskon Tambahan:", -globalDiscountAmount]);
+            }
+            if (usePPN) {
+                excelData.push(["", "", "", "", "", "", `PPN (${ppnRate}%):`, ppnAmount]);
+            }
+            if (usePPh && pphAmount > 0) {
+                excelData.push(["", "", "", "", "", "", `Potongan PPh (${pphRate}%):`, -pphAmount]);
+            }
+            if (shippingFee > 0) {
+                excelData.push(["", "", "", "", "", "", "Biaya Pengiriman:", shippingFee]);
+            }
+            excelData.push(["", "", "", "", "", "", "GRAND TOTAL:", grandTotal]);
+
+            excelData.push([""]);
+            excelData.push(["REKENING PEMBAYARAN:"]);
+            excelData.push([`${document.getElementById('bankName').value || '-'} - A/N: ${document.getElementById('bankHolder').value || '-'} (${document.getElementById('bankAccount').value || '-'})`]);
+            excelData.push([""]);
+            excelData.push(["SYARAT & KETENTUAN:"]);
+            excelData.push([document.getElementById('termsText').value || '-']);
+
             const ws = XLSX.utils.aoa_to_sheet(excelData);
+            
+            // Atur lebar kolom agar rapi
+            ws['!cols'] = [
+                { wch: 6 },  // No
+                { wch: 32 }, // Nama Item
+                { wch: 38 }, // Deskripsi
+                { wch: 8 },  // Qty
+                { wch: 10 }, // Satuan
+                { wch: 18 }, // Harga
+                { wch: 14 }, // Diskon
+                { wch: 20 }  // Total
+            ];
+
             XLSX.utils.book_append_sheet(wb, ws, "Quotation");
-            XLSX.writeFile(wb, `Quotation_${document.getElementById('docNumber').value.replace(/[\/\\?%*:|"<>]/g, '-')}.xlsx`);
+            XLSX.writeFile(wb, `Quotation_${(document.getElementById('docNumber').value || 'Draft').replace(/[\/\\?%*:|"<>]/g, '-')}.xlsx`);
         }
 
         function exportWord() {
+            const curr = document.getElementById('currencySymbol').value;
+            const compName = document.getElementById('companyName').value || 'Nama Perusahaan';
+            const compAddr = document.getElementById('companyAddress').value || '-';
+            const compPhone = document.getElementById('companyPhone').value || '-';
+            const compEmail = document.getElementById('companyEmail').value || '';
+            
+            const clientName = document.getElementById('clientName').value || 'Nama Klien';
+            const clientContact = document.getElementById('clientContact').value || '-';
+            const clientAddr = document.getElementById('clientAddress').value || '-';
+
+            // Calculations
+            let subtotal = 0;
+            itemsData.forEach(item => {
+                subtotal += (item.qty * item.price) - item.discount;
+            });
+
+            let globalDiscountAmount = 0;
+            const globalDiscType = document.getElementById('globalDiscountType').value;
+            const globalDiscVal = parseFloat(document.getElementById('globalDiscountValue').value) || 0;
+            if (globalDiscType === 'percent') {
+                globalDiscountAmount = subtotal * (globalDiscVal / 100);
+            } else {
+                globalDiscountAmount = globalDiscVal;
+            }
+
+            const subtotalAfterDisc = Math.max(0, subtotal - globalDiscountAmount);
+            const usePPN = document.getElementById('usePPN').checked;
+            const ppnRate = parseFloat(document.getElementById('ppnRate').value) || 0;
+            const ppnMode = document.querySelector('input[name="ppnMode"]:checked').value;
+            let ppnAmount = 0;
+            let dpp = subtotalAfterDisc;
+
+            if (usePPN && ppnRate > 0) {
+                if (ppnMode === 'exclude') {
+                    dpp = subtotalAfterDisc;
+                    ppnAmount = dpp * (ppnRate / 100);
+                } else {
+                    dpp = subtotalAfterDisc / (1 + (ppnRate / 100));
+                    ppnAmount = subtotalAfterDisc - dpp;
+                }
+            }
+
+            const usePPh = document.getElementById('usePPh').checked;
+            const pphRate = parseFloat(document.getElementById('pphRate').value) || 0;
+            let pphAmount = (usePPh && pphRate > 0) ? dpp * (pphRate / 100) : 0;
+            const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
+            let grandTotal = (ppnMode === 'include') ? (subtotalAfterDisc - pphAmount + shippingFee) : (subtotalAfterDisc + ppnAmount - pphAmount + shippingFee);
+
+            const tableRows = [
+                new docx.TableRow({
+                    tableHeader: true,
+                    children: [
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: "NO", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 5, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: "DESKRIPSI & SPESIFIKASI", bold: true })], width: { size: 45, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: "QTY", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 10, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: "SATUAN", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 10, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: `HARGA (${curr})`, bold: true, alignment: docx.AlignmentType.RIGHT })], width: { size: 15, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: `TOTAL (${curr})`, bold: true, alignment: docx.AlignmentType.RIGHT })], width: { size: 15, type: docx.WidthType.PERCENTAGE } }),
+                    ],
+                }),
+                ...itemsData.map((item, idx) => new docx.TableRow({
+                    children: [
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: String(idx + 1), alignment: docx.AlignmentType.CENTER })] }),
+                        new docx.TableCell({ 
+                            children: [
+                                new docx.Paragraph({ text: item.name, bold: true }),
+                                ...(item.desc ? [new docx.Paragraph({ text: item.desc, style: "caption" })] : [])
+                            ] 
+                        }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: String(item.qty), alignment: docx.AlignmentType.CENTER })] }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: item.unit, alignment: docx.AlignmentType.CENTER })] }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: formatCurrency(item.price, '').trim(), alignment: docx.AlignmentType.RIGHT })] }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: formatCurrency((item.qty * item.price) - item.discount, '').trim(), alignment: docx.AlignmentType.RIGHT })] }),
+                    ]
+                }))
+            ];
+
             const doc = new docx.Document({
                 sections: [{
-                    properties: {},
+                    properties: {
+                        page: {
+                            margin: {
+                                top: 720,    // 0.5 inch (sekitar 12.7mm)
+                                bottom: 720,
+                                left: 720,
+                                right: 720,
+                            }
+                        }
+                    },
                     children: [
                         new docx.Paragraph({
                             children: [
-                                new docx.TextRun({ text: document.getElementById('companyName').value, bold: true, size: 28 }),
+                                new docx.TextRun({ text: compName, bold: true, size: 28, color: "1E3A8A" }),
                             ],
                         }),
-                        new docx.Paragraph({ text: document.getElementById('companyAddress').value }),
-                        new docx.Paragraph({ text: `Telp: ${document.getElementById('companyPhone').value}` }),
+                        new docx.Paragraph({ text: compAddr }),
+                        new docx.Paragraph({ text: `Telp: ${compPhone} | Email: ${compEmail}` }),
+                        new docx.Paragraph({ text: "--------------------------------------------------------------------------------------------------" }),
                         new docx.Paragraph({ text: "" }),
                         new docx.Paragraph({
                             children: [
@@ -1226,46 +1442,52 @@
                             ],
                         }),
                         new docx.Paragraph({ text: `No: ${document.getElementById('docNumber').value}` }),
+                        new docx.Paragraph({ text: `Tanggal: ${formatDate(document.getElementById('docDate').value)}` }),
                         new docx.Paragraph({ text: `Perihal: ${document.getElementById('docSubject').value}` }),
                         new docx.Paragraph({ text: "" }),
-                        new docx.Paragraph({ text: `Kepada Yth: ${document.getElementById('clientName').value} (${document.getElementById('clientContact').value})` }),
+                        new docx.Paragraph({ text: `Kepada Yth: ${clientName}` }),
+                        new docx.Paragraph({ text: `UP: ${clientContact}` }),
+                        new docx.Paragraph({ text: clientAddr }),
                         new docx.Paragraph({ text: "" }),
                         
                         new docx.Table({
-                            rows: [
-                                new docx.TableRow({
-                                    children: [
-                                        new docx.TableCell({ children: [new docx.Paragraph({ text: "No", bold: true })] }),
-                                        new docx.TableCell({ children: [new docx.Paragraph({ text: "Deskripsi", bold: true })] }),
-                                        new docx.TableCell({ children: [new docx.Paragraph({ text: "Qty", bold: true })] }),
-                                        new docx.TableCell({ children: [new docx.Paragraph({ text: "Harga Satuan", bold: true })] }),
-                                        new docx.TableCell({ children: [new docx.Paragraph({ text: "Total", bold: true })] }),
-                                    ],
-                                }),
-                                ...itemsData.map((item, idx) => new docx.TableRow({
-                                    children: [
-                                        new docx.TableCell({ children: [new docx.Paragraph(String(idx + 1))] }),
-                                        new docx.TableCell({ children: [new docx.Paragraph(item.name)] }),
-                                        new docx.TableCell({ children: [new docx.Paragraph(`${item.qty} ${item.unit}`)] }),
-                                        new docx.TableCell({ children: [new docx.Paragraph(String(item.price))] }),
-                                        new docx.TableCell({ children: [new docx.Paragraph(String((item.qty * item.price) - item.discount))] }),
-                                    ]
-                                }))
-                            ],
+                            width: { size: 100, type: docx.WidthType.PERCENTAGE },
+                            rows: tableRows,
                         }),
+                        
+                        new docx.Paragraph({ text: "" }),
+                        new docx.Paragraph({ text: `Subtotal: ${formatCurrency(subtotal, curr)}`, alignment: docx.AlignmentType.RIGHT }),
+                        ...(globalDiscountAmount > 0 ? [new docx.Paragraph({ text: `Diskon Tambahan: -${formatCurrency(globalDiscountAmount, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
+                        ...(usePPN ? [new docx.Paragraph({ text: `PPN (${ppnRate}%): ${formatCurrency(ppnAmount, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
+                        ...(usePPh && pphAmount > 0 ? [new docx.Paragraph({ text: `Potongan PPh (${pphRate}%): -${formatCurrency(pphAmount, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
+                        ...(shippingFee > 0 ? [new docx.Paragraph({ text: `Biaya Pengiriman: ${formatCurrency(shippingFee, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
+                        new docx.Paragraph({ 
+                            children: [
+                                new docx.TextRun({ text: `GRAND TOTAL: ${formatCurrency(grandTotal, curr)}`, bold: true, size: 22, color: "1E3A8A" })
+                            ],
+                            alignment: docx.AlignmentType.RIGHT 
+                        }),
+
+                        new docx.Paragraph({ text: "" }),
+                        new docx.Paragraph({ text: "Rekening Pembayaran:", bold: true }),
+                        new docx.Paragraph({ text: `${document.getElementById('bankName').value || '-'} : ${document.getElementById('bankAccount').value || '-'} (A/N: ${document.getElementById('bankHolder').value || '-'})` }),
                         new docx.Paragraph({ text: "" }),
                         new docx.Paragraph({ text: "Syarat & Ketentuan:", bold: true }),
-                        new docx.Paragraph({ text: document.getElementById('termsText').value }),
+                        new docx.Paragraph({ text: document.getElementById('termsText').value || '-' }),
+                        new docx.Paragraph({ text: "" }),
+                        new docx.Paragraph({ text: "Hormat Kami,", alignment: docx.AlignmentType.RIGHT }),
+                        new docx.Paragraph({ text: "" }),
+                        new docx.Paragraph({ text: document.getElementById('signerName').value || 'Nama Terang', bold: true, alignment: docx.AlignmentType.RIGHT }),
+                        new docx.Paragraph({ text: document.getElementById('signerTitle').value || 'Jabatan', alignment: docx.AlignmentType.RIGHT }),
                     ],
                 }],
             });
 
             docx.Packer.toBlob(doc).then((blob) => {
                 const url = window.URL.createObjectURL(blob);
-                const a="href";
                 const downloadLink = document.createElement("a");
                 downloadLink.href = url;
-                downloadLink.download = `Quotation_${document.getElementById('docNumber').value.replace(/[\/\\?%*:|"<>]/g, '-')}.docx`;
+                downloadLink.download = `Quotation_${(document.getElementById('docNumber').value || 'Draft').replace(/[\/\\?%*:|"<>]/g, '-')}.docx`;
                 downloadLink.click();
             });
         }
