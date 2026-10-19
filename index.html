@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Penawaran Harga (Sales Offer / Quotation)</title>
+    <title>Generator Penawaran Harga Professional (Sales Offer / Quotation)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -53,11 +53,11 @@
             font-family: 'Roboto Mono', monospace, sans-serif;
         }
 
-        /* Mencegah pemotongan elemen saat eksport PDF & Print */
+        /* Prevent element splitting on print/PDF export */
         .a4-page {
             width: 210mm;
             min-height: 297mm;
-            padding: 12mm 14mm 14mm 14mm;
+            padding: 14mm 16mm 16mm 16mm;
             margin: 0 auto 24px auto;
             background: white;
             box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
@@ -66,9 +66,9 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            border-radius: 4px;
-            word-break: normal;
-            overflow-wrap: break-word;
+            border-radius: 6px;
+            word-break: break-word;
+            overflow-wrap: anywhere;
         }
 
         tr, .page-break-inside-avoid {
@@ -88,7 +88,8 @@
                 margin: 0 !important; 
                 width: 210mm !important; 
                 min-height: 297mm !important; 
-                padding: 12mm 14mm !important; 
+                max-height: 297mm !important;
+                padding: 12mm 15mm !important; 
                 page-break-after: always !important;
                 page-break-inside: avoid !important;
                 border: none !important;
@@ -209,6 +210,7 @@
                             <option value="10" selected>10 pt (Default)</option>
                             <option value="11">11 pt</option>
                             <option value="12">12 pt</option>
+                            <option value="14">14 pt</option>
                         </select>
                     </div>
 
@@ -226,29 +228,31 @@
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Text Tabel</label>
                         <select id="tableFontSizeSelect" onchange="changeTableFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
-                            <option value="7">7.5 pt</option>
-                            <option value="8" selected>8.5 pt (Rekomendasi)</option>
-                            <option value="9">9.5 pt</option>
+                            <option value="7">7 pt</option>
+                            <option value="8">8 pt</option>
+                            <option value="9" selected>9 pt (Standard)</option>
                             <option value="10">10 pt</option>
+                            <option value="11">11 pt</option>
                         </select>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Deskripsi Item</label>
                         <select id="itemDescFontSizeSelect" onchange="changeItemDescFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
-                            <option value="6">6.5 pt</option>
-                            <option value="7.5" selected>7.5 pt (Default)</option>
-                            <option value="8.5">8.5 pt</option>
-                            <option value="9.5">9.5 pt</option>
+                            <option value="6">6 pt</option>
+                            <option value="7">7 pt</option>
+                            <option value="8" selected>8 pt (Default)</option>
+                            <option value="9">9 pt</option>
                         </select>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Ukuran Angka/Numeric</label>
                         <select id="numericFontSizeSelect" onchange="changeNumericFontSize(this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-medium bg-white">
-                            <option value="7">7.5 pt</option>
-                            <option value="8.5" selected>8.5 pt (Standard)</option>
-                            <option value="9.5">9.5 pt</option>
+                            <option value="7">7 pt</option>
+                            <option value="8">8 pt</option>
+                            <option value="9" selected>9 pt (Standard)</option>
+                            <option value="10">10 pt</option>
                         </select>
                     </div>
 
@@ -259,6 +263,7 @@
                             <option value="10">10 pt</option>
                             <option value="11" selected>11 pt (Default)</option>
                             <option value="12">12 pt</option>
+                            <option value="14">14 pt</option>
                         </select>
                     </div>
 
@@ -663,7 +668,7 @@
     </main>
 
     <!-- Custom Toast Notification Box -->
-    <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl border border-slate-700 flex items-center space-x-3 text-xs font-medium pointer-events-none">
+    <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl border border-slate-700 flex items-center space-x-3 text-xs font-medium">
         <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
         <span id="toastMessage">Pemberitahuan sistem...</span>
     </div>
@@ -686,21 +691,21 @@
         ];
 
         const themePresets = {
-            navy: { primaryHex: '#1e3a8a', bgLight: '#f8fafc', headerBg: '#f1f5f9', badgeBg: '#eff6ff', badgeText: '#1e40af' },
-            emerald: { primaryHex: '#065f46', bgLight: '#f0fdf4', headerBg: '#e6f4ea', badgeBg: '#ecfdf5', badgeText: '#047857' },
-            slate: { primaryHex: '#334155', bgLight: '#f8fafc', headerBg: '#f1f5f9', badgeBg: '#f1f5f9', badgeText: '#334155' },
-            terracotta: { primaryHex: '#9a3412', bgLight: '#fff7ed', headerBg: '#ffedd5', badgeBg: '#fff7ed', badgeText: '#c2410c' },
-            gold: { primaryHex: '#854d0e', bgLight: '#fefce8', headerBg: '#fef08a', badgeBg: '#fefce8', badgeText: '#a16207' },
-            royal: { primaryHex: '#4338ca', bgLight: '#eef2ff', headerBg: '#e0e7ff', badgeBg: '#eef2ff', badgeText: '#3730a3' }
+            navy: { primaryHex: '#1e3a8a', bgLight: '#f8fafc', headerBg: '#1e3a8a', badgeBg: '#eff6ff', badgeText: '#1e40af' },
+            emerald: { primaryHex: '#065f46', bgLight: '#f0fdf4', headerBg: '#065f46', badgeBg: '#ecfdf5', badgeText: '#047857' },
+            slate: { primaryHex: '#334155', bgLight: '#f8fafc', headerBg: '#334155', badgeBg: '#f1f5f9', badgeText: '#334155' },
+            terracotta: { primaryHex: '#9a3412', bgLight: '#fff7ed', headerBg: '#9a3412', badgeBg: '#fff7ed', badgeText: '#c2410c' },
+            gold: { primaryHex: '#854d0e', bgLight: '#fefce8', headerBg: '#854d0e', badgeBg: '#fefce8', badgeText: '#a16207' },
+            royal: { primaryHex: '#4338ca', bgLight: '#eef2ff', headerBg: '#4338ca', badgeBg: '#eef2ff', badgeText: '#3730a3' }
         };
 
         let currentThemeKey = 'navy';
         let currentFontFamily = "'Plus Jakarta Sans', sans-serif";
         let currentHeaderFontSizePt = 10;
         let currentClientFontSizePt = 10;
-        let currentTableFontSizePt = 8.5;
-        let currentItemDescFontSizePt = 7.5;
-        let currentNumericFontSizePt = 8.5;
+        let currentTableFontSizePt = 9;
+        let currentItemDescFontSizePt = 8;
+        let currentNumericFontSizePt = 9;
         let currentGrandTotalFontSizePt = 11;
         let currentFooterFontSizePt = 9;
 
@@ -846,6 +851,11 @@
             showToast("Semua item diatur ulang.");
         }
 
+        function autoResizeTextarea(el) {
+            el.style.height = 'auto';
+            el.style.height = el.scrollHeight + 'px';
+        }
+
         function updateLogoControls() {
             logoWidth = parseInt(document.getElementById('logoWidthInput').value) || 140;
             logoHeight = parseInt(document.getElementById('logoHeightInput').value) || 60;
@@ -892,51 +902,57 @@
 
             itemsData.forEach((item, index) => {
                 const itemDiv = document.createElement('div');
-                itemDiv.className = 'bg-slate-50/80 p-3 rounded-xl border border-slate-200/80 space-y-2 relative group hover:border-blue-200 transition';
+                itemDiv.className = 'bg-slate-50/90 p-3.5 rounded-xl border border-slate-200 space-y-3 relative group hover:border-blue-300 transition shadow-xs';
                 itemDiv.dataset.id = item.id;
                 
                 itemDiv.innerHTML = `
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-200/60">
                         <div class="flex items-center space-x-2">
                             <span class="drag-handle cursor-grab text-slate-400 hover:text-slate-600 p-1">
                                 <i class="fa-solid fa-grip-vertical"></i>
                             </span>
-                            <span class="text-xs font-bold text-slate-700">Item #${index + 1}</span>
+                            <span class="text-xs font-bold text-slate-700 bg-slate-200/70 px-2 py-0.5 rounded-md">Item #${index + 1}</span>
                         </div>
-                        <button onclick="removeItemRow(${index})" type="button" class="text-xs text-rose-500 hover:text-rose-700 font-semibold transition">
-                            <i class="fa-solid fa-trash mr-1"></i> Hapus
+                        <button onclick="removeItemRow(${index})" type="button" class="text-xs text-rose-500 hover:text-rose-700 font-semibold transition flex items-center gap-1">
+                            <i class="fa-solid fa-trash text-[11px]"></i> Hapus
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         <div>
-                            <input type="text" placeholder="Nama Barang / Jasa" value="${escapeHtml(item.name)}" oninput="updateItemData(${index}, 'name', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-semibold bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <label class="text-[11px] text-slate-600 font-bold block mb-1">Nama Barang / Jasa</label>
+                            <input type="text" placeholder="Masukkan nama barang atau deskripsi utama" value="${escapeHtml(item.name)}" oninput="updateItemData(${index}, 'name', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-semibold bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                         <div>
-                            <input type="text" placeholder="Deskripsi Singkat / Spesifikasi" value="${escapeHtml(item.desc)}" oninput="updateItemData(${index}, 'desc', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <label class="text-[11px] text-slate-600 font-bold block mb-1">Spesifikasi / Detail Lengkap</label>
+                            <textarea placeholder="Penjelasan detail/spesifikasi item" oninput="autoResizeTextarea(this); updateItemData(${index}, 'desc', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none overflow-hidden" rows="1">${escapeHtml(item.desc)}</textarea>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
                         <div>
-                            <label class="text-[10px] text-slate-500 font-semibold block">Qty</label>
-                            <input type="number" min="1" value="${item.qty}" oninput="updateItemData(${index}, 'qty', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
+                            <label class="text-[10px] text-slate-600 font-bold block mb-1">Qty</label>
+                            <input type="number" min="1" value="${item.qty}" oninput="updateItemData(${index}, 'qty', parseFloat(this.value) || 0)" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white font-medium text-center focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
-                            <label class="text-[10px] text-slate-500 font-semibold block">Satuan</label>
-                            <input type="text" placeholder="pcs/unit/jam" value="${escapeHtml(item.unit)}" oninput="updateItemData(${index}, 'unit', this.value)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
+                            <label class="text-[10px] text-slate-600 font-bold block mb-1">Satuan</label>
+                            <input type="text" placeholder="pcs/unit" value="${escapeHtml(item.unit)}" oninput="updateItemData(${index}, 'unit', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white font-medium text-center focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
-                            <label class="text-[10px] text-slate-500 font-semibold block">Harga Satuan</label>
-                            <input type="number" min="0" value="${item.price}" oninput="updateItemData(${index}, 'price', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
+                            <label class="text-[10px] text-slate-600 font-bold block mb-1">Harga Satuan</label>
+                            <input type="number" min="0" value="${item.price}" oninput="updateItemData(${index}, 'price', parseFloat(this.value) || 0)" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white font-semibold text-slate-800 focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
-                            <label class="text-[10px] text-slate-500 font-semibold block">Diskon Item</label>
-                            <input type="number" min="0" value="${item.discount}" oninput="updateItemData(${index}, 'discount', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
+                            <label class="text-[10px] text-slate-600 font-bold block mb-1">Diskon Item</label>
+                            <input type="number" min="0" value="${item.discount}" oninput="updateItemData(${index}, 'discount', parseFloat(this.value) || 0)" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white font-semibold text-rose-600 focus:ring-2 focus:ring-blue-500">
                         </div>
                     </div>
                 `;
                 container.appendChild(itemDiv);
+                
+                // Auto resize textarea height
+                const txt = itemDiv.querySelector('textarea');
+                if (txt) autoResizeTextarea(txt);
             });
         }
 
@@ -980,37 +996,37 @@
         }
 
         function changeHeaderFontSize(sizePt) {
-            currentHeaderFontSizePt = parseFloat(sizePt) || 10;
+            currentHeaderFontSizePt = parseInt(sizePt) || 10;
             updatePreview();
         }
 
         function changeClientFontSize(sizePt) {
-            currentClientFontSizePt = parseFloat(sizePt) || 10;
+            currentClientFontSizePt = parseInt(sizePt) || 10;
             updatePreview();
         }
 
         function changeTableFontSize(sizePt) {
-            currentTableFontSizePt = parseFloat(sizePt) || 8.5;
+            currentTableFontSizePt = parseInt(sizePt) || 9;
             updatePreview();
         }
 
         function changeItemDescFontSize(sizePt) {
-            currentItemDescFontSizePt = parseFloat(sizePt) || 7.5;
+            currentItemDescFontSizePt = parseInt(sizePt) || 8;
             updatePreview();
         }
 
         function changeNumericFontSize(sizePt) {
-            currentNumericFontSizePt = parseFloat(sizePt) || 8.5;
+            currentNumericFontSizePt = parseInt(sizePt) || 9;
             updatePreview();
         }
 
         function changeGrandTotalFontSize(sizePt) {
-            currentGrandTotalFontSizePt = parseFloat(sizePt) || 11;
+            currentGrandTotalFontSizePt = parseInt(sizePt) || 11;
             updatePreview();
         }
 
         function changeFooterFontSize(sizePt) {
-            currentFooterFontSizePt = parseFloat(sizePt) || 9;
+            currentFooterFontSizePt = parseInt(sizePt) || 9;
             updatePreview();
         }
 
@@ -1026,12 +1042,10 @@
             const grandTotalFontPt = currentGrandTotalFontSizePt;
             const footerFontPt = currentFooterFontSizePt;
             
-            const ITEMS_PER_PAGE = 8;
-            const totalPages = Math.ceil(itemsData.length / ITEMS_PER_PAGE) || 1;
             const theme = themePresets[currentThemeKey] || themePresets.navy;
             const curr = document.getElementById('currencySymbol').value;
 
-            // Form Values
+            // Form Input Values
             const compName = document.getElementById('companyName').value || 'Nama Perusahaan';
             const compPhone = document.getElementById('companyPhone').value || '-';
             const compAddr = document.getElementById('companyAddress').value || '-';
@@ -1094,40 +1108,80 @@
             const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
             let grandTotal = (ppnMode === 'include') ? (subtotalAfterDisc - pphAmount + shippingFee) : (subtotalAfterDisc + ppnAmount - pphAmount + shippingFee);
 
-            // Render Logo Alignment Classes
+            // Alignment options for company logo
             let logoAlignClass = 'justify-start';
             if (logoAlign === 'center') logoAlignClass = 'justify-center';
             if (logoAlign === 'right') logoAlignClass = 'justify-end';
 
-            // Render Each Page
+            // DYNAMIC PAGINATION ALGORITHM
+            let pagesItems = [];
+            let currentChunk = [];
+            let estimatedHeight = 0;
+            
+            const PAGE_MAX_HEIGHT = 800;
+            const FIRST_PAGE_HEADER_HEIGHT = 280;
+            const CONTINUOUS_PAGE_HEADER_HEIGHT = 100;
+
+            let currentPageMax = PAGE_MAX_HEIGHT - FIRST_PAGE_HEADER_HEIGHT;
+
+            itemsData.forEach((item) => {
+                const descLines = item.desc ? item.desc.split('\n').length : 0;
+                const charCount = item.desc ? item.desc.length : 0;
+                const extraLines = Math.max(descLines, Math.ceil(charCount / 40));
+                const approxRowHeight = 38 + (extraLines * (itemDescFontPt * 1.5));
+
+                if (estimatedHeight + approxRowHeight > currentPageMax && currentChunk.length > 0) {
+                    pagesItems.push(currentChunk);
+                    currentChunk = [item];
+                    estimatedHeight = approxRowHeight;
+                    currentPageMax = PAGE_MAX_HEIGHT - CONTINUOUS_PAGE_HEADER_HEIGHT;
+                } else {
+                    currentChunk.push(item);
+                    estimatedHeight += approxRowHeight;
+                }
+            });
+
+            if (currentChunk.length > 0) {
+                pagesItems.push(currentChunk);
+            }
+
+            const totalPages = pagesItems.length || 1;
+
+            // Render Document Pages
             for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
                 const pageNum = pageIndex + 1;
-                const pageItems = itemsData.slice(pageIndex * ITEMS_PER_PAGE, (pageIndex + 1) * ITEMS_PER_PAGE);
+                const pageItems = pagesItems[pageIndex] || [];
                 const isLastPage = pageNum === totalPages;
 
                 const pageDiv = document.createElement('div');
                 pageDiv.className = `a4-page transition-all duration-300 flex flex-col justify-between`;
                 pageDiv.style.fontFamily = currentFontFamily;
 
+                let startIdx = 0;
+                for (let i = 0; i < pageIndex; i++) {
+                    startIdx += pagesItems[i].length;
+                }
+
+                // HIGHLY ELEGANT & PROFESSIONAL TABLE ROWS GENERATION
                 let tableRowsHtml = '';
                 pageItems.forEach((item, idx) => {
-                    const actualIdx = (pageIndex * ITEMS_PER_PAGE) + idx + 1;
+                    const actualIdx = startIdx + idx + 1;
                     const itemTotal = (item.qty * item.price) - item.discount;
                     const isEven = idx % 2 === 0;
                     const bgClass = isEven ? 'bg-white' : 'bg-slate-50/70';
 
                     tableRowsHtml += `
-                        <tr class="${bgClass} border-b border-slate-200/80 hover:bg-slate-100/60 transition-colors">
-                            <td class="py-2.5 px-1.5 text-center text-slate-500 font-medium tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt">${actualIdx}</td>
-                            <td class="py-2.5 px-3 border-r border-slate-200/60" style="word-break: break-word;">
-                                <strong class="text-slate-800 font-bold block leading-tight" style="font-size: ${tableFontPt}pt">${escapeHtml(item.name)}</strong>
-                                ${item.desc ? `<span class="text-slate-500 block whitespace-pre-line leading-relaxed mt-1" style="font-size: ${itemDescFontPt}pt">${escapeHtml(item.desc)}</span>` : ''}
+                        <tr class="${bgClass} border-b border-slate-200/70 hover:bg-slate-100/60 transition-colors">
+                            <td class="py-3 px-2 text-center text-slate-500 font-semibold tabular-nums border-r border-slate-200/50" style="font-size: ${numericFontPt}pt">${actualIdx}</td>
+                            <td class="py-3 px-3.5 border-r border-slate-200/50 break-words max-w-[220px]">
+                                <strong class="text-slate-800 font-bold block break-words tracking-tight" style="font-size: ${tableFontPt}pt">${escapeHtml(item.name)}</strong>
+                                ${item.desc ? `<span class="text-slate-500 block whitespace-pre-line leading-relaxed mt-1 break-words font-normal" style="font-size: ${itemDescFontPt}pt">${escapeHtml(item.desc)}</span>` : ''}
                             </td>
-                            <td class="py-2.5 px-1 text-center font-semibold text-slate-700 tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt">${item.qty}</td>
-                            <td class="py-2.5 px-1 text-center text-slate-600 font-medium border-r border-slate-200/60" style="font-size: ${numericFontPt}pt">${escapeHtml(item.unit)}</td>
-                            <td class="py-2.5 px-2 text-right text-slate-700 font-medium tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt">${formatCurrency(item.price, curr)}</td>
-                            <td class="py-2.5 px-2 text-right text-rose-600 font-medium tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</td>
-                            <td class="py-2.5 px-2.5 text-right font-bold text-slate-900 tabular-nums" style="font-size: ${numericFontPt}pt">${formatCurrency(itemTotal, curr)}</td>
+                            <td class="py-3 px-2 text-center font-bold text-slate-700 tabular-nums border-r border-slate-200/50" style="font-size: ${numericFontPt}pt">${item.qty}</td>
+                            <td class="py-3 px-2 text-center text-slate-600 font-medium border-r border-slate-200/50" style="font-size: ${numericFontPt}pt">${escapeHtml(item.unit)}</td>
+                            <td class="py-3 px-3 text-right text-slate-700 font-medium tabular-nums border-r border-slate-200/50" style="font-size: ${numericFontPt}pt">${formatCurrency(item.price, curr)}</td>
+                            <td class="py-3 px-3 text-right text-rose-600 font-medium tabular-nums border-r border-slate-200/50" style="font-size: ${numericFontPt}pt">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</td>
+                            <td class="py-3 px-3.5 text-right font-extrabold text-slate-900 tabular-nums" style="font-size: ${numericFontPt}pt">${formatCurrency(itemTotal, curr)}</td>
                         </tr>
                     `;
                 });
@@ -1135,7 +1189,7 @@
                 let summaryAndFooterSection = '';
                 if (isLastPage) {
                     summaryAndFooterSection = `
-                        <!-- Financial Summary -->
+                        <!-- Financial Summary Block -->
                         <div class="flex justify-end mb-4 page-break-inside-avoid">
                             <div class="w-80 rounded-xl overflow-hidden border border-slate-200/90 bg-slate-50/80 p-3.5 shadow-xs space-y-2">
                                 <div class="flex justify-between text-slate-600" style="font-size: ${numericFontPt}pt">
@@ -1162,24 +1216,24 @@
                                     <span>Biaya Pengiriman</span>
                                     <span class="font-semibold text-slate-800 tabular-nums">${formatCurrency(shippingFee, curr)}</span>
                                 </div>` : ''}
-                                <div class="flex justify-between items-center font-bold border-t border-slate-300 pt-2.5 mt-1" style="color: ${theme.primaryHex}; font-size: ${grandTotalFontPt}pt">
+                                <div class="flex justify-between items-center font-black border-t border-slate-300 pt-2.5 mt-1" style="color: ${theme.primaryHex}; font-size: ${grandTotalFontPt}pt">
                                     <span>GRAND TOTAL</span>
                                     <span class="tabular-nums">${formatCurrency(grandTotal, curr)}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Terms, Bank & Signature -->
+                        <!-- Terms, Bank & Signature Section -->
                         <div class="grid grid-cols-2 gap-4 border-t border-slate-200/80 pt-3 page-break-inside-avoid" style="font-size: ${footerFontPt}pt">
                             <div class="space-y-2">
                                 <div>
-                                    <h4 class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(6, footerFontPt - 1)}pt">REKENING PEMBAYARAN:</h4>
+                                    <h4 class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, footerFontPt - 1)}pt">REKENING PEMBAYARAN:</h4>
                                     <p class="text-slate-700"><span>${escapeHtml(document.getElementById('bankName').value || '-')}</span>: <strong class="text-slate-900">${escapeHtml(document.getElementById('bankAccount').value || '-')}</strong></p>
                                     <p class="text-slate-600"><span>A/N:</span> <span>${escapeHtml(document.getElementById('bankHolder').value || '-')}</span></p>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(6, footerFontPt - 1)}pt">SYARAT & KETENTUAN:</h4>
-                                    <p class="text-slate-600 whitespace-pre-line leading-relaxed" style="font-size: ${Math.max(6, footerFontPt - 1)}pt">${escapeHtml(document.getElementById('termsText').value || '-')}</p>
+                                    <h4 class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, footerFontPt - 1)}pt">SYARAT & KETENTUAN:</h4>
+                                    <p class="text-slate-600 whitespace-pre-line leading-relaxed" style="font-size: ${Math.max(4, footerFontPt - 1)}pt">${escapeHtml(document.getElementById('termsText').value || '-')}</p>
                                 </div>
                             </div>
 
@@ -1190,7 +1244,7 @@
                                 </div>
                                 <div>
                                     <p class="font-bold text-slate-900 underline">${escapeHtml(document.getElementById('signerName').value || 'Nama Terang')}</p>
-                                    <p class="text-slate-500 font-medium" style="font-size: ${Math.max(6, footerFontPt - 1.5)}pt">${escapeHtml(document.getElementById('signerTitle').value || 'Jabatan')}</p>
+                                    <p class="text-slate-500 font-medium" style="font-size: ${Math.max(4, footerFontPt - 1.5)}pt">${escapeHtml(document.getElementById('signerTitle').value || 'Jabatan')}</p>
                                 </div>
                             </div>
                         </div>
@@ -1202,7 +1256,7 @@
                         <!-- Header Section -->
                         <div class="border-b-2 pb-3 mb-3 transition-colors" style="border-color: ${theme.primaryHex};">
                             
-                            <!-- Dynamic Logo Container (Flexible Controls) -->
+                            <!-- Dynamic Logo Container -->
                             ${logoBase64 ? `
                             <div class="flex ${logoAlignClass} mb-2" style="transform: translateY(${logoOffsetY}px);">
                                 <img src="${logoBase64}" alt="Company Logo" style="width: ${logoWidth}px; max-height: ${logoHeight}px; object-fit: contain;">
@@ -1220,7 +1274,7 @@
 
                                 <div class="text-right" style="font-size: ${headerFontPt}pt">
                                     <h1 class="font-black tracking-wider uppercase transition-colors" style="color: ${theme.primaryHex}; font-size: ${headerFontPt + 6}pt">PENAWARAN HARGA</h1>
-                                    <p class="text-slate-400 font-bold uppercase tracking-widest" style="font-size: ${Math.max(6, headerFontPt - 2)}pt">QUOTATION</p>
+                                    <p class="text-slate-400 font-bold uppercase tracking-widest" style="font-size: ${Math.max(4, headerFontPt - 2)}pt">QUOTATION</p>
                                     
                                     <div class="mt-2 space-y-0.5 bg-slate-50 p-2 rounded-lg border border-slate-200/70 inline-block text-left">
                                         <p><span class="text-slate-500">No. Penawaran:</span> <strong class="text-slate-800">${escapeHtml(docNum)}</strong></p>
@@ -1231,10 +1285,11 @@
                             </div>
                         </div>
 
-                        <!-- Client & Subject Information -->
-                        <div class="grid grid-cols-2 gap-3 mb-3 bg-slate-50 p-3 rounded-xl border border-slate-200/80" style="font-size: ${clientFontPt}pt">
+                        ${pageNum === 1 ? `
+                        <!-- Client & Subject Information (Only on Page 1) -->
+                        <div class="grid grid-cols-2 gap-3 mb-3 bg-slate-50/80 p-3 rounded-xl border border-slate-200/80" style="font-size: ${clientFontPt}pt">
                             <div>
-                                <p class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(6, clientFontPt - 2)}pt">KEPADA YTH:</p>
+                                <p class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, clientFontPt - 2)}pt">KEPADA YTH:</p>
                                 <h3 class="font-extrabold text-slate-800" style="font-size: ${clientFontPt + 1}pt">${escapeHtml(clientName)}</h3>
                                 <p class="text-slate-600"><span>Up:</span> <span class="font-medium">${escapeHtml(clientContact)}</span></p>
                                 ${showClientAddress ? `<p class="text-slate-600 whitespace-pre-line leading-tight mt-0.5">${escapeHtml(clientAddr)}</p>` : ''}
@@ -1242,26 +1297,27 @@
                                 ${showClientEmail ? `<p class="text-slate-600"><span>Email:</span> <span class="font-medium">${escapeHtml(clientEmail)}</span></p>` : ''}
                             </div>
                             <div>
-                                <p class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(6, clientFontPt - 2)}pt">PERIHAL / SUBJECT:</p>
+                                <p class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, clientFontPt - 2)}pt">PERIHAL / SUBJECT:</p>
                                 <p class="font-semibold text-slate-800 leading-snug">${escapeHtml(docSubj)}</p>
                             </div>
                         </div>
+                        ` : ''}
 
-                        <!-- Items Table -->
-                        <div class="mb-3 overflow-hidden rounded-xl border border-slate-200/90 shadow-xs">
-                            <table class="w-full border-collapse table-fixed">
+                        <!-- Highly Professional Items Table -->
+                        <div class="mb-3 overflow-hidden rounded-lg border border-slate-200 shadow-xs" style="font-size: ${tableFontPt}pt">
+                            <table class="w-full border-collapse">
                                 <thead>
-                                    <tr class="text-white uppercase tracking-wider font-bold" style="background-color: ${theme.primaryHex}; font-size: ${Math.max(7, tableFontPt - 0.5)}pt">
-                                        <th class="py-2.5 px-1.5 text-center border-r border-white/20" style="width: 5%;">NO</th>
-                                        <th class="py-2.5 px-3 text-left border-r border-white/20" style="width: 37%;">DESKRIPSI & SPESIFIKASI</th>
-                                        <th class="py-2.5 px-1 text-center border-r border-white/20" style="width: 7%;">QTY</th>
-                                        <th class="py-2.5 px-1 text-center border-r border-white/20" style="width: 9%;">SATUAN</th>
-                                        <th class="py-2.5 px-2 text-right border-r border-white/20" style="width: 15%;">HARGA SATUAN</th>
-                                        <th class="py-2.5 px-2 text-right border-r border-white/20" style="width: 11%;">DISKON</th>
-                                        <th class="py-2.5 px-2.5 text-right" style="width: 16%;">TOTAL HARGA</th>
+                                    <tr class="text-white uppercase tracking-wider font-extrabold" style="background-color: ${theme.primaryHex}; font-size: ${Math.max(6, tableFontPt - 0.5)}pt">
+                                        <th class="py-3 px-2 text-center w-10 border-r border-white/20">NO</th>
+                                        <th class="py-3 px-3.5 text-left border-r border-white/20">DESKRIPSI & SPESIFIKASI</th>
+                                        <th class="py-3 px-2 text-center w-12 border-r border-white/20">QTY</th>
+                                        <th class="py-3 px-2 text-center w-16 border-r border-white/20">SATUAN</th>
+                                        <th class="py-3 px-3 text-right w-28 border-r border-white/20">HARGA SATUAN</th>
+                                        <th class="py-3 px-3 text-right w-20 border-r border-white/20">DISKON</th>
+                                        <th class="py-3 px-3.5 text-right w-32">TOTAL HARGA</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="divide-y divide-slate-200/70">
                                     ${tableRowsHtml}
                                 </tbody>
                             </table>
@@ -1271,7 +1327,7 @@
                     </div>
 
                     <!-- Footer Page Count -->
-                    <div class="border-t border-slate-200/80 pt-2 text-slate-400 flex justify-between items-center no-print-footer" style="font-size: ${Math.max(6, footerFontPt - 2)}pt">
+                    <div class="border-t border-slate-200/80 pt-2 text-slate-400 flex justify-between items-center no-print-footer" style="font-size: ${Math.max(4, footerFontPt - 2)}pt">
                         <span>Dokumen penawaran harga ini diterbitkan secara resmi melalui sistem QuotationPRO.</span>
                         <span class="font-bold text-slate-600">Halaman ${pageNum} dari ${totalPages}</span>
                     </div>
@@ -1374,7 +1430,7 @@
             container.classList.add('export-clean');
 
             const opt = {
-                margin:       [0, 0, 0, 0],
+                margin:       [4, 0, 4, 0],
                 filename:     `Quotation_${(document.getElementById('docNumber').value || 'Draft').replace(/[\/\\?%*:|"<>]/g, '-')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { 
@@ -1542,170 +1598,169 @@
         }
 
         function exportWord() {
-            try {
-                const curr = document.getElementById('currencySymbol').value;
-                const compName = document.getElementById('companyName').value || 'Nama Perusahaan';
-                const compAddr = document.getElementById('companyAddress').value || '-';
-                const compPhone = document.getElementById('companyPhone').value || '-';
-                const compEmail = document.getElementById('companyEmail').value || '';
-                
-                const clientName = document.getElementById('clientName').value || 'Nama Klien';
-                const clientContact = document.getElementById('clientContact').value || '-';
-                const clientAddr = document.getElementById('clientAddress').value || '-';
+            const curr = document.getElementById('currencySymbol').value;
+            const compName = document.getElementById('companyName').value || 'Nama Perusahaan';
+            const compAddr = document.getElementById('companyAddress').value || '-';
+            const compPhone = document.getElementById('companyPhone').value || '-';
+            const compEmail = document.getElementById('companyEmail').value || '';
+            
+            const clientName = document.getElementById('clientName').value || 'Nama Klien';
+            const clientContact = document.getElementById('clientContact').value || '-';
+            const clientAddr = document.getElementById('clientAddress').value || '-';
 
-                let subtotal = 0;
-                itemsData.forEach(item => {
-                    subtotal += (item.qty * item.price) - item.discount;
-                });
+            let subtotal = 0;
+            itemsData.forEach(item => {
+                subtotal += (item.qty * item.price) - item.discount;
+            });
 
-                let globalDiscountAmount = 0;
-                const globalDiscType = document.getElementById('globalDiscountType').value;
-                const globalDiscVal = parseFloat(document.getElementById('globalDiscountValue').value) || 0;
-                if (globalDiscType === 'percent') {
-                    globalDiscountAmount = subtotal * (globalDiscVal / 100);
-                } else {
-                    globalDiscountAmount = globalDiscVal;
-                }
-
-                const subtotalAfterDisc = Math.max(0, subtotal - globalDiscountAmount);
-                const usePPN = document.getElementById('usePPN').checked;
-                const ppnRate = parseFloat(document.getElementById('ppnRate').value) || 0;
-                const ppnMode = document.querySelector('input[name="ppnMode"]:checked').value;
-                let ppnAmount = 0;
-                let dpp = subtotalAfterDisc;
-
-                if (usePPN && ppnRate > 0) {
-                    if (ppnMode === 'exclude') {
-                        dpp = subtotalAfterDisc;
-                        ppnAmount = dpp * (ppnRate / 100);
-                    } else {
-                        dpp = subtotalAfterDisc / (1 + (ppnRate / 100));
-                        ppnAmount = subtotalAfterDisc - dpp;
-                    }
-                }
-
-                const usePPh = document.getElementById('usePPh').checked;
-                const pphRate = parseFloat(document.getElementById('pphRateInput').value) || 0;
-                let pphAmount = (usePPh && pphRate > 0) ? dpp * (pphRate / 100) : 0;
-                const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
-                let grandTotal = (ppnMode === 'include') ? (subtotalAfterDisc - pphAmount + shippingFee) : (subtotalAfterDisc + ppnAmount - pphAmount + shippingFee);
-
-                const tableRows = [
-                    new docx.TableRow({
-                        tableHeader: true,
-                        children: [
-                            new docx.TableCell({ children: [new docx.Paragraph({ text: "NO", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 5, type: docx.WidthType.PERCENTAGE } }),
-                            new docx.TableCell({ children: [new docx.Paragraph({ text: "DESKRIPSI & SPESIFIKASI", bold: true })], width: { size: 37, type: docx.WidthType.PERCENTAGE } }),
-                            new docx.TableCell({ children: [new docx.Paragraph({ text: "QTY", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 7, type: docx.WidthType.PERCENTAGE } }),
-                            new docx.TableCell({ children: [new docx.Paragraph({ text: "SATUAN", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 10, type: docx.WidthType.PERCENTAGE } }),
-                            new docx.TableCell({ children: [new docx.Paragraph({ text: `HARGA (${curr})`, bold: true, alignment: docx.AlignmentType.RIGHT })], width: { size: 15, type: docx.WidthType.PERCENTAGE } }),
-                            new docx.TableCell({ children: [new docx.Paragraph({ text: `DISKON (${curr})`, bold: true, alignment: docx.AlignmentType.RIGHT })], width: { size: 10, type: docx.WidthType.PERCENTAGE } }),
-                            new docx.TableCell({ children: [new docx.Paragraph({ text: `TOTAL (${curr})`, bold: true, alignment: docx.AlignmentType.RIGHT })], width: { size: 16, type: docx.WidthType.PERCENTAGE } }),
-                        ],
-                    }),
-                    ...itemsData.map((item, idx) => {
-                        const descParagraphs = item.desc 
-                            ? item.desc.split('\n').map(d => new docx.Paragraph({ text: d })) 
-                            : [];
-
-                        return new docx.TableRow({
-                            children: [
-                                new docx.TableCell({ children: [new docx.Paragraph({ text: String(idx + 1), alignment: docx.AlignmentType.CENTER })] }),
-                                new docx.TableCell({ 
-                                    children: [
-                                        new docx.Paragraph({ text: item.name, bold: true }),
-                                        ...descParagraphs
-                                    ] 
-                                }),
-                                new docx.TableCell({ children: [new docx.Paragraph({ text: String(item.qty), alignment: docx.AlignmentType.CENTER })] }),
-                                new docx.TableCell({ children: [new docx.Paragraph({ text: item.unit, alignment: docx.AlignmentType.CENTER })] }),
-                                new docx.TableCell({ children: [new docx.Paragraph({ text: formatCurrency(item.price, '').trim(), alignment: docx.AlignmentType.RIGHT })] }),
-                                new docx.TableCell({ children: [new docx.Paragraph({ text: item.discount > 0 ? '-' + formatCurrency(item.discount, '').trim() : '-', alignment: docx.AlignmentType.RIGHT })] }),
-                                new docx.TableCell({ children: [new docx.Paragraph({ text: formatCurrency((item.qty * item.price) - item.discount, '').trim(), alignment: docx.AlignmentType.RIGHT })] }),
-                            ]
-                        });
-                    })
-                ];
-
-                const termsParagraphs = (document.getElementById('termsText').value || '-').split('\n').map(t => new docx.Paragraph({ text: t }));
-
-                const doc = new docx.Document({
-                    sections: [{
-                        properties: {
-                            page: {
-                                margin: {
-                                    top: 720,
-                                    bottom: 720,
-                                    left: 720,
-                                    right: 720,
-                                }
-                            }
-                        },
-                        children: [
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({ text: compName, bold: true, size: 28, color: "1E3A8A" }),
-                                ],
-                            }),
-                            new docx.Paragraph({ text: compAddr }),
-                            new docx.Paragraph({ text: `Telp: ${compPhone} | Email: ${compEmail}` }),
-                            new docx.Paragraph({ text: "--------------------------------------------------------------------------------------------------" }),
-                            new docx.Paragraph({ text: "" }),
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({ text: "PENAWARAN HARGA / QUOTATION", bold: true, size: 24, color: "1E3A8A" })
-                                ]
-                            }),
-                            new docx.Paragraph({ text: `No. Penawaran: ${document.getElementById('docNumber').value}` }),
-                            new docx.Paragraph({ text: `Tanggal: ${formatDate(document.getElementById('docDate').value)}` }),
-                            new docx.Paragraph({ text: `Berlaku s/d: ${formatDate(document.getElementById('docValidDate').value)}` }),
-                            new docx.Paragraph({ text: "" }),
-                            new docx.Paragraph({ children: [new docx.TextRun({ text: "KEPADA YTH:", bold: true })] }),
-                            new docx.Paragraph({ text: clientName }),
-                            new docx.Paragraph({ text: `Up: ${clientContact}` }),
-                            new docx.Paragraph({ text: clientAddr }),
-                            new docx.Paragraph({ text: "" }),
-                            new docx.Table({
-                                rows: tableRows,
-                                width: { size: 100, type: docx.WidthType.PERCENTAGE }
-                            }),
-                            new docx.Paragraph({ text: "" }),
-                            new docx.Paragraph({ text: `Subtotal: ${formatCurrency(subtotal, curr)}`, alignment: docx.AlignmentType.RIGHT }),
-                            ...(globalDiscountAmount > 0 ? [new docx.Paragraph({ text: `Diskon Global: -${formatCurrency(globalDiscountAmount, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
-                            ...(usePPN ? [new docx.Paragraph({ text: `PPN (${ppnRate}%): ${formatCurrency(ppnAmount, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
-                            ...(usePPh && pphAmount > 0 ? [new docx.Paragraph({ text: `Potongan PPh (${pphRate}%): -${formatCurrency(pphAmount, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
-                            ...(shippingFee > 0 ? [new docx.Paragraph({ text: `Biaya Pengiriman: ${formatCurrency(shippingFee, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
-                            new docx.Paragraph({ children: [new docx.TextRun({ text: `GRAND TOTAL: ${formatCurrency(grandTotal, curr)}`, bold: true, size: 22 })], alignment: docx.AlignmentType.RIGHT }),
-                            new docx.Paragraph({ text: "" }),
-                            new docx.Paragraph({ children: [new docx.TextRun({ text: "REKENING PEMBAYARAN:", bold: true })] }),
-                            new docx.Paragraph({ text: `${document.getElementById('bankName').value || '-'} - ${document.getElementById('bankAccount').value || '-'} (A/N: ${document.getElementById('bankHolder').value || '-'})` }),
-                            new docx.Paragraph({ text: "" }),
-                            new docx.Paragraph({ children: [new docx.TextRun({ text: "SYARAT & KETENTUAN:", bold: true })] }),
-                            ...termsParagraphs,
-                            new docx.Paragraph({ text: "" }),
-                            new docx.Paragraph({ text: "" }),
-                            new docx.Paragraph({ text: "Hormat Kami,", alignment: docx.AlignmentType.RIGHT }),
-                            new docx.Paragraph({ text: "" }),
-                            new docx.Paragraph({ text: "" }),
-                            new docx.Paragraph({ children: [new docx.TextRun({ text: document.getElementById('signerName').value || 'Nama Terang', bold: true, underline: {} })], alignment: docx.AlignmentType.RIGHT }),
-                            new docx.Paragraph({ text: document.getElementById('signerTitle').value || 'Jabatan', alignment: docx.AlignmentType.RIGHT }),
-                        ]
-                    }]
-                });
-
-                docx.Packer.toBlob(doc).then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = `Quotation_${(document.getElementById('docNumber').value || 'Draft').replace(/[\/\\?%*:|"<>]/g, '-')}.docx`;
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                    showToast("File Word (.docx) berhasil diunduh!");
-                });
-            } catch (err) {
-                console.error("Export Word Error:", err);
-                showToast("Gagal mengunduh file Word.", true);
+            let globalDiscountAmount = 0;
+            const globalDiscType = document.getElementById('globalDiscountType').value;
+            const globalDiscVal = parseFloat(document.getElementById('globalDiscountValue').value) || 0;
+            if (globalDiscType === 'percent') {
+                globalDiscountAmount = subtotal * (globalDiscVal / 100);
+            } else {
+                globalDiscountAmount = globalDiscVal;
             }
+
+            const subtotalAfterDisc = Math.max(0, subtotal - globalDiscountAmount);
+            const usePPN = document.getElementById('usePPN').checked;
+            const ppnRate = parseFloat(document.getElementById('ppnRate').value) || 0;
+            const ppnMode = document.querySelector('input[name="ppnMode"]:checked').value;
+            let ppnAmount = 0;
+            let dpp = subtotalAfterDisc;
+
+            if (usePPN && ppnRate > 0) {
+                if (ppnMode === 'exclude') {
+                    dpp = subtotalAfterDisc;
+                    ppnAmount = dpp * (ppnRate / 100);
+                } else {
+                    dpp = subtotalAfterDisc / (1 + (ppnRate / 100));
+                    ppnAmount = subtotalAfterDisc - dpp;
+                }
+            }
+
+            const usePPh = document.getElementById('usePPh').checked;
+            const pphRate = parseFloat(document.getElementById('pphRateInput').value) || 0;
+            let pphAmount = (usePPh && pphRate > 0) ? dpp * (pphRate / 100) : 0;
+            const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
+            let grandTotal = (ppnMode === 'include') ? (subtotalAfterDisc - pphAmount + shippingFee) : (subtotalAfterDisc + ppnAmount - pphAmount + shippingFee);
+
+            const tableRows = [
+                new docx.TableRow({
+                    tableHeader: true,
+                    children: [
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: "NO", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 6, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: "DESKRIPSI & SPESIFIKASI", bold: true })], width: { size: 44, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: "QTY", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 8, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: "SATUAN", bold: true, alignment: docx.AlignmentType.CENTER })], width: { size: 10, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: `HARGA (${curr})`, bold: true, alignment: docx.AlignmentType.RIGHT })], width: { size: 16, type: docx.WidthType.PERCENTAGE } }),
+                        new docx.TableCell({ children: [new docx.Paragraph({ text: `TOTAL (${curr})`, bold: true, alignment: docx.AlignmentType.RIGHT })], width: { size: 16, type: docx.WidthType.PERCENTAGE } }),
+                    ],
+                }),
+                ...itemsData.map((item, idx) => {
+                    const descParagraphs = item.desc 
+                        ? item.desc.split('\n').map(d => new docx.Paragraph({ text: d, style: "caption" })) 
+                        : [];
+
+                    return new docx.TableRow({
+                        children: [
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: String(idx + 1), alignment: docx.AlignmentType.CENTER })] }),
+                            new docx.TableCell({ 
+                                children: [
+                                    new docx.Paragraph({ text: item.name, bold: true }),
+                                    ...descParagraphs
+                                ] 
+                            }),
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: String(item.qty), alignment: docx.AlignmentType.CENTER })] }),
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: item.unit, alignment: docx.AlignmentType.CENTER })] }),
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: formatCurrency(item.price, '').trim(), alignment: docx.AlignmentType.RIGHT })] }),
+                            new docx.TableCell({ children: [new docx.Paragraph({ text: formatCurrency((item.qty * item.price) - item.discount, '').trim(), alignment: docx.AlignmentType.RIGHT })] }),
+                        ]
+                    });
+                })
+            ];
+
+            const termsParagraphs = (document.getElementById('termsText').value || '-').split('\n').map(t => new docx.Paragraph({ text: t }));
+
+            const doc = new docx.Document({
+                sections: [{
+                    properties: {
+                        page: {
+                            margin: {
+                                top: 720,
+                                bottom: 720,
+                                left: 720,
+                                right: 720,
+                            }
+                        }
+                    },
+                    children: [
+                        new docx.Paragraph({
+                            children: [
+                                new docx.TextRun({ text: compName, bold: true, size: 28, color: "1E3A8A" }),
+                            ],
+                        }),
+                        new docx.Paragraph({ text: compAddr }),
+                        new docx.Paragraph({ text: `Telp: ${compPhone} | Email: ${compEmail}` }),
+                        new docx.Paragraph({ text: "--------------------------------------------------------------------------------------------------" }),
+                        new docx.Paragraph({ text: "" }),
+                        new docx.Paragraph({
+                            children: [
+                                new docx.TextRun({ text: "PENAWARAN HARGA (QUOTATION)", bold: true, size: 24, color: "1E3A8A" }),
+                            ],
+                        }),
+                        new docx.Paragraph({ text: `No: ${document.getElementById('docNumber').value}` }),
+                        new docx.Paragraph({ text: `Tanggal: ${formatDate(document.getElementById('docDate').value)}` }),
+                        new docx.Paragraph({ text: `Perihal: ${document.getElementById('docSubject').value}` }),
+                        new docx.Paragraph({ text: "" }),
+                        new docx.Paragraph({ text: `Kepada Yth: ${clientName}` }),
+                        new docx.Paragraph({ text: `UP: ${clientContact}` }),
+                        new docx.Paragraph({ text: clientAddr }),
+                        new docx.Paragraph({ text: "" }),
+                        
+                        new docx.Table({
+                            width: { size: 100, type: docx.WidthType.PERCENTAGE },
+                            rows: tableRows,
+                        }),
+                        
+                        new docx.Paragraph({ text: "" }),
+                        new docx.Paragraph({ text: `Subtotal: ${formatCurrency(subtotal, curr)}`, alignment: docx.AlignmentType.RIGHT }),
+                        ...(globalDiscountAmount > 0 ? [new docx.Paragraph({ text: `Diskon Tambahan: -${formatCurrency(globalDiscountAmount, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
+                        ...(usePPN ? [new docx.Paragraph({ text: `PPN (${ppnRate}%): ${formatCurrency(ppnAmount, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
+                        ...(usePPh && pphAmount > 0 ? [new docx.Paragraph({ text: `Potongan PPh (${pphRate}%): -${formatCurrency(pphAmount, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
+                        ...(shippingFee > 0 ? [new docx.Paragraph({ text: `Biaya Pengiriman: ${formatCurrency(shippingFee, curr)}`, alignment: docx.AlignmentType.RIGHT })] : []),
+                        new docx.Paragraph({ 
+                            children: [
+                                new docx.TextRun({ text: `GRAND TOTAL: ${formatCurrency(grandTotal, curr)}`, bold: true, size: 22, color: "1E3A8A" })
+                            ],
+                            alignment: docx.AlignmentType.RIGHT 
+                        }),
+
+                        new docx.Paragraph({ text: "" }),
+                        new docx.Paragraph({ text: "Rekening Pembayaran:", bold: true }),
+                        new docx.Paragraph({ text: `${document.getElementById('bankName').value || '-'} : ${document.getElementById('bankAccount').value || '-'} (A/N: ${document.getElementById('bankHolder').value || '-'})` }),
+                        new docx.Paragraph({ text: "" }),
+                        new docx.Paragraph({ text: "Syarat & Ketentuan:", bold: true }),
+                        ...termsParagraphs,
+                        new docx.Paragraph({ text: "" }),
+                        new docx.Paragraph({ text: "Hormat Kami,", alignment: docx.AlignmentType.RIGHT }),
+                        new docx.Paragraph({ text: "" }),
+                        new docx.Paragraph({ text: document.getElementById('signerName').value || 'Nama Terang', bold: true, alignment: docx.AlignmentType.RIGHT }),
+                        new docx.Paragraph({ text: document.getElementById('signerTitle').value || 'Jabatan', alignment: docx.AlignmentType.RIGHT }),
+                    ],
+                }],
+            });
+
+            docx.Packer.toBlob(doc).then((blob) => {
+                const url = window.URL.createObjectURL(blob);
+                const downloadLink = document.createElement("a");
+                downloadLink.href = url;
+                downloadLink.download = `Quotation_${(document.getElementById('docNumber').value || 'Draft').replace(/[\/\\?%*:|"<>]/g, '-')}.docx`;
+                downloadLink.click();
+                showToast("File Word berhasil diunduh!");
+            }).catch(err => {
+                showToast("Gagal mengunduh Word.", true);
+            });
         }
     </script>
 </body>
