@@ -1,10 +1,9 @@
-```html
 <!DOCTYPE html>
 <html lang="id" class="h-full bg-slate-100">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Penawaran Harga Professional (Sales Offer / Quotation)</title>
+    <title>Generator Penawaran Harga (Sales Offer / Quotation)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -53,7 +52,7 @@
             font-family: 'Roboto Mono', monospace, sans-serif;
         }
 
-        /* Prevent element splitting on print/PDF export */
+        /* Mencegah pemotongan elemen saat eksport PDF & Print */
         .a4-page {
             width: 210mm;
             min-height: 297mm;
@@ -66,7 +65,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            border-radius: 6px;
+            border-radius: 4px;
             word-break: break-word;
             overflow-wrap: anywhere;
         }
@@ -168,12 +167,13 @@
         <!-- ================= LEFT FORM INPUT PANEL ================= -->
         <section class="w-full lg:w-1/2 p-4 sm:p-6 overflow-y-auto h-full border-r border-slate-200/80 custom-scrollbar space-y-6 no-print bg-slate-50">
             
+            <!-- TEMA WARNA & TIPOGRAFI -->
             <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
                 <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
                     <h2 class="text-sm font-bold text-slate-800 flex items-center">
-                        <i class="fa-solid fa-palette text-blue-600 mr-2"></i> Tema Warna, Font & Layout Tabel
+                        <i class="fa-solid fa-palette text-blue-600 mr-2"></i> Tema Warna Soft & Tipografi
                     </h2>
-                    <span class="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">Style & Spacing</span>
+                    <span class="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">Style</span>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2 p-3 bg-slate-50/80 rounded-xl border border-slate-200/60">
@@ -276,44 +276,9 @@
                         </select>
                     </div>
                 </div>
-
-                <!-- PENGATURAN JARAK & KETINGGIAN BARIS/KOLOM/NOMOR -->
-                <div class="mt-4 pt-3 border-t border-slate-200">
-                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 text-blue-700 flex items-center gap-1.5">
-                        <i class="fa-solid fa-arrows-up-down-left-right"></i> Pengaturan Jarak & Ketinggian Tabel (Kolom/Nomor)
-                    </h3>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 bg-blue-50/50 rounded-xl border border-blue-100">
-                        <!-- Ketinggian Baris / Padding Vertikal -->
-                        <div>
-                            <div class="flex justify-between text-[11px] font-semibold text-slate-700 mb-1">
-                                <span>Ketinggian Baris (Vertikal):</span>
-                                <span id="tableRowPaddingYVal" class="text-blue-600 font-bold">12 px</span>
-                            </div>
-                            <input type="range" id="tableRowPaddingYInput" min="4" max="28" value="12" oninput="updateTableSpacingControls()" class="w-full accent-blue-600 cursor-pointer">
-                        </div>
-
-                        <!-- Jarak Antar Kolom / Padding Horizontal -->
-                        <div>
-                            <div class="flex justify-between text-[11px] font-semibold text-slate-700 mb-1">
-                                <span>Jarak Kolom (Horizontal):</span>
-                                <span id="tableColPaddingXVal" class="text-blue-600 font-bold">10 px</span>
-                            </div>
-                            <input type="range" id="tableColPaddingXInput" min="4" max="24" value="10" oninput="updateTableSpacingControls()" class="w-full accent-blue-600 cursor-pointer">
-                        </div>
-
-                        <!-- Lebar Kolom Nomor -->
-                        <div>
-                            <div class="flex justify-between text-[11px] font-semibold text-slate-700 mb-1">
-                                <span>Lebar Kolom Nomor:</span>
-                                <span id="tableNoColWidthVal" class="text-blue-600 font-bold">40 px</span>
-                            </div>
-                            <input type="range" id="tableNoColWidthInput" min="25" max="80" value="40" oninput="updateTableSpacingControls()" class="w-full accent-blue-600 cursor-pointer">
-                        </div>
-                    </div>
-                </div>
             </div>
 
+            <!-- SECTION 1: PERUSAHAAN & LOGO CONTROLS -->
             <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
                 <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
                     <h2 class="text-sm font-bold text-slate-800 flex items-center">
@@ -377,15 +342,15 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Perusahaan (Pengirim)</label>
-                            <input type="text" id="companyName" value="PT Solusi Digital Perkasa" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <input type="text" id="companyName" value="CV. Berkah Mandiri Elektrik" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">No. Telp / WA</label>
-                            <input type="text" id="companyPhone" value="+62 812-3456-7890" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <input type="text" id="companyPhone" value="+62 856-4765-9515" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                         <div class="sm:col-span-2">
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Perusahaan</label>
-                            <textarea id="companyAddress" rows="2" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">Jl. Jendral Sudirman No. 45, Jakarta Selatan 12190</textarea>
+                            <textarea id="companyAddress" rows="2" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">Cikembar, Kabupaten Sukabumi, Jawa Barat</textarea>
                         </div>
 
                         <div>
@@ -395,7 +360,7 @@
                                     <input type="checkbox" id="showCompanyEmail" checked onchange="updatePreview()" class="rounded text-blue-600 mr-1"> Tampilkan
                                 </label>
                             </div>
-                            <input type="email" id="companyEmail" value="info@solusidigital.co.id" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <input type="email" id="companyEmail" value="info@berkahmandirielektrik.co.id" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
 
                         <div>
@@ -466,7 +431,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Perihal / Subject</label>
-                            <input type="text" id="docSubject" value="Penawaran Harga Pengadaan Server & Jaringan Web" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <input type="text" id="docSubject" value="Penawaran Harga Pekerjaan Kelistrikan & Sparepart" oninput="updatePreview()" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Penawaran</label>
@@ -480,6 +445,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 2: TABEL BARANG / JASA -->
             <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
                 <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
                     <div>
@@ -506,7 +472,7 @@
                         <option value="">-- Pilih Layanan / Produk --</option>
                         <option value="server">Server Enterprise (Rp 48.000.000)</option>
                         <option value="switch">Cisco Gigabit Switch (Rp 12.500.000)</option>
-                        <option value="network">Jasa Konfigurasi Jaringan (Rp 8.500.000)</option>
+                        <option value="network">Jasa Instalasi & Konfigurasi Jaringan (Rp 8.500.000)</option>
                         <option value="web">Pengembangan Web Aplikasi Custom (Rp 25.000.000)</option>
                         <option value="maintenance">Maintenance Bulanan Sistem (Rp 3.500.000)</option>
                     </select>
@@ -527,6 +493,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 3: KALKULASI PAJAK & BIAYA -->
             <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
                 <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
                     <h2 class="text-sm font-bold text-slate-800 flex items-center">
@@ -605,6 +572,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 4: TERMS & TANDA TANGAN -->
             <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
                 <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
                     <h2 class="text-sm font-bold text-slate-800 flex items-center">
@@ -626,7 +594,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Atas Nama (A/N)</label>
-                            <input type="text" id="bankHolder" value="PT Solusi Digital Perkasa" oninput="updatePreview()" class="w-full text-xs p-2 border border-slate-300 rounded-lg">
+                            <input type="text" id="bankHolder" value="CV. Berkah Mandiri Elektrik" oninput="updatePreview()" class="w-full text-xs p-2 border border-slate-300 rounded-lg">
                         </div>
                     </div>
 
@@ -645,22 +613,22 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Penandatangan</label>
-                                <input type="text" id="signerName" value="Budi Santoso, S.Kom" oninput="updatePreview()" class="w-full text-xs p-2 border border-slate-300 rounded-lg">
+                                <input type="text" id="signerName" value="Budi Santoso" oninput="updatePreview()" class="w-full text-xs p-2 border border-slate-300 rounded-lg">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">Jabatan</label>
-                                <input type="text" id="signerTitle" value="Sales & Commercial Director" oninput="updatePreview()" class="w-full text-xs p-2 border border-slate-300 rounded-lg">
+                                <input type="text" id="signerTitle" value="Direktur" oninput="updatePreview()" class="w-full text-xs p-2 border border-slate-300 rounded-lg">
                             </div>
                         </div>
 
                         <div class="mt-3">
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Metode Tanda Tangan</label>
                             <div class="flex items-center space-x-4 mb-2">
-                                <label class="text-xs inline-flex items-center cursor-pointer">
+                                <label class="text-xs inline-flex items-center">
                                     <input type="radio" name="sigMethod" value="draw" checked onchange="toggleSigMethod('draw')" class="text-blue-600">
                                     <span class="ml-1.5">Gambar Langsung</span>
                                 </label>
-                                <label class="text-xs inline-flex items-center cursor-pointer">
+                                <label class="text-xs inline-flex items-center">
                                     <input type="radio" name="sigMethod" value="upload" onchange="toggleSigMethod('upload')" class="text-blue-600">
                                     <span class="ml-1.5">Upload Stempel/Gambar</span>
                                 </label>
@@ -715,11 +683,6 @@
         let logoAlign = 'left';
         let logoOffsetY = 0;
 
-        // Table Spacing & Height State
-        let tableRowPaddingY = 12; // Ketinggian vertikal cell (px)
-        let tableColPaddingX = 10; // Jarak antar kolom horizontal (px)
-        let tableNoColWidth = 40;   // Lebar khusus kolom nomor (px)
-
         let itemsData = [
             { id: 1, name: "Server Dell PowerEdge R750", desc: "Intel Xeon Silver 4310, 32GB RAM, 2x 1TB SSD NVMe Dual PSU", qty: 2, unit: "Unit", price: 48000000, discount: 1000000 },
             { id: 2, name: "Cisco Catalyst Switch 24-Port Gigabit", desc: "Managed Switch L2+ dengan PoE Support 370W Smart Managed", qty: 1, unit: "Unit", price: 12500000, discount: 0 },
@@ -727,12 +690,12 @@
         ];
 
         const themePresets = {
-            navy: { primaryHex: '#1e3a8a', bgLight: '#f8fafc', headerBg: '#1e3a8a', badgeBg: '#eff6ff', badgeText: '#1e40af' },
-            emerald: { primaryHex: '#065f46', bgLight: '#f0fdf4', headerBg: '#065f46', badgeBg: '#ecfdf5', badgeText: '#047857' },
-            slate: { primaryHex: '#334155', bgLight: '#f8fafc', headerBg: '#334155', badgeBg: '#f1f5f9', badgeText: '#334155' },
-            terracotta: { primaryHex: '#9a3412', bgLight: '#fff7ed', headerBg: '#9a3412', badgeBg: '#fff7ed', badgeText: '#c2410c' },
-            gold: { primaryHex: '#854d0e', bgLight: '#fefce8', headerBg: '#854d0e', badgeBg: '#fefce8', badgeText: '#a16207' },
-            royal: { primaryHex: '#4338ca', bgLight: '#eef2ff', headerBg: '#4338ca', badgeBg: '#eef2ff', badgeText: '#3730a3' }
+            navy: { primaryHex: '#1e3a8a', bgLight: '#f8fafc', headerBg: '#f1f5f9', badgeBg: '#eff6ff', badgeText: '#1e40af' },
+            emerald: { primaryHex: '#065f46', bgLight: '#f0fdf4', headerBg: '#e6f4ea', badgeBg: '#ecfdf5', badgeText: '#047857' },
+            slate: { primaryHex: '#334155', bgLight: '#f8fafc', headerBg: '#f1f5f9', badgeBg: '#f1f5f9', badgeText: '#334155' },
+            terracotta: { primaryHex: '#9a3412', bgLight: '#fff7ed', headerBg: '#ffedd5', badgeBg: '#fff7ed', badgeText: '#c2410c' },
+            gold: { primaryHex: '#854d0e', bgLight: '#fefce8', headerBg: '#fef08a', badgeBg: '#fefce8', badgeText: '#a16207' },
+            royal: { primaryHex: '#4338ca', bgLight: '#eef2ff', headerBg: '#e0e7ff', badgeBg: '#eef2ff', badgeText: '#3730a3' }
         };
 
         let currentThemeKey = 'navy';
@@ -802,10 +765,7 @@
                 signerName: document.getElementById('signerName').value,
                 signerTitle: document.getElementById('signerTitle').value,
                 logoBase64: logoBase64,
-                sigImageBase64: sigImageBase64,
-                tableRowPaddingY: tableRowPaddingY,
-                tableColPaddingX: tableColPaddingX,
-                tableNoColWidth: tableNoColWidth
+                sigImageBase64: sigImageBase64
             };
             localStorage.setItem('quotationpro_draft', JSON.stringify(draftData));
             showToast("Draft berhasil disimpan ke penyimpanan lokal!");
@@ -840,22 +800,6 @@
                     if (data.signerTitle) document.getElementById('signerTitle').value = data.signerTitle;
                     if (data.logoBase64) logoBase64 = data.logoBase64;
                     if (data.sigImageBase64) sigImageBase64 = data.sigImageBase64;
-                    
-                    if (data.tableRowPaddingY !== undefined) {
-                        tableRowPaddingY = data.tableRowPaddingY;
-                        document.getElementById('tableRowPaddingYInput').value = tableRowPaddingY;
-                        document.getElementById('tableRowPaddingYVal').innerText = tableRowPaddingY + ' px';
-                    }
-                    if (data.tableColPaddingX !== undefined) {
-                        tableColPaddingX = data.tableColPaddingX;
-                        document.getElementById('tableColPaddingXInput').value = tableColPaddingX;
-                        document.getElementById('tableColPaddingXVal').innerText = tableColPaddingX + ' px';
-                    }
-                    if (data.tableNoColWidth !== undefined) {
-                        tableNoColWidth = data.tableNoColWidth;
-                        document.getElementById('tableNoColWidthInput').value = tableNoColWidth;
-                        document.getElementById('tableNoColWidthVal').innerText = tableNoColWidth + ' px';
-                    }
                 }
             } catch (e) {
                 console.error("Gagal memuat draft:", e);
@@ -906,11 +850,6 @@
             showToast("Semua item diatur ulang.");
         }
 
-        function autoResizeTextarea(el) {
-            el.style.height = 'auto';
-            el.style.height = el.scrollHeight + 'px';
-        }
-
         function updateLogoControls() {
             logoWidth = parseInt(document.getElementById('logoWidthInput').value) || 140;
             logoHeight = parseInt(document.getElementById('logoHeightInput').value) || 60;
@@ -920,18 +859,6 @@
             document.getElementById('logoWidthVal').innerText = logoWidth + ' px';
             document.getElementById('logoHeightVal').innerText = logoHeight + ' px';
             document.getElementById('logoOffsetYVal').innerText = logoOffsetY + ' px';
-
-            updatePreview();
-        }
-
-        function updateTableSpacingControls() {
-            tableRowPaddingY = parseInt(document.getElementById('tableRowPaddingYInput').value) || 12;
-            tableColPaddingX = parseInt(document.getElementById('tableColPaddingXInput').value) || 10;
-            tableNoColWidth = parseInt(document.getElementById('tableNoColWidthInput').value) || 40;
-
-            document.getElementById('tableRowPaddingYVal').innerText = tableRowPaddingY + ' px';
-            document.getElementById('tableColPaddingXVal').innerText = tableColPaddingX + ' px';
-            document.getElementById('tableNoColWidthVal').innerText = tableNoColWidth + ' px';
 
             updatePreview();
         }
@@ -969,57 +896,51 @@
 
             itemsData.forEach((item, index) => {
                 const itemDiv = document.createElement('div');
-                itemDiv.className = 'bg-slate-50/90 p-3.5 rounded-xl border border-slate-200 space-y-3 relative group hover:border-blue-300 transition shadow-xs';
+                itemDiv.className = 'bg-slate-50/80 p-3 rounded-xl border border-slate-200/80 space-y-2 relative group hover:border-blue-200 transition';
                 itemDiv.dataset.id = item.id;
                 
                 itemDiv.innerHTML = `
-                    <div class="flex items-center justify-between pb-2 border-b border-slate-200/60">
+                    <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-2">
                             <span class="drag-handle cursor-grab text-slate-400 hover:text-slate-600 p-1">
                                 <i class="fa-solid fa-grip-vertical"></i>
                             </span>
-                            <span class="text-xs font-bold text-slate-700 bg-slate-200/70 px-2 py-0.5 rounded-md">Item #${index + 1}</span>
+                            <span class="text-xs font-bold text-slate-700">Item #${index + 1}</span>
                         </div>
-                        <button onclick="removeItemRow(${index})" type="button" class="text-xs text-rose-500 hover:text-rose-700 font-semibold transition flex items-center gap-1">
-                            <i class="fa-solid fa-trash text-[11px]"></i> Hapus
+                        <button onclick="removeItemRow(${index})" type="button" class="text-xs text-rose-500 hover:text-rose-700 font-semibold transition">
+                            <i class="fa-solid fa-trash mr-1"></i> Hapus
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div>
-                            <label class="text-[11px] text-slate-600 font-bold block mb-1">Nama Barang / Jasa</label>
-                            <input type="text" placeholder="Masukkan nama barang atau deskripsi utama" value="${escapeHtml(item.name)}" oninput="updateItemData(${index}, 'name', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-semibold bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <input type="text" placeholder="Nama Barang / Jasa" value="${escapeHtml(item.name)}" oninput="updateItemData(${index}, 'name', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg font-semibold bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                         <div>
-                            <label class="text-[11px] text-slate-600 font-bold block mb-1">Spesifikasi / Detail Lengkap</label>
-                            <textarea placeholder="Penjelasan detail/spesifikasi item" oninput="autoResizeTextarea(this); updateItemData(${index}, 'desc', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none overflow-hidden" rows="1">${escapeHtml(item.desc)}</textarea>
+                            <input type="text" placeholder="Deskripsi Singkat / Spesifikasi" value="${escapeHtml(item.desc)}" oninput="updateItemData(${index}, 'desc', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                         <div>
-                            <label class="text-[10px] text-slate-600 font-bold block mb-1">Qty</label>
-                            <input type="number" min="1" value="${item.qty}" oninput="updateItemData(${index}, 'qty', parseFloat(this.value) || 0)" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white font-medium text-center focus:ring-2 focus:ring-blue-500">
+                            <label class="text-[10px] text-slate-500 font-semibold block">Qty</label>
+                            <input type="number" min="1" value="${item.qty}" oninput="updateItemData(${index}, 'qty', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
                         </div>
                         <div>
-                            <label class="text-[10px] text-slate-600 font-bold block mb-1">Satuan</label>
-                            <input type="text" placeholder="pcs/unit" value="${escapeHtml(item.unit)}" oninput="updateItemData(${index}, 'unit', this.value)" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white font-medium text-center focus:ring-2 focus:ring-blue-500">
+                            <label class="text-[10px] text-slate-500 font-semibold block">Satuan</label>
+                            <input type="text" placeholder="pcs/unit/jam" value="${escapeHtml(item.unit)}" oninput="updateItemData(${index}, 'unit', this.value)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
                         </div>
                         <div>
-                            <label class="text-[10px] text-slate-600 font-bold block mb-1">Harga Satuan</label>
-                            <input type="number" min="0" value="${item.price}" oninput="updateItemData(${index}, 'price', parseFloat(this.value) || 0)" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white font-semibold text-slate-800 focus:ring-2 focus:ring-blue-500">
+                            <label class="text-[10px] text-slate-500 font-semibold block">Harga Satuan</label>
+                            <input type="number" min="0" value="${item.price}" oninput="updateItemData(${index}, 'price', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
                         </div>
                         <div>
-                            <label class="text-[10px] text-slate-600 font-bold block mb-1">Diskon Item</label>
-                            <input type="number" min="0" value="${item.discount}" oninput="updateItemData(${index}, 'discount', parseFloat(this.value) || 0)" class="w-full text-xs p-2 border border-slate-300 rounded-lg bg-white font-semibold text-rose-600 focus:ring-2 focus:ring-blue-500">
+                            <label class="text-[10px] text-slate-500 font-semibold block">Diskon Item</label>
+                            <input type="number" min="0" value="${item.discount}" oninput="updateItemData(${index}, 'discount', parseFloat(this.value) || 0)" class="w-full text-xs p-1.5 border border-slate-300 rounded-lg bg-white">
                         </div>
                     </div>
                 `;
                 container.appendChild(itemDiv);
-                
-                // Auto resize textarea height
-                const txt = itemDiv.querySelector('textarea');
-                if (txt) autoResizeTextarea(txt);
             });
         }
 
@@ -1109,11 +1030,18 @@
             const grandTotalFontPt = currentGrandTotalFontSizePt;
             const footerFontPt = currentFooterFontSizePt;
             
+            let dynamicItemsPerPage = Math.floor(200 / (tableFontPt / 6));
+            if (dynamicItemsPerPage > 200) dynamicItemsPerPage = 200;
+            if (dynamicItemsPerPage < 1) dynamicItemsPerPage = 1;
+
+            const ITEMS_PER_PAGE = Math.min(dynamicItemsPerPage, 200);
+
+            const totalPages = Math.ceil(itemsData.length / ITEMS_PER_PAGE) || 1;
             const theme = themePresets[currentThemeKey] || themePresets.navy;
             const curr = document.getElementById('currencySymbol').value;
 
-            // Form Input Values
-            const compName = document.getElementById('companyName').value || 'Nama Perusahaan';
+            // Form Values
+            const compName = document.getElementById('companyName').value || 'CV. Berkah Mandiri Elektrik';
             const compPhone = document.getElementById('companyPhone').value || '-';
             const compAddr = document.getElementById('companyAddress').value || '-';
             const compEmail = document.getElementById('companyEmail').value || '';
@@ -1175,86 +1103,40 @@
             const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
             let grandTotal = (ppnMode === 'include') ? (subtotalAfterDisc - pphAmount + shippingFee) : (subtotalAfterDisc + ppnAmount - pphAmount + shippingFee);
 
-            // Alignment options for company logo
+            // Render Logo Alignment Classes
             let logoAlignClass = 'justify-start';
             if (logoAlign === 'center') logoAlignClass = 'justify-center';
             if (logoAlign === 'right') logoAlignClass = 'justify-end';
 
-            // DYNAMIC PAGINATION ALGORITHM (accounting for custom row padding)
-            let pagesItems = [];
-            let currentChunk = [];
-            let estimatedHeight = 0;
-            
-            const PAGE_MAX_HEIGHT = 800;
-            const FIRST_PAGE_HEADER_HEIGHT = 280;
-            const CONTINUOUS_PAGE_HEADER_HEIGHT = 100;
-
-            let currentPageMax = PAGE_MAX_HEIGHT - FIRST_PAGE_HEADER_HEIGHT;
-
-            itemsData.forEach((item) => {
-                const descLines = item.desc ? item.desc.split('\n').length : 0;
-                const charCount = item.desc ? item.desc.length : 0;
-                const extraLines = Math.max(descLines, Math.ceil(charCount / 40));
-                
-                // Account for user's row padding Y in row height calculations
-                const approxRowHeight = (tableRowPaddingY * 2) + 16 + (extraLines * (itemDescFontPt * 1.5));
-
-                if (estimatedHeight + approxRowHeight > currentPageMax && currentChunk.length > 0) {
-                    pagesItems.push(currentChunk);
-                    currentChunk = [item];
-                    estimatedHeight = approxRowHeight;
-                    currentPageMax = PAGE_MAX_HEIGHT - CONTINUOUS_PAGE_HEADER_HEIGHT;
-                } else {
-                    currentChunk.push(item);
-                    estimatedHeight += approxRowHeight;
-                }
-            });
-
-            if (currentChunk.length > 0) {
-                pagesItems.push(currentChunk);
-            }
-
-            const totalPages = pagesItems.length || 1;
-
-            // Dynamic Inline Styles for Table Padding & Height Control
-            const cellStyle = `padding-top: ${tableRowPaddingY}px; padding-bottom: ${tableRowPaddingY}px; padding-left: ${tableColPaddingX}px; padding-right: ${tableColPaddingX}px;`;
-            const noColStyle = `width: ${tableNoColWidth}px; min-width: ${tableNoColWidth}px; ${cellStyle}`;
-
-            // Render Document Pages
+            // Render Each Page
             for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
                 const pageNum = pageIndex + 1;
-                const pageItems = pagesItems[pageIndex] || [];
+                const pageItems = itemsData.slice(pageIndex * ITEMS_PER_PAGE, (pageIndex + 1) * ITEMS_PER_PAGE);
                 const isLastPage = pageNum === totalPages;
 
                 const pageDiv = document.createElement('div');
                 pageDiv.className = `a4-page transition-all duration-300 flex flex-col justify-between`;
                 pageDiv.style.fontFamily = currentFontFamily;
 
-                let startIdx = 0;
-                for (let i = 0; i < pageIndex; i++) {
-                    startIdx += pagesItems[i].length;
-                }
-
-                // HIGHLY ELEGANT & PROFESSIONAL TABLE ROWS GENERATION
                 let tableRowsHtml = '';
                 pageItems.forEach((item, idx) => {
-                    const actualIdx = startIdx + idx + 1;
+                    const actualIdx = (pageIndex * ITEMS_PER_PAGE) + idx + 1;
                     const itemTotal = (item.qty * item.price) - item.discount;
                     const isEven = idx % 2 === 0;
                     const bgClass = isEven ? 'bg-white' : 'bg-slate-50/70';
 
                     tableRowsHtml += `
-                        <tr class="${bgClass} border-b border-slate-200/70 hover:bg-slate-100/60 transition-colors">
-                            <td class="text-center text-slate-500 font-semibold tabular-nums border-r border-slate-200/50" style="${noColStyle} font-size: ${numericFontPt}pt">${actualIdx}</td>
-                            <td class="border-r border-slate-200/50 break-words max-w-[220px]" style="${cellStyle}">
-                                <strong class="text-slate-800 font-bold block break-words tracking-tight" style="font-size: ${tableFontPt}pt">${escapeHtml(item.name)}</strong>
-                                ${item.desc ? `<span class="text-slate-500 block whitespace-pre-line leading-relaxed mt-1 break-words font-normal" style="font-size: ${itemDescFontPt}pt">${escapeHtml(item.desc)}</span>` : ''}
+                        <tr class="${bgClass} border-b border-slate-200/80 hover:bg-slate-100/60 transition-colors">
+                            <td class="py-2.5 px-2 text-center text-slate-500 font-medium tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt"><span class="px-1">${actualIdx}</span></td>
+                            <td class="py-2.5 px-3 border-r border-slate-200/60 break-words max-w-[220px]">
+                                <strong class="text-slate-800 font-bold block break-words" style="font-size: ${tableFontPt}pt">${escapeHtml(item.name)}</strong>
+                                ${item.desc ? `<span class="text-slate-500 block whitespace-pre-line leading-relaxed mt-0.5 break-words" style="font-size: ${itemDescFontPt}pt">${escapeHtml(item.desc)}</span>` : ''}
                             </td>
-                            <td class="text-center font-bold text-slate-700 tabular-nums border-r border-slate-200/50" style="${cellStyle} font-size: ${numericFontPt}pt">${item.qty}</td>
-                            <td class="text-center text-slate-600 font-medium border-r border-slate-200/50" style="${cellStyle} font-size: ${numericFontPt}pt">${escapeHtml(item.unit)}</td>
-                            <td class="text-right text-slate-700 font-medium tabular-nums border-r border-slate-200/50" style="${cellStyle} font-size: ${numericFontPt}pt">${formatCurrency(item.price, curr)}</td>
-                            <td class="text-right text-rose-600 font-medium tabular-nums border-r border-slate-200/50" style="${cellStyle} font-size: ${numericFontPt}pt">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</td>
-                            <td class="text-right font-extrabold text-slate-900 tabular-nums" style="${cellStyle} font-size: ${numericFontPt}pt">${formatCurrency(itemTotal, curr)}</td>
+                            <td class="py-2.5 px-2 text-center font-semibold text-slate-700 tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt"><span class="px-1">${item.qty}</span></td>
+                            <td class="py-2.5 px-2 text-center text-slate-600 font-medium border-r border-slate-200/60" style="font-size: ${numericFontPt}pt"><span class="px-1">${escapeHtml(item.unit)}</span></td>
+                            <td class="py-2.5 px-2.5 text-right text-slate-700 font-medium tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt"><span class="px-1">${formatCurrency(item.price, curr)}</span></td>
+                            <td class="py-2.5 px-2.5 text-right text-rose-600 font-medium tabular-nums border-r border-slate-200/60" style="font-size: ${numericFontPt}pt"><span class="px-1">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</span></td>
+                            <td class="py-2.5 px-3 text-right font-bold text-slate-900 tabular-nums" style="font-size: ${numericFontPt}pt"><span class="px-1">${formatCurrency(itemTotal, curr)}</span></td>
                         </tr>
                     `;
                 });
@@ -1262,7 +1144,7 @@
                 let summaryAndFooterSection = '';
                 if (isLastPage) {
                     summaryAndFooterSection = `
-                        <!-- Financial Summary Block -->
+                        <!-- Financial Summary -->
                         <div class="flex justify-end mb-4 page-break-inside-avoid">
                             <div class="w-80 rounded-xl overflow-hidden border border-slate-200/90 bg-slate-50/80 p-3.5 shadow-xs space-y-2">
                                 <div class="flex justify-between text-slate-600" style="font-size: ${numericFontPt}pt">
@@ -1276,7 +1158,7 @@
                                 </div>` : ''}
                                 ${usePPN ? `
                                 <div class="flex justify-between text-slate-600" style="font-size: ${numericFontPt}pt">
-                                    <span>PPN (${ppnRate}%) ${ppnMode === 'include' ? '[Incl.]' : ''}</span>
+                                    <span>PPN (${ppnRate}\%)${ppnMode === 'include' ? '[Incl.]' : ''}</span>
                                     <span class="font-semibold text-slate-800 tabular-nums">${formatCurrency(ppnAmount, curr)}</span>
                                 </div>` : ''}
                                 ${usePPh && pphAmount > 0 ? `
@@ -1289,14 +1171,14 @@
                                     <span>Biaya Pengiriman</span>
                                     <span class="font-semibold text-slate-800 tabular-nums">${formatCurrency(shippingFee, curr)}</span>
                                 </div>` : ''}
-                                <div class="flex justify-between items-center font-black border-t border-slate-300 pt-2.5 mt-1" style="color: ${theme.primaryHex}; font-size: ${grandTotalFontPt}pt">
+                                <div class="flex justify-between items-center font-bold border-t border-slate-300 pt-2.5 mt-1" style="color: ${theme.primaryHex}; font-size: ${grandTotalFontPt}pt">
                                     <span>GRAND TOTAL</span>
                                     <span class="tabular-nums">${formatCurrency(grandTotal, curr)}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Terms, Bank & Signature Section -->
+                        <!-- Terms, Bank & Signature -->
                         <div class="grid grid-cols-2 gap-4 border-t border-slate-200/80 pt-3 page-break-inside-avoid" style="font-size: ${footerFontPt}pt">
                             <div class="space-y-2">
                                 <div>
@@ -1329,10 +1211,10 @@
                         <!-- Header Section -->
                         <div class="border-b-2 pb-3 mb-3 transition-colors" style="border-color: ${theme.primaryHex};">
                             
-                            <!-- Dynamic Logo Container -->
+                            <!-- Dynamic Logo Container (Flexible Controls) -->
                             ${logoBase64 ? `
                             <div class="flex ${logoAlignClass} mb-2" style="transform: translateY(${logoOffsetY}px);">
-                                <img src="${logoBase64}" alt="Company Logo" style="width: ${logoWidth}px; max-height: ${logoHeight}px; object-fit: contain;">
+                                <img src="${logoBase64}" alt="Company Logo" style="width: ${logoWidth}px; max-height:${logoHeight}px; object-fit: contain;">
                             </div>
                             ` : ''}
 
@@ -1358,9 +1240,8 @@
                             </div>
                         </div>
 
-                        ${pageNum === 1 ? `
-                        <!-- Client & Subject Information (Only on Page 1) -->
-                        <div class="grid grid-cols-2 gap-3 mb-3 bg-slate-50/80 p-3 rounded-xl border border-slate-200/80" style="font-size: ${clientFontPt}pt">
+                        <!-- Client & Subject Information -->
+                        <div class="grid grid-cols-2 gap-3 mb-3 bg-slate-50 p-3 rounded-xl border border-slate-200/80" style="font-size: ${clientFontPt}pt">
                             <div>
                                 <p class="font-bold uppercase tracking-wider mb-0.5" style="color: ${theme.primaryHex}; font-size: ${Math.max(4, clientFontPt - 2)}pt">KEPADA YTH:</p>
                                 <h3 class="font-extrabold text-slate-800" style="font-size: ${clientFontPt + 1}pt">${escapeHtml(clientName)}</h3>
@@ -1374,23 +1255,22 @@
                                 <p class="font-semibold text-slate-800 leading-snug">${escapeHtml(docSubj)}</p>
                             </div>
                         </div>
-                        ` : ''}
 
-                        <!-- Highly Professional Items Table -->
-                        <div class="mb-3 overflow-hidden rounded-lg border border-slate-200 shadow-xs" style="font-size: ${tableFontPt}pt">
+                        <!-- Items Table -->
+                        <div class="mb-3 overflow-hidden rounded-xl border border-slate-200/90 shadow-xs" style="font-size: ${tableFontPt}pt">
                             <table class="w-full border-collapse">
                                 <thead>
-                                    <tr class="text-white uppercase tracking-wider font-extrabold" style="background-color: ${theme.primaryHex}; font-size: ${Math.max(6, tableFontPt - 0.5)}pt">
-                                        <th class="text-center border-r border-white/20" style="${noColStyle}">NO</th>
-                                        <th class="text-left border-r border-white/20" style="${cellStyle}">DESKRIPSI & SPESIFIKASI</th>
-                                        <th class="text-center border-r border-white/20" style="${cellStyle}">QTY</th>
-                                        <th class="text-center border-r border-white/20" style="${cellStyle}">SATUAN</th>
-                                        <th class="text-right border-r border-white/20" style="${cellStyle}">HARGA SATUAN</th>
-                                        <th class="text-right border-r border-white/20" style="${cellStyle}">DISKON</th>
-                                        <th class="text-right" style="${cellStyle}">TOTAL HARGA</th>
+                                    <tr class="text-white uppercase tracking-wider font-bold" style="background-color: ${theme.primaryHex}; font-size: ${Math.max(6, tableFontPt - 0.5)}pt">
+                                        <th class="py-2.5 px-2 text-center w-8 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span class="px-1">NO</span></th>
+                                        <th class="py-2.5 px-3 text-left border-r border-white/20"><span class="px-1">DESKRIPSI & SPESIFIKASI ITEMS</span></th>
+                                        <th class="py-2.5 px-2 text-center w-12 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span class="px-1">QTY</span></th>
+                                        <th class="py-2.5 px-2 text-center w-14 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span class="px-1">SATUAN</span></th>
+                                        <th class="py-2.5 px-2.5 text-right w-28 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span class="px-1">HARGA SATUAN</span></th>
+                                        <th class="py-2.5 px-2.5 text-right w-20 border-r border-white/20" style="font-size: ${numericFontPt}pt"><span class="px-1">DISKON</span></th>
+                                        <th class="py-2.5 px-3 text-right w-32" style="font-size: ${numericFontPt}pt"><span class="px-1">TOTAL HARGA</span></th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-200/70">
+                                <tbody>
                                     ${tableRowsHtml}
                                 </tbody>
                             </table>
@@ -1401,7 +1281,7 @@
 
                     <!-- Footer Page Count -->
                     <div class="border-t border-slate-200/80 pt-2 text-slate-400 flex justify-between items-center no-print-footer" style="font-size: ${Math.max(4, footerFontPt - 2)}pt">
-                        <span>Dokumen penawaran harga ini diterbitkan secara resmi melalui sistem QuotationPRO.</span>
+                        <span>Dokumen penawaran harga ini diterbitkan secara resmi oleh CV. Berkah Mandiri Elektrik.</span>
                         <span class="font-bold text-slate-600">Halaman ${pageNum} dari ${totalPages}</span>
                     </div>
                 `;
@@ -1453,7 +1333,7 @@
                 uploadCont.classList.add('hidden');
             } else {
                 drawCont.classList.add('hidden');
-                uploadCont.classList.remove('hidden');
+                uploadCont.remove('hidden');
             }
         }
 
@@ -1672,7 +1552,7 @@
 
         function exportWord() {
             const curr = document.getElementById('currencySymbol').value;
-            const compName = document.getElementById('companyName').value || 'Nama Perusahaan';
+            const compName = document.getElementById('companyName').value || 'CV. Berkah Mandiri Elektrik';
             const compAddr = document.getElementById('companyAddress').value || '-';
             const compPhone = document.getElementById('companyPhone').value || '-';
             const compEmail = document.getElementById('companyEmail').value || '';
@@ -1820,8 +1700,9 @@
                         new docx.Paragraph({ text: "" }),
                         new docx.Paragraph({ text: document.getElementById('signerName').value || 'Nama Terang', bold: true, alignment: docx.AlignmentType.RIGHT }),
                         new docx.Paragraph({ text: document.getElementById('signerTitle').value || 'Jabatan', alignment: docx.AlignmentType.RIGHT }),
-                  new docx.Paragraph({ text: "Dokumen penawaran harga ini diterbitkan secara resmi oleh CV. Berkah Mandiri Elektrik.", alignment: docx.AlignmentType.CENTER }),
-  ],
+                        new docx.Paragraph({ text: "" }),
+                        new docx.Paragraph({ text: "Dokumen penawaran harga ini diterbitkan secara resmi oleh CV. Berkah Mandiri Elektrik.", alignment: docx.AlignmentType.CENTER })
+                    ],
                 }],
             });
 
@@ -1839,4 +1720,3 @@
     </script>
 </body>
 </html>
-```
