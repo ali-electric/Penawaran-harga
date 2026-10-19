@@ -168,13 +168,12 @@
         <!-- ================= LEFT FORM INPUT PANEL ================= -->
         <section class="w-full lg:w-1/2 p-4 sm:p-6 overflow-y-auto h-full border-r border-slate-200/80 custom-scrollbar space-y-6 no-print bg-slate-50">
             
-            <!-- TEMA WARNA & TIPOGRAFI -->
             <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
                 <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
                     <h2 class="text-sm font-bold text-slate-800 flex items-center">
-                        <i class="fa-solid fa-palette text-blue-600 mr-2"></i> Tema Warna Soft & Tipografi
+                        <i class="fa-solid fa-palette text-blue-600 mr-2"></i> Tema Warna, Font & Layout Tabel
                     </h2>
-                    <span class="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">Style</span>
+                    <span class="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">Style & Spacing</span>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2 p-3 bg-slate-50/80 rounded-xl border border-slate-200/60">
@@ -277,9 +276,44 @@
                         </select>
                     </div>
                 </div>
+
+                <!-- PENGATURAN JARAK & KETINGGIAN BARIS/KOLOM/NOMOR -->
+                <div class="mt-4 pt-3 border-t border-slate-200">
+                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 text-blue-700 flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrows-up-down-left-right"></i> Pengaturan Jarak & Ketinggian Tabel (Kolom/Nomor)
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 bg-blue-50/50 rounded-xl border border-blue-100">
+                        <!-- Ketinggian Baris / Padding Vertikal -->
+                        <div>
+                            <div class="flex justify-between text-[11px] font-semibold text-slate-700 mb-1">
+                                <span>Ketinggian Baris (Vertikal):</span>
+                                <span id="tableRowPaddingYVal" class="text-blue-600 font-bold">12 px</span>
+                            </div>
+                            <input type="range" id="tableRowPaddingYInput" min="4" max="28" value="12" oninput="updateTableSpacingControls()" class="w-full accent-blue-600 cursor-pointer">
+                        </div>
+
+                        <!-- Jarak Antar Kolom / Padding Horizontal -->
+                        <div>
+                            <div class="flex justify-between text-[11px] font-semibold text-slate-700 mb-1">
+                                <span>Jarak Kolom (Horizontal):</span>
+                                <span id="tableColPaddingXVal" class="text-blue-600 font-bold">10 px</span>
+                            </div>
+                            <input type="range" id="tableColPaddingXInput" min="4" max="24" value="10" oninput="updateTableSpacingControls()" class="w-full accent-blue-600 cursor-pointer">
+                        </div>
+
+                        <!-- Lebar Kolom Nomor -->
+                        <div>
+                            <div class="flex justify-between text-[11px] font-semibold text-slate-700 mb-1">
+                                <span>Lebar Kolom Nomor:</span>
+                                <span id="tableNoColWidthVal" class="text-blue-600 font-bold">40 px</span>
+                            </div>
+                            <input type="range" id="tableNoColWidthInput" min="25" max="80" value="40" oninput="updateTableSpacingControls()" class="w-full accent-blue-600 cursor-pointer">
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- SECTION 1: PERUSAHAAN & LOGO CONTROLS -->
             <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
                 <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
                     <h2 class="text-sm font-bold text-slate-800 flex items-center">
@@ -446,7 +480,6 @@
                 </div>
             </div>
 
-            <!-- SECTION 2: TABEL BARANG / JASA -->
             <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
                 <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
                     <div>
@@ -494,7 +527,6 @@
                 </div>
             </div>
 
-            <!-- SECTION 3: KALKULASI PAJAK & BIAYA -->
             <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
                 <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
                     <h2 class="text-sm font-bold text-slate-800 flex items-center">
@@ -573,7 +605,6 @@
                 </div>
             </div>
 
-            <!-- SECTION 4: TERMS & TANDA TANGAN -->
             <div class="bg-white p-5 rounded-xl shadow-xs border border-slate-200/80">
                 <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
                     <h2 class="text-sm font-bold text-slate-800 flex items-center">
@@ -684,6 +715,11 @@
         let logoAlign = 'left';
         let logoOffsetY = 0;
 
+        // Table Spacing & Height State
+        let tableRowPaddingY = 12; // Ketinggian vertikal cell (px)
+        let tableColPaddingX = 10; // Jarak antar kolom horizontal (px)
+        let tableNoColWidth = 40;   // Lebar khusus kolom nomor (px)
+
         let itemsData = [
             { id: 1, name: "Server Dell PowerEdge R750", desc: "Intel Xeon Silver 4310, 32GB RAM, 2x 1TB SSD NVMe Dual PSU", qty: 2, unit: "Unit", price: 48000000, discount: 1000000 },
             { id: 2, name: "Cisco Catalyst Switch 24-Port Gigabit", desc: "Managed Switch L2+ dengan PoE Support 370W Smart Managed", qty: 1, unit: "Unit", price: 12500000, discount: 0 },
@@ -766,7 +802,10 @@
                 signerName: document.getElementById('signerName').value,
                 signerTitle: document.getElementById('signerTitle').value,
                 logoBase64: logoBase64,
-                sigImageBase64: sigImageBase64
+                sigImageBase64: sigImageBase64,
+                tableRowPaddingY: tableRowPaddingY,
+                tableColPaddingX: tableColPaddingX,
+                tableNoColWidth: tableNoColWidth
             };
             localStorage.setItem('quotationpro_draft', JSON.stringify(draftData));
             showToast("Draft berhasil disimpan ke penyimpanan lokal!");
@@ -801,6 +840,22 @@
                     if (data.signerTitle) document.getElementById('signerTitle').value = data.signerTitle;
                     if (data.logoBase64) logoBase64 = data.logoBase64;
                     if (data.sigImageBase64) sigImageBase64 = data.sigImageBase64;
+                    
+                    if (data.tableRowPaddingY !== undefined) {
+                        tableRowPaddingY = data.tableRowPaddingY;
+                        document.getElementById('tableRowPaddingYInput').value = tableRowPaddingY;
+                        document.getElementById('tableRowPaddingYVal').innerText = tableRowPaddingY + ' px';
+                    }
+                    if (data.tableColPaddingX !== undefined) {
+                        tableColPaddingX = data.tableColPaddingX;
+                        document.getElementById('tableColPaddingXInput').value = tableColPaddingX;
+                        document.getElementById('tableColPaddingXVal').innerText = tableColPaddingX + ' px';
+                    }
+                    if (data.tableNoColWidth !== undefined) {
+                        tableNoColWidth = data.tableNoColWidth;
+                        document.getElementById('tableNoColWidthInput').value = tableNoColWidth;
+                        document.getElementById('tableNoColWidthVal').innerText = tableNoColWidth + ' px';
+                    }
                 }
             } catch (e) {
                 console.error("Gagal memuat draft:", e);
@@ -865,6 +920,18 @@
             document.getElementById('logoWidthVal').innerText = logoWidth + ' px';
             document.getElementById('logoHeightVal').innerText = logoHeight + ' px';
             document.getElementById('logoOffsetYVal').innerText = logoOffsetY + ' px';
+
+            updatePreview();
+        }
+
+        function updateTableSpacingControls() {
+            tableRowPaddingY = parseInt(document.getElementById('tableRowPaddingYInput').value) || 12;
+            tableColPaddingX = parseInt(document.getElementById('tableColPaddingXInput').value) || 10;
+            tableNoColWidth = parseInt(document.getElementById('tableNoColWidthInput').value) || 40;
+
+            document.getElementById('tableRowPaddingYVal').innerText = tableRowPaddingY + ' px';
+            document.getElementById('tableColPaddingXVal').innerText = tableColPaddingX + ' px';
+            document.getElementById('tableNoColWidthVal').innerText = tableNoColWidth + ' px';
 
             updatePreview();
         }
@@ -1113,7 +1180,7 @@
             if (logoAlign === 'center') logoAlignClass = 'justify-center';
             if (logoAlign === 'right') logoAlignClass = 'justify-end';
 
-            // DYNAMIC PAGINATION ALGORITHM
+            // DYNAMIC PAGINATION ALGORITHM (accounting for custom row padding)
             let pagesItems = [];
             let currentChunk = [];
             let estimatedHeight = 0;
@@ -1128,7 +1195,9 @@
                 const descLines = item.desc ? item.desc.split('\n').length : 0;
                 const charCount = item.desc ? item.desc.length : 0;
                 const extraLines = Math.max(descLines, Math.ceil(charCount / 40));
-                const approxRowHeight = 38 + (extraLines * (itemDescFontPt * 1.5));
+                
+                // Account for user's row padding Y in row height calculations
+                const approxRowHeight = (tableRowPaddingY * 2) + 16 + (extraLines * (itemDescFontPt * 1.5));
 
                 if (estimatedHeight + approxRowHeight > currentPageMax && currentChunk.length > 0) {
                     pagesItems.push(currentChunk);
@@ -1146,6 +1215,10 @@
             }
 
             const totalPages = pagesItems.length || 1;
+
+            // Dynamic Inline Styles for Table Padding & Height Control
+            const cellStyle = `padding-top: ${tableRowPaddingY}px; padding-bottom: ${tableRowPaddingY}px; padding-left: ${tableColPaddingX}px; padding-right: ${tableColPaddingX}px;`;
+            const noColStyle = `width: ${tableNoColWidth}px; min-width: ${tableNoColWidth}px; ${cellStyle}`;
 
             // Render Document Pages
             for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
@@ -1172,16 +1245,16 @@
 
                     tableRowsHtml += `
                         <tr class="${bgClass} border-b border-slate-200/70 hover:bg-slate-100/60 transition-colors">
-                            <td class="py-3 px-2 text-center text-slate-500 font-semibold tabular-nums border-r border-slate-200/50" style="font-size: ${numericFontPt}pt">${actualIdx}</td>
-                            <td class="py-3 px-3.5 border-r border-slate-200/50 break-words max-w-[220px]">
+                            <td class="text-center text-slate-500 font-semibold tabular-nums border-r border-slate-200/50" style="${noColStyle} font-size: ${numericFontPt}pt">${actualIdx}</td>
+                            <td class="border-r border-slate-200/50 break-words max-w-[220px]" style="${cellStyle}">
                                 <strong class="text-slate-800 font-bold block break-words tracking-tight" style="font-size: ${tableFontPt}pt">${escapeHtml(item.name)}</strong>
                                 ${item.desc ? `<span class="text-slate-500 block whitespace-pre-line leading-relaxed mt-1 break-words font-normal" style="font-size: ${itemDescFontPt}pt">${escapeHtml(item.desc)}</span>` : ''}
                             </td>
-                            <td class="py-3 px-2 text-center font-bold text-slate-700 tabular-nums border-r border-slate-200/50" style="font-size: ${numericFontPt}pt">${item.qty}</td>
-                            <td class="py-3 px-2 text-center text-slate-600 font-medium border-r border-slate-200/50" style="font-size: ${numericFontPt}pt">${escapeHtml(item.unit)}</td>
-                            <td class="py-3 px-3 text-right text-slate-700 font-medium tabular-nums border-r border-slate-200/50" style="font-size: ${numericFontPt}pt">${formatCurrency(item.price, curr)}</td>
-                            <td class="py-3 px-3 text-right text-rose-600 font-medium tabular-nums border-r border-slate-200/50" style="font-size: ${numericFontPt}pt">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</td>
-                            <td class="py-3 px-3.5 text-right font-extrabold text-slate-900 tabular-nums" style="font-size: ${numericFontPt}pt">${formatCurrency(itemTotal, curr)}</td>
+                            <td class="text-center font-bold text-slate-700 tabular-nums border-r border-slate-200/50" style="${cellStyle} font-size: ${numericFontPt}pt">${item.qty}</td>
+                            <td class="text-center text-slate-600 font-medium border-r border-slate-200/50" style="${cellStyle} font-size: ${numericFontPt}pt">${escapeHtml(item.unit)}</td>
+                            <td class="text-right text-slate-700 font-medium tabular-nums border-r border-slate-200/50" style="${cellStyle} font-size: ${numericFontPt}pt">${formatCurrency(item.price, curr)}</td>
+                            <td class="text-right text-rose-600 font-medium tabular-nums border-r border-slate-200/50" style="${cellStyle} font-size: ${numericFontPt}pt">${item.discount > 0 ? '-' + formatCurrency(item.discount, curr) : '-'}</td>
+                            <td class="text-right font-extrabold text-slate-900 tabular-nums" style="${cellStyle} font-size: ${numericFontPt}pt">${formatCurrency(itemTotal, curr)}</td>
                         </tr>
                     `;
                 });
@@ -1308,13 +1381,13 @@
                             <table class="w-full border-collapse">
                                 <thead>
                                     <tr class="text-white uppercase tracking-wider font-extrabold" style="background-color: ${theme.primaryHex}; font-size: ${Math.max(6, tableFontPt - 0.5)}pt">
-                                        <th class="py-3 px-2 text-center w-10 border-r border-white/20">NO</th>
-                                        <th class="py-3 px-3.5 text-left border-r border-white/20">DESKRIPSI & SPESIFIKASI</th>
-                                        <th class="py-3 px-2 text-center w-12 border-r border-white/20">QTY</th>
-                                        <th class="py-3 px-2 text-center w-16 border-r border-white/20">SATUAN</th>
-                                        <th class="py-3 px-3 text-right w-28 border-r border-white/20">HARGA SATUAN</th>
-                                        <th class="py-3 px-3 text-right w-20 border-r border-white/20">DISKON</th>
-                                        <th class="py-3 px-3.5 text-right w-32">TOTAL HARGA</th>
+                                        <th class="text-center border-r border-white/20" style="${noColStyle}">NO</th>
+                                        <th class="text-left border-r border-white/20" style="${cellStyle}">DESKRIPSI & SPESIFIKASI</th>
+                                        <th class="text-center border-r border-white/20" style="${cellStyle}">QTY</th>
+                                        <th class="text-center border-r border-white/20" style="${cellStyle}">SATUAN</th>
+                                        <th class="text-right border-r border-white/20" style="${cellStyle}">HARGA SATUAN</th>
+                                        <th class="text-right border-r border-white/20" style="${cellStyle}">DISKON</th>
+                                        <th class="text-right" style="${cellStyle}">TOTAL HARGA</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-200/70">
