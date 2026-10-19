@@ -1820,7 +1820,8 @@
                         new docx.Paragraph({ text: "" }),
                         new docx.Paragraph({ text: document.getElementById('signerName').value || 'Nama Terang', bold: true, alignment: docx.AlignmentType.RIGHT }),
                         new docx.Paragraph({ text: document.getElementById('signerTitle').value || 'Jabatan', alignment: docx.AlignmentType.RIGHT }),
-                    ],
+                  new docx.Paragraph({ text: "Dokumen penawaran harga ini diterbitkan secara resmi oleh CV. Berkah Mandiri Elektrik.", alignment: docx.AlignmentType.CENTER }),
+  ],
                 }],
             });
 
